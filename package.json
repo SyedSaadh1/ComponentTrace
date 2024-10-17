@@ -52,6 +52,7 @@
     "reflect-metadata": "^0.1.13",
     "sequelize": "6.33.0",
     "ts-node-dev": "^2.0.0",
+    "uuid": "^10.0.0",
     "winston": "^3.2.1",
     "xml-js": "^1.6.11",
     "xml-to-json-stream": "^1.1.0",
