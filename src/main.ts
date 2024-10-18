@@ -3,12 +3,17 @@ import { Request, Response } from "express-serve-static-core";
 let app = express();
 app.use(express.json());
 // apis here.......
-app.get("/api/findComponentMaster", (req: Request, res: express.Response) => {
+
+/**
+ * findComponentMaster APi call will get all the Component Master details
+ */
+app.get("/api/findComponentMaster", (req: Request, res: Response) => {
   res.status(200).send({
     componentMasterId: "CM-001",
     componentMasterName: "Keyboard",
     componentMasterDescription: "Used for Vehivles",
     componentImage: "https://images.com/tyre.png",
+    isFinalProduct: "No",
     category: "Rubber",
     quantity: 100,
     productionStatus: "Active",
@@ -18,6 +23,8 @@ app.get("/api/findComponentMaster", (req: Request, res: express.Response) => {
     _id: "67122520a5768407fca14e22",
   });
 });
+//createComponentMaster API will help us to create Component Master
+app.post('/api/createComponentMaster',(req:Request,res))
 
 let port = 9000;
 app.listen(port, () => {
