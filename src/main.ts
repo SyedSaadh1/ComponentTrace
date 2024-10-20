@@ -7,7 +7,6 @@ app.use(express.json());
 /**
  * findComponentMaster APi call will get all the Component Master details
  */
-app.get("/api/findComponentMaster", (req: Request, res: Response) => {
   res.status(200).send({
     componentMasterId: "CM-001",
     componentMasterName: "Keyboard",
@@ -23,10 +22,11 @@ app.get("/api/findComponentMaster", (req: Request, res: Response) => {
     _id: "67122520a5768407fca14e22",
   });
 });
-//createComponentMaster API will help us to create Component Master
-app.post('/api/createComponentMaster',(req:Request,res))
+//createComponentMaster API will help us to create a Component Master
+app.post("/api/createComponentMaster", (req: Request, res: Response) => {
+  = req.body;
+});
 
-let port = 9000;
 app.listen(port, () => {
   console.log("server started on ", +port);
 });
