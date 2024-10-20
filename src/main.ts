@@ -7,6 +7,7 @@ app.use(express.json());
 /**
  * findComponentMaster APi call will get all the Component Master details
  */
+app.get("/componentMaster/findComponentMaster", (req: Request, res: Response) => {
   res.status(200).send({
     componentMasterId: "CM-001",
     componentMasterName: "Keyboard",
@@ -27,6 +28,7 @@ app.post("/api/createComponentMaster", (req: Request, res: Response) => {
   = req.body;
 });
 
+let port = 7000;
 app.listen(port, () => {
   console.log("server started on ", +port);
 });
