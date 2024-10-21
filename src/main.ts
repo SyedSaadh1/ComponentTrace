@@ -47,7 +47,7 @@ app.post(
       category,
       productionStatus,
       createdBy,
-    } = req.body;
+    } = req.body; //this is req body format
 
     // Here you could add logic to save the component in a database
     // For now, we are just simulating the creation and returning the same data back.

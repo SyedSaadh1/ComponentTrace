@@ -31,7 +31,7 @@ app.get("/componentMaster/findAllComponentMaster", (req, res) => {
 });
 // POST API to create a new ComponentMaster
 app.post("componentMaster/createComponentMaster", (req, res) => {
-    const { componentMasterId, componentMasterName, componentMasterDescription, componentImage, components, isFinalProduct, category, productionStatus, createdBy, } = req.body;
+    const { componentMasterId, componentMasterName, componentMasterDescription, componentImage, components, isFinalProduct, category, productionStatus, createdBy, } = req.body; //this is req body format
     // Here you could add logic to save the component in a database
     // For now, we are just simulating the creation and returning the same data back.
     // const newComponentMaster = {
