@@ -28,7 +28,7 @@ app.get(
 );
 
 // POST API to create a new ComponentMaster
-app.post("/api/createComponentMaster", (req: Request, res: Response) => {
+app.post("/createComponentMaster", (req: Request, res: Response) => {
   const {
     componentMasterId,
     componentMasterName,
