@@ -75,7 +75,6 @@ app.get("/Inventory/findInventory", (req: Request, res: Response) => {
   });
 });
 
-let port = 9000;
 let port = 7000;
 app.listen(port, () => {
   console.log("server started on ", +port);
