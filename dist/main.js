@@ -7,6 +7,7 @@ app.use(express.json());
 /**
  * findComponentMaster APi call will get all the Component Master details
 //  */
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 // app.get(
 //   "/componentMaster/findComponentMaster",
@@ -90,14 +91,23 @@ app.post("/poorder/createpoorder", (req, res) => {
         poId: "5678"
 =======
 app.get("/componentMaster/findComponentMaster", (req, res) => {
+=======
+app.get("/componentMaster/findAllComponentMaster", (req, res) => {
+>>>>>>> Stashed changes
     res.status(200).send({
         componentMasterId: "CM-001",
         componentMasterName: "Keyboard",
         componentMasterDescription: "Used for Vehivles",
         componentImage: "https://images.com/tyre.png",
+        components: [
+            { componentName: "Keys", quantity: 100 },
+            {
+                componentName: "Mother Board",
+                quantity: 1,
+            },
+        ],
         isFinalProduct: "No",
         category: "Rubber",
-        quantity: 100,
         productionStatus: "Active",
         createdBy: "miway",
         createdOn: "2024-10-18T00:00:00.000Z",
@@ -106,8 +116,8 @@ app.get("/componentMaster/findComponentMaster", (req, res) => {
     });
 });
 // POST API to create a new ComponentMaster
-app.post("/createComponentMaster", (req, res) => {
-    const { componentMasterId, componentMasterName, componentMasterDescription, componentImage, isFinalProduct, category, quantity, productionStatus, createdBy, } = req.body;
+app.post("componentMaster/createComponentMaster", (req, res) => {
+    const { componentMasterId, componentMasterName, componentMasterDescription, componentImage, components, isFinalProduct, category, productionStatus, createdBy, } = req.body;
     // Here you could add logic to save the component in a database
     // For now, we are just simulating the creation and returning the same data back.
     const newComponentMaster = {
@@ -115,16 +125,47 @@ app.post("/createComponentMaster", (req, res) => {
         componentMasterName,
         componentMasterDescription,
         componentImage,
+        components,
         isFinalProduct,
         category,
-        quantity,
         productionStatus,
         createdBy,
         createdOn: new Date().toISOString(),
         updatedOn: new Date().toISOString(),
     };
     // Responding with the created component
-    res.status(201).send(newComponentMaster);
+    res.status(201).send({
+        componentMasterId: "CM-003",
+        componentMasterName: "Keyboard",
+        componentMasterDescription: "Used for PCs",
+        componentImage: "https://images.com/mouse.png",
+        components: [
+            {
+                componentMasterId: "CM-002",
+                quantity: 100,
+            },
+            {
+                componentMasterId: "CM-001",
+                quantity: 1,
+            },
+        ],
+        isFinalProduct: "Yes",
+        category: "Plastic",
+        productionStatus: "Active",
+        createdBy: "user123",
+        createdOn: "2024-10-21T11:00:55.290Z",
+        updatedOn: "2024-10-21T11:00:55.290Z",
+    });
+});
+app.put("/componentMaster/updateComponentMaster", (req, res) => {
+    const { componentMasterName, components } = req.body;
+    res.status(200).send({
+        acknowledged: true,
+        modifiedCount: 1 || 0, //depends on if any record got updated or not
+        upsertedId: null,
+        upsertedCount: 0,
+        matchedCount: 1 || 0,
+    });
 });
 // Component List
 app.get("/findComponentList", (req, res) => {
