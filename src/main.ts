@@ -52,19 +52,19 @@ app.post(
     // Here you could add logic to save the component in a database
     // For now, we are just simulating the creation and returning the same data back.
 
-    const newComponentMaster = {
-      componentMasterId: componentMasterId || "CM-002",
-      componentMasterName,
-      componentMasterDescription,
-      componentImage,
-      components,
-      isFinalProduct,
-      category,
-      productionStatus,
-      createdBy,
-      createdOn: new Date().toISOString(),
-      updatedOn: new Date().toISOString(),
-    };
+    // const newComponentMaster = {
+    //   componentMasterId: componentMasterId || "CM-002",
+    //   componentMasterName,
+    //   componentMasterDescription,
+    //   componentImage,
+    //   components,
+    //   isFinalProduct,
+    //   category,
+    //   productionStatus,
+    //   createdBy,
+    //   createdOn: new Date().toISOString(),
+    //   updatedOn: new Date().toISOString(),
+    // };
 
     // Responding with the created component
     res.status(201).send({
