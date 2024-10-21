@@ -44,6 +44,23 @@ app.post("/createComponentMaster", (req, res) => {
     // Responding with the created component
     res.status(201).send(newComponentMaster);
 });
+// Component List
+app.get("/findComponentList", (req, res) => {
+    res.status(200).send({
+        componentMasterId: "CM-001",
+        componentId: "C-001",
+        componentName: "Component A",
+        qrCode: "",
+        category: "Electronics",
+        sentToDelivery: true,
+        batchNumber: "BATCH-001",
+        location: "Warehouse A",
+        createdBy: "User1",
+        createdOn: "2024-10-18T00:00:00.000Z",
+        updatedOn: "2024-10-18T00:00:00.000Z",
+        _id: "66fb7eea86ea2d7cf5743791"
+    });
+});
 /**
  * findInventory APi call will get all the Inventory  details
  */
