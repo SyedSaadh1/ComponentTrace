@@ -1,5 +1,5 @@
 import express = require("express");
-import { Request, Response } from "express-serve-static-core";
+import { Request, Response } from "express";
 let app = express();
 app.use(express.json());
 // apis here.......
