@@ -6,7 +6,7 @@ app.use(express.json());
 
 /**
  * findComponentMaster APi call will get all the Component Master details
-//  */
+ */
 app.get(
   "/componentMaster/findComponentMaster",
   (req: Request, res: Response) => {
@@ -27,7 +27,7 @@ app.get(
   }
 );
 
-// POST API to create a new ComponentMaster
+// // POST API to create a new ComponentMaster
 app.post("/createComponentMaster", (req: Request, res: Response) => {
   const {
     componentMasterId,
@@ -74,6 +74,35 @@ app.get("/Inventory/findInventory", (req: Request, res: Response) => {
     _id: "66faeca1d9b10bced59a7585",
   });
 });
+
+
+//PurchaseOrder(PO) code is Below
+
+
+
+app.post("/poorder/createpoorder", (req, res) => {
+
+  res.status(201).send({
+    _id: "12345678911",
+    description: req.body?.description ?? "Ordered 4 MRF tyres for car",
+    orderedBy: "Sachin",
+    orderDetails: [
+      {
+
+        componentMasterName: "Tyres",
+        quantity: 4,
+        expectedDate: "22-10-2023"
+      }
+    ],
+    orderedTo: "MRF",
+    address: "Hyderabad",
+    orderedDate: "18-10-2023",
+    poId: "5678"
+  });
+});
+
+
+
 
 let port = 7000;
 app.listen(port, () => {
