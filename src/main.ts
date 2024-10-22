@@ -243,9 +243,14 @@ app.get("/findComponentList", (req: Request, res: Response) => {
     createdBy: "User1",
     createdOn: "2024-10-18T00:00:00.000Z",
     updatedOn: "2024-10-18T00:00:00.000Z",
+<<<<<<< HEAD
     _id: "66fb7eea86ea2d7cf5743791",
   });
 });
+=======
+    _id: "66fb7eea86ea2d7cf5743791"
+  })});
+>>>>>>> e39d4179e9470d7dbf397e247a734e3ed617f8d3
 app.get("/Transaction/findTransaction", (req: Request, res: Response) => {
   res.status(200).send([
     {
