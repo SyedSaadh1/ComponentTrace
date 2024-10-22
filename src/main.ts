@@ -146,13 +146,20 @@ app.put(
  * findInventory APi call will get all the Inventory  details
  */
 app.get("/Inventory/findInventory", (req: Request, res: Response) => {
-  res.status(200).send({
+  res.status(200).send([{
     componentMasterId: "CM-001",
     componentName: "Tyre",
     quantity: 10,
     userId: "xxx",
     _id: "66faeca1d9b10bced59a7585",
-  });
+  },
+  {
+    componentMasterId: "CM-002",
+    componentName: "CPU",
+    quantity: 20,
+    userId: "xxx",
+    _id: "66faeca1d9b10bced59a7588",
+  }]);
 });
 
 /**
