@@ -237,6 +237,7 @@ app.post("/poorder/createpoorder", (req, res) => {
     poId: req.body?.poId ?? "5678",
   });
 });
+// POST API to create a new component in the component list
 app.post("/componentList/createComponent", (req, res) => {
   const {
     componentMasterId,
@@ -275,6 +276,7 @@ app.post("/componentList/createComponent", (req, res) => {
     updatedOn: "2024-10-21T11:07:15.605Z",
   });
 });
+// GET API to retrieve all components in the component list
 app.get("/componentList/findAllComponents", (req: Request, res: Response) => {
   res.status(200).send([{
     componentMasterId: "CM-001",
@@ -317,19 +319,33 @@ app.get("/componentList/findAllComponents", (req: Request, res: Response) => {
       _id: "66fb7eea86ea2d7cf5743793"
     }]);
 });
-
+// PUT API to update an existing component in the component list
 app.put("/componentlist/updateComponent", (req: Request, res: Response) => {
   const { componentId, componentName, status, wareHouseLocation } = req.body;
 
-  res.status(200).send({
+  let result = {
     acknowledged: true,
-    modifiedCount: 1, 
+    modifiedCount: 1 || 0, //depends if any record got updated or not
     upsertedId: null,
     upsertedCount: 0,
-    matchedCount: 1, 
-  });
-});
-
+    matchedCount: 1 || 0,
+  };
+  if (!result.acknowledged) {
+    res.status(400).send({ msg: "Updated operation not acknowledged" });
+  } else if (result.matchedCount == 0) {
+    res.status(200).send({ msg: "No record found" });
+  } else if (result.modifiedCount > 0) {
+    res.status(200).send({ msg: "Component Master Updated Successfully" });
+  } else if (result.matchedCount > 0) {
+    res.status(200).send({ msg: "Already upto date" });
+  } else {
+    res
+      .status(500)
+      .send({ msg: "An unexpected error occurred. Please try again later" });
+  }
+}
+);
+// GET API to find a specific component by its name
 app.get("/componentList/:compName", (req: Request, res: Response) => {
   const compName = req.params.compName;
   res.status(200).send({
