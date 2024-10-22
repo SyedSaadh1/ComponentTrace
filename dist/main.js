@@ -4,13 +4,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
 let app = (0, express_1.default)();
 app.use(express_1.default.json());
+app.use((0, cors_1.default)());
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "X-Requested-With, Content-Type");
+    next();
+});
 // apis here.......
 /**
  * findComponentMaster APi call will get all the Component Master details
- */
-app.get("/componentMaster/findAllComponentMaster", (req, res) => {
+//  */
+app.get("/componentMaster/findComponentMaster", (req, res) => {
     res.status(200).send([
         {
             componentMasterId: "CM-001",
