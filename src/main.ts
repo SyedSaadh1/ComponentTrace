@@ -159,6 +159,7 @@ app.put(
     }
   }
 );
+
 /**
  * findInventory APi call will get all the Inventory  details
  */
@@ -170,6 +171,50 @@ app.get("/Inventory/findInventory", (req: Request, res: Response) => {
     userId: "xxx",
     _id: "66faeca1d9b10bced59a7585",
   });
+});
+
+/**
+ *  To findInventory APi to get from component List by component name
+ */
+
+const componentList = [
+  {
+    _id: "66fb7eea86ea2d7cf5743791",
+    componentMasterId: "1",
+    qrCode: "",
+    status: "available",
+    componentId: "COM001",
+    componentName: "Engine",
+  },
+  {
+    _id: "66fb8ffb87fb2d8df5743702",
+    componentMasterId: "2",
+    qrCode: "",
+    status: "pending",
+    componentId: "COM002",
+    componentName: "Transmission",
+  },
+];
+
+/**
+ *  To findInventory APi to get from component List by component MasterId
+ */
+
+app.get("/Inventory/findComponentsByMasterIds/:componentMasterIds", (req: Request, res: Response) => {
+  const componentMasterIds = req.params.componentMasterIds.split(','); 
+  let components;
+  if(req.params.componentMasterIds == "all"){
+    components = componentList;
+  }else
+   components = componentList.filter(item => componentMasterIds.includes(item.componentMasterId));
+
+  if (components.length > 0) {
+    res.status(200).send(components); 
+  } else {
+    res.status(404).send({
+      error: "No components found for the given componentMasterIds",
+    });
+  }
 });
 
 //PurchaseOrder(PO) code is Below
