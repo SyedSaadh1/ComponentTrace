@@ -163,7 +163,6 @@ app.get("/Inventory/findInventory", (req: Request, res: Response) => {
   ]);
 });
 
-<<<<<<< Updated upstream
 /**
  *  To findInventory APi to get from component List by component name
  */
@@ -213,8 +212,6 @@ app.get(
   }
 );
 
-=======
->>>>>>> Stashed changes
 //PurchaseOrder(PO) code is Below
 
 app.post("/poorder/createpoorder", (req:any, res:any) => {
