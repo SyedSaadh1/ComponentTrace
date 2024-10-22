@@ -19,6 +19,7 @@ app.use((req, res, next) => {
 
   next();
 });
+//added cors
 
 // apis here.......
 

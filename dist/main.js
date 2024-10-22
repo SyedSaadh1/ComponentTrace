@@ -14,6 +14,7 @@ app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Headers", "X-Requested-With, Content-Type");
     next();
 });
+//added cors
 // apis here.......
 /**
  * findComponentMaster APi call will get all the Component Master details
