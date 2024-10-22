@@ -230,7 +230,63 @@ app.post("/componentList/createComponent", (req, res) => {
     updatedOn: "2024-10-21T11:07:15.605Z",
   });
 });
-app.get("/findComponentList", (req: Request, res: Response) => {
+app.get("/componentList/findAllComponents", (req: Request, res: Response) => {
+  res.status(200).send([{
+    componentMasterId: "CM-001",
+    componentId: "C-001",
+    componentName: "Component A",
+    qrCode: "",
+    category: "Electronics",
+    sentToDelivery: true,
+    batchNumber: "BATCH-001",
+    location: "Warehouse A",
+    createdBy: "User1",
+    createdOn: "2024-10-18T00:00:00.000Z",
+    updatedOn: "2024-10-18T00:00:00.000Z",
+    _id: "66fb7eea86ea2d7cf5743791"
+  },
+  { componentMasterId: "CM-002",
+    componentId: "C-002",
+    componentName: "Component B",
+    qrCode: "QR12345",
+    category: "Mechanical",
+    sentToDelivery: false,
+    batchNumber: "BATCH-002",
+    location: "Warehouse B",
+    createdBy: "User2",
+    createdOn: "2024-10-17T00:00:00.000Z",
+    updatedOn: "2024-10-17T00:00:00.000Z",
+    _id: "66fb7eea86ea2d7cf5743792"},
+    {
+      componentMasterId: "CM-003",
+      componentId: "C-003",
+      componentName: "Component C",
+      qrCode: "",
+      category: "Electrical",
+      sentToDelivery: true,
+      batchNumber: "BATCH-003",
+      location: "Warehouse C",
+      createdBy: "User3",
+      createdOn: "2024-10-16T00:00:00.000Z",
+      updatedOn: "2024-10-16T00:00:00.000Z",
+      _id: "66fb7eea86ea2d7cf5743793"
+    }]);
+});
+
+app.put("/componentlist/updateComponent", (req: Request, res: Response) => {
+  const { componentId, componentName, status, wareHouseLocation } = req.body;
+
+  res.status(200).send({
+    acknowledged: true,
+    modifiedCount: 1, 
+    upsertedId: null,
+    upsertedCount: 0,
+    matchedCount: 1, 
+  });
+});
+
+app.get("/componentList/:compName", (req: Request, res: Response) => {
+  const compName = req.params.compName;
   res.status(200).send({
     componentMasterId: "CM-001",
     componentId: "C-001",
@@ -301,6 +357,8 @@ app.get("/Transaction/findTransaction", (req: Request, res: Response) => {
     },
   ]);
 });
+
+
 
 let port = 7000;
 app.listen(port, () => {
