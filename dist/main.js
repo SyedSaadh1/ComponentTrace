@@ -8,29 +8,69 @@ app.use(express.json());
  * findComponentMaster APi call will get all the Component Master details
  */
 app.get("/componentMaster/findAllComponentMaster", (req, res) => {
-    res.status(200).send({
-        componentMasterId: "CM-001",
-        componentMasterName: "Keyboard",
-        componentMasterDescription: "Used for Vehivles",
-        componentImage: "https://images.com/tyre.png",
-        components: [
-            { componentName: "Keys", quantity: 100 },
-            {
-                componentName: "Mother Board",
-                quantity: 1,
-            },
-        ],
-        isFinalProduct: "No",
-        category: "Rubber",
-        productionStatus: "Active",
-        createdBy: "miway",
-        createdOn: "2024-10-18T00:00:00.000Z",
-        updatedOn: "2024-10-18T00:00:00.000Z",
-        _id: "67122520a5768407fca14e22",
-    });
+    res.status(200).send([
+        {
+            componentMasterId: "CM-001",
+            componentMasterName: "Keyboard",
+            componentMasterDescription: "Used for Vehivles",
+            componentImage: "https://images.com/tyre.png",
+            components: [
+                { componentName: "Keys", quantity: 100 },
+                {
+                    componentName: "Mother Board",
+                    quantity: 1,
+                },
+            ],
+            isFinalProduct: false,
+            category: "Electronics",
+            productionStatus: "Active",
+            createdBy: "miway",
+            createdOn: "2024-10-18T00:00:00.000Z",
+            updatedOn: "2024-10-18T00:00:00.000Z",
+            _id: "67122520a5768407fca14e22",
+        },
+        {
+            componentMasterId: "CM-002",
+            componentMasterName: "Mouse",
+            componentMasterDescription: "Used in Computers",
+            componentImage: "https://images.com/mouse.png",
+            components: [],
+            isFinalProduct: false,
+            category: "Electronics",
+            productionStatus: "Active",
+            createdBy: "miway",
+            createdOn: "2024-10-18T00:00:00.000Z",
+            updatedOn: "2024-10-18T00:00:00.000Z",
+            _id: "67122520a5768407fca14e22",
+        },
+        {
+            componentMasterId: "CM-003",
+            componentMasterName: "Car",
+            componentMasterDescription: "It is a 4 wheeler",
+            componentImage: "https://images.com/car.png",
+            components: [
+                { componentName: "Tyre", quantity: 4 },
+                {
+                    componentName: "Engine",
+                    quantity: 1,
+                },
+                {
+                    componentName: "Seats",
+                    quantity: 5,
+                },
+            ],
+            isFinalProduct: true,
+            category: "Automobiles",
+            productionStatus: "Active",
+            createdBy: "miway",
+            createdOn: "2024-10-18T00:00:00.000Z",
+            updatedOn: "2024-10-18T00:00:00.000Z",
+            _id: "67122520a5768407fca14e22",
+        },
+    ]);
 });
 // POST API to create a new ComponentMaster
-app.post("componentMaster/createComponentMaster", (req, res) => {
+app.post("/componentMaster/createComponentMaster", (req, res) => {
     const { componentMasterId, componentMasterName, componentMasterDescription, componentImage, components, isFinalProduct, category, productionStatus, createdBy, } = req.body; //this is req body format
     // Here you could add logic to save the component in a database
     // For now, we are just simulating the creation and returning the same data back.
@@ -49,11 +89,11 @@ app.post("componentMaster/createComponentMaster", (req, res) => {
     // };
     // Responding with the created component
     res.status(201).send({
-        componentMasterId: "CM-003",
-        componentMasterName: "Keyboard",
-        componentMasterDescription: "Used for PCs",
-        componentImage: "https://images.com/mouse.png",
-        components: [
+        componentMasterId: componentMasterId || "CM-003",
+        componentMasterName: componentMasterName || "Keyboard",
+        componentMasterDescription: componentMasterDescription || "Used for PCs",
+        componentImage: componentImage || "https://images.com/mouse.png",
+        components: components || [
             {
                 componentMasterId: "CM-002",
                 quantity: 100,
@@ -63,23 +103,40 @@ app.post("componentMaster/createComponentMaster", (req, res) => {
                 quantity: 1,
             },
         ],
-        isFinalProduct: "Yes",
-        category: "Plastic",
-        productionStatus: "Active",
-        createdBy: "user123",
-        createdOn: "2024-10-21T11:00:55.290Z",
-        updatedOn: "2024-10-21T11:00:55.290Z",
+        isFinalProduct: isFinalProduct || false,
+        category: category || "Plastic",
+        productionStatus: productionStatus || "Active",
+        createdBy: createdBy || "user123",
+        createdOn: new Date(),
+        updatedOn: new Date(),
     });
 });
 app.put("/componentMaster/updateComponentMaster", (req, res) => {
     const { componentMasterName, components } = req.body;
-    res.status(200).send({
+    let result = {
         acknowledged: true,
         modifiedCount: 1 || 0, //depends on if any record got updated or not
         upsertedId: null,
         upsertedCount: 0,
         matchedCount: 1 || 0,
-    });
+    };
+    if (!result.acknowledged) {
+        res.status(400).send({ msg: "Updated operation not acknowledged" });
+    }
+    else if (result.matchedCount == 0) {
+        res.status(200).send({ msg: "No record found" });
+    }
+    else if (result.modifiedCount > 0) {
+        res.status(200).send({ msg: "Component Master Updated Successfully" });
+    }
+    else if (result.matchedCount > 0) {
+        res.status(200).send({ msg: "Already upto date" });
+    }
+    else {
+        res
+            .status(500)
+            .send({ msg: "An unexpected error occurred. Please try again later" });
+    }
 });
 /**
  * findInventory APi call will get all the Inventory  details
