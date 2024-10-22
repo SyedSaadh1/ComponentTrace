@@ -135,7 +135,7 @@ app.post(
 app.put(
   "/componentMaster/updateComponentMaster",
   (req: Request, res: Response) => {
-    const { componentMasterName, components } = req.body;
+    const data = req.body;
 
     let result = {
       acknowledged: true,
@@ -172,7 +172,6 @@ app.get("/Inventory/findInventory", (req: Request, res: Response) => {
   });
 });
 
-<<<<<<< Updated upstream
 //PurchaseOrder(PO) code is Below
 
 app.post("/poorder/createpoorder", (req, res) => {
@@ -194,7 +193,16 @@ app.post("/poorder/createpoorder", (req, res) => {
   });
 });
 app.post("/componentList/createComponent", (req, res) => {
-  const { componentMasterId, componentId, componentName, qrCode, currentOwner, wareHouseLocation, batchNumber, createdBy } = req.body;
+  const {
+    componentMasterId,
+    componentId,
+    componentName,
+    qrCode,
+    currentOwner,
+    wareHouseLocation,
+    batchNumber,
+    createdBy,
+  } = req.body;
   // Simulating the creation of a new component in the component list
   // const newComponent = {
   //   componentMasterId: componentMasterId || "CM-001",
@@ -210,16 +218,16 @@ app.post("/componentList/createComponent", (req, res) => {
   // };
   // Responding with the created component
   res.status(201).send({
-      "componentMasterId": "CM-001",
-      "componentId": "C-001",
-      "componentName": "Component A",
-      "qrCode": "",
-      "currentOwner": "Owner1",
-      "wareHouseLocation": "Warehouse A",
-      "batchNumber": "BATCH-001",
-      "createdBy": "User1",
-      "createdOn": "2024-10-21T11:07:15.603Z",
-      "updatedOn": "2024-10-21T11:07:15.605Z"
+    componentMasterId: "CM-001",
+    componentId: "C-001",
+    componentName: "Component A",
+    qrCode: "",
+    currentOwner: "Owner1",
+    wareHouseLocation: "Warehouse A",
+    batchNumber: "BATCH-001",
+    createdBy: "User1",
+    createdOn: "2024-10-21T11:07:15.603Z",
+    updatedOn: "2024-10-21T11:07:15.605Z",
   });
 });
 app.get("/findComponentList", (req: Request, res: Response) => {
@@ -235,9 +243,9 @@ app.get("/findComponentList", (req: Request, res: Response) => {
     createdBy: "User1",
     createdOn: "2024-10-18T00:00:00.000Z",
     updatedOn: "2024-10-18T00:00:00.000Z",
-    _id: "66fb7eea86ea2d7cf5743791"
+    _id: "66fb7eea86ea2d7cf5743791",
   });
-=======
+});
 app.get("/Transaction/findTransaction", (req: Request, res: Response) => {
   res.status(200).send([
     {
@@ -292,7 +300,6 @@ app.get("/Transaction/findTransaction", (req: Request, res: Response) => {
       feedback: "This is good product",
     },
   ]);
->>>>>>> Stashed changes
 });
 
 let port = 7000;
