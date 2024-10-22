@@ -138,6 +138,51 @@ app.post("/poorder/createpoorder", (req, res) => {
     poId: "5678",
   });
 });
+app.post("/componentList/createComponent", (req, res) => {
+  const { componentMasterId, componentId, componentName, qrCode, currentOwner, wareHouseLocation, batchNumber, createdBy } = req.body;
+  // Simulating the creation of a new component in the component list
+  // const newComponent = {
+  //   componentMasterId: componentMasterId || "CM-001",
+  //   componentId: componentId || "COM001",
+  //   componentName: componentName || "Engine",
+  //   qrCode: qrCode || "",
+  //   currentOwner: currentOwner || "Owner1",
+  //   wareHouseLocation: wareHouseLocation || "Warehouse A",
+  //   batchNumber: batchNumber || "BATCH-001",
+  //   createdBy: createdBy || "User1",
+  //   createdOn: new Date().toISOString(),
+  //   updatedOn: new Date().toISOString(),
+  // };
+  // Responding with the created component
+  res.status(201).send({
+      "componentMasterId": "CM-001",
+      "componentId": "C-001",
+      "componentName": "Component A",
+      "qrCode": "",
+      "currentOwner": "Owner1",
+      "wareHouseLocation": "Warehouse A",
+      "batchNumber": "BATCH-001",
+      "createdBy": "User1",
+      "createdOn": "2024-10-21T11:07:15.603Z",
+      "updatedOn": "2024-10-21T11:07:15.605Z"
+  });
+});
+app.get("/findComponentList", (req: Request, res: Response) => {
+  res.status(200).send({
+    componentMasterId: "CM-001",
+    componentId: "C-001",
+    componentName: "Component A",
+    qrCode: "",
+    category: "Electronics",
+    sentToDelivery: true,
+    batchNumber: "BATCH-001",
+    location: "Warehouse A",
+    createdBy: "User1",
+    createdOn: "2024-10-18T00:00:00.000Z",
+    updatedOn: "2024-10-18T00:00:00.000Z",
+    _id: "66fb7eea86ea2d7cf5743791"
+  });
+});
 
 let port = 7000;
 app.listen(port, () => {
