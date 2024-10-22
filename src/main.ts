@@ -141,7 +141,6 @@ app.put(
     }
   }
 );
-
 /**
  * findInventory APi call will get all the Inventory  details
  */
@@ -164,6 +163,7 @@ app.get("/Inventory/findInventory", (req: Request, res: Response) => {
   ]);
 });
 
+<<<<<<< Updated upstream
 /**
  *  To findInventory APi to get from component List by component name
  */
@@ -213,9 +213,11 @@ app.get(
   }
 );
 
+=======
+>>>>>>> Stashed changes
 //PurchaseOrder(PO) code is Below
 
-app.post("/poorder/createpoorder", (req, res) => {
+app.post("/poorder/createpoorder", (req:any, res:any) => {
   res.status(201).send({
     _id: "102345678911",
     description: req.body?.description ?? "Ordered 4 MRF tyres for car",
