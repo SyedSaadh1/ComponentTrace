@@ -141,6 +141,7 @@ app.put(
     }
   }
 );
+
 /**
  * findInventory APi call will get all the Inventory  details
  */
@@ -154,26 +155,76 @@ app.get("/Inventory/findInventory", (req: Request, res: Response) => {
   });
 });
 
+/**
+ *  To findInventory APi to get from component List by component name
+ */
+
+const componentList = [
+  {
+    _id: "66fb7eea86ea2d7cf5743791",
+    componentMasterId: "1",
+    qrCode: "",
+    status: "available",
+    componentId: "COM001",
+    componentName: "Engine",
+  },
+  {
+    _id: "66fb8ffb87fb2d8df5743702",
+    componentMasterId: "2",
+    qrCode: "",
+    status: "pending",
+    componentId: "COM002",
+    componentName: "Transmission",
+  },
+];
+
+/**
+ *  To findInventory APi to get from component List by component MasterId
+ */
+
+app.get(
+  "/Inventory/findComponentsByMasterIds/:componentMasterIds",
+  (req: Request, res: Response) => {
+    const componentMasterIds = req.params.componentMasterIds.split(",");
+    let components;
+    if (req.params.componentMasterIds == "all") {
+      components = componentList;
+    } else
+      components = componentList.filter((item) =>
+        componentMasterIds.includes(item.componentMasterId)
+      );
+
+    if (components.length > 0) {
+      res.status(200).send(components);
+    } else {
+      res.status(404).send({
+        error: "No components found for the given componentMasterIds",
+      });
+    }
+  }
+);
+
 //PurchaseOrder(PO) code is Below
 
 app.post("/poorder/createpoorder", (req, res) => {
   res.status(201).send({
-    _id: "12345678911",
+    _id: "102345678911",
     description: req.body?.description ?? "Ordered 4 MRF tyres for car",
-    orderedBy: "Sachin",
-    orderDetails: [
+    orderedBy: req.body?.orderedBy ?? "Sachin",
+    orderDetails: req.body?.orderDetails ?? [
       {
         componentMasterName: "Tyres",
         quantity: 4,
         expectedDate: "22-10-2023",
       },
     ],
-    orderedTo: "MRF",
-    address: "Hyderabad",
-    orderedDate: "18-10-2023",
-    poId: "5678",
+    orderedTo: req.body?.orderedTo ?? "MRF",
+    address: req.body?.address ?? "Hyderabad",
+    orderedDate: req.body?.orderedDate ?? "18-10-2023",
+    poId: req.body?.poId ?? "5678",
   });
 });
+// POST API to create a new component in the component list
 app.post("/componentList/createComponent", (req, res) => {
   const {
     componentMasterId,
@@ -212,6 +263,7 @@ app.post("/componentList/createComponent", (req, res) => {
     updatedOn: "2024-10-21T11:07:15.605Z",
   });
 });
+// GET API to retrieve all components in the component list
 app.get("/componentList/findAllComponents", (req: Request, res: Response) => {
   res.status(200).send([
     {
@@ -258,19 +310,32 @@ app.get("/componentList/findAllComponents", (req: Request, res: Response) => {
     },
   ]);
 });
-
+// PUT API to update an existing component in the component list
 app.put("/componentlist/updateComponent", (req: Request, res: Response) => {
   const { componentId, componentName, status, wareHouseLocation } = req.body;
 
-  res.status(200).send({
+  let result = {
     acknowledged: true,
     modifiedCount: 1,
     upsertedId: null,
     upsertedCount: 0,
-    matchedCount: 1,
-  });
+    matchedCount: 1 || 0,
+  };
+  if (!result.acknowledged) {
+    res.status(400).send({ msg: "Updated operation not acknowledged" });
+  } else if (result.matchedCount == 0) {
+    res.status(200).send({ msg: "No record found" });
+  } else if (result.modifiedCount > 0) {
+    res.status(200).send({ msg: "Component Master Updated Successfully" });
+  } else if (result.matchedCount > 0) {
+    res.status(200).send({ msg: "Already upto date" });
+  } else {
+    res
+      .status(500)
+      .send({ msg: "An unexpected error occurred. Please try again later" });
+  }
 });
-
+// GET API to find a specific component by its name
 app.get("/componentList/:compName", (req: Request, res: Response) => {
   const compName = req.params.compName;
   res.status(200).send({
