@@ -176,20 +176,20 @@ app.get("/Inventory/findInventory", (req: Request, res: Response) => {
 
 app.post("/poorder/createpoorder", (req, res) => {
   res.status(201).send({
-    _id: "12345678911",
+    _id: "102345678911",
     description: req.body?.description ?? "Ordered 4 MRF tyres for car",
-    orderedBy: "Sachin",
-    orderDetails: [
+    orderedBy: req.body?.orderedBy ?? "Sachin",
+    orderDetails: req.body?.orderDetails ?? [
       {
         componentMasterName: "Tyres",
         quantity: 4,
         expectedDate: "22-10-2023",
       },
     ],
-    orderedTo: "MRF",
-    address: "Hyderabad",
-    orderedDate: "18-10-2023",
-    poId: "5678",
+    orderedTo: req.body?.orderedTo ?? "MRF",
+    address: req.body?.address ?? "Hyderabad",
+    orderedDate: req.body?.orderedDate ?? "18-10-2023",
+    poId: req.body?.poId ?? "5678",
   });
 });
 app.post("/componentList/createComponent", (req, res) => {
