@@ -1,8 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const express = require("express");
-let app = express();
-app.use(express.json());
+const express_1 = __importDefault(require("express"));
+let app = (0, express_1.default)();
+app.use(express_1.default.json());
 // apis here.......
 /**
  * findComponentMaster APi call will get all the Component Master details
@@ -12,7 +15,7 @@ app.get("/componentMaster/findAllComponentMaster", (req, res) => {
         {
             componentMasterId: "CM-001",
             componentMasterName: "Keyboard",
-            componentMasterDescription: "Used for Vehivles",
+            componentMasterDescription: "Used for Vehicles",
             componentImage: "https://images.com/tyre.png",
             components: [
                 { componentName: "Keys", quantity: 100 },
@@ -72,21 +75,6 @@ app.get("/componentMaster/findAllComponentMaster", (req, res) => {
 // POST API to create a new ComponentMaster
 app.post("/componentMaster/createComponentMaster", (req, res) => {
     const { componentMasterId, componentMasterName, componentMasterDescription, componentImage, components, isFinalProduct, category, productionStatus, createdBy, } = req.body; //this is req body format
-    // Here you could add logic to save the component in a database
-    // For now, we are just simulating the creation and returning the same data back.
-    // const newComponentMaster = {
-    //   componentMasterId: componentMasterId || "CM-002",
-    //   componentMasterName,
-    //   componentMasterDescription,
-    //   componentImage,
-    //   components,
-    //   isFinalProduct,
-    //   category,
-    //   productionStatus,
-    //   createdBy,
-    //   createdOn: new Date().toISOString(),
-    //   updatedOn: new Date().toISOString(),
-    // };
     // Responding with the created component
     res.status(201).send({
         componentMasterId: componentMasterId || "CM-003",
@@ -111,6 +99,7 @@ app.post("/componentMaster/createComponentMaster", (req, res) => {
         updatedOn: new Date(),
     });
 });
+//to update the Component Master if entered any wrong info
 app.put("/componentMaster/updateComponentMaster", (req, res) => {
     const data = req.body;
     let result = {
@@ -121,10 +110,10 @@ app.put("/componentMaster/updateComponentMaster", (req, res) => {
         matchedCount: 1 || 0,
     };
     if (!result.acknowledged) {
-        res.status(400).send({ msg: "Updated operation not acknowledged" });
+        res.status(400).send({ msg: "Updating operation not acknowledged" });
     }
     else if (result.matchedCount == 0) {
-        res.status(200).send({ msg: "No record found" });
+        res.status(200).send({ msg: "No Component Master found" });
     }
     else if (result.modifiedCount > 0) {
         res.status(200).send({ msg: "Component Master Updated Successfully" });
@@ -142,7 +131,8 @@ app.put("/componentMaster/updateComponentMaster", (req, res) => {
  * findInventory APi call will get all the Inventory  details
  */
 app.get("/Inventory/findInventory", (req, res) => {
-    res.status(200).send([{
+    res.status(200).send([
+        {
             componentMasterId: "CM-001",
             componentName: "Tyre",
             quantity: 10,
@@ -155,7 +145,8 @@ app.get("/Inventory/findInventory", (req, res) => {
             quantity: 20,
             userId: "xxx",
             _id: "66faeca1d9b10bced59a7588",
-        }]);
+        },
+    ]);
 });
 /**
  *  To findInventory APi to get from component List by component name
@@ -182,13 +173,13 @@ const componentList = [
  *  To findInventory APi to get from component List by component MasterId
  */
 app.get("/Inventory/findComponentsByMasterIds/:componentMasterIds", (req, res) => {
-    const componentMasterIds = req.params.componentMasterIds.split(',');
+    const componentMasterIds = req.params.componentMasterIds.split(",");
     let components;
     if (req.params.componentMasterIds == "all") {
         components = componentList;
     }
     else
-        components = componentList.filter(item => componentMasterIds.includes(item.componentMasterId));
+        components = componentList.filter((item) => componentMasterIds.includes(item.componentMasterId));
     if (components.length > 0) {
         res.status(200).send(components);
     }
@@ -197,26 +188,6 @@ app.get("/Inventory/findComponentsByMasterIds/:componentMasterIds", (req, res) =
             error: "No components found for the given componentMasterIds",
         });
     }
-});
-//PurchaseOrder(PO) code is Below
-app.post("/poorder/createpoorder", (req, res) => {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p;
-    res.status(201).send({
-        _id: "102345678911",
-        description: (_b = (_a = req.body) === null || _a === void 0 ? void 0 : _a.description) !== null && _b !== void 0 ? _b : "Ordered 4 MRF tyres for car",
-        orderedBy: (_d = (_c = req.body) === null || _c === void 0 ? void 0 : _c.orderedBy) !== null && _d !== void 0 ? _d : "Sachin",
-        orderDetails: (_f = (_e = req.body) === null || _e === void 0 ? void 0 : _e.orderDetails) !== null && _f !== void 0 ? _f : [
-            {
-                componentMasterName: "Tyres",
-                quantity: 4,
-                expectedDate: "22-10-2023",
-            },
-        ],
-        orderedTo: (_h = (_g = req.body) === null || _g === void 0 ? void 0 : _g.orderedTo) !== null && _h !== void 0 ? _h : "MRF",
-        address: (_k = (_j = req.body) === null || _j === void 0 ? void 0 : _j.address) !== null && _k !== void 0 ? _k : "Hyderabad",
-        orderedDate: (_m = (_l = req.body) === null || _l === void 0 ? void 0 : _l.orderedDate) !== null && _m !== void 0 ? _m : "18-10-2023",
-        poId: (_p = (_o = req.body) === null || _o === void 0 ? void 0 : _o.poId) !== null && _p !== void 0 ? _p : "5678",
-    });
 });
 // POST API to create a new component in the component list
 app.post("/componentList/createComponent", (req, res) => {
@@ -250,7 +221,8 @@ app.post("/componentList/createComponent", (req, res) => {
 });
 // GET API to retrieve all components in the component list
 app.get("/componentList/findAllComponents", (req, res) => {
-    res.status(200).send([{
+    res.status(200).send([
+        {
             componentMasterId: "CM-001",
             componentId: "C-001",
             componentName: "Component A",
@@ -262,9 +234,10 @@ app.get("/componentList/findAllComponents", (req, res) => {
             createdBy: "User1",
             createdOn: "2024-10-18T00:00:00.000Z",
             updatedOn: "2024-10-18T00:00:00.000Z",
-            _id: "66fb7eea86ea2d7cf5743791"
+            _id: "66fb7eea86ea2d7cf5743791",
         },
-        { componentMasterId: "CM-002",
+        {
+            componentMasterId: "CM-002",
             componentId: "C-002",
             componentName: "Component B",
             qrCode: "QR12345",
@@ -275,7 +248,8 @@ app.get("/componentList/findAllComponents", (req, res) => {
             createdBy: "User2",
             createdOn: "2024-10-17T00:00:00.000Z",
             updatedOn: "2024-10-17T00:00:00.000Z",
-            _id: "66fb7eea86ea2d7cf5743792" },
+            _id: "66fb7eea86ea2d7cf5743792",
+        },
         {
             componentMasterId: "CM-003",
             componentId: "C-003",
@@ -288,15 +262,16 @@ app.get("/componentList/findAllComponents", (req, res) => {
             createdBy: "User3",
             createdOn: "2024-10-16T00:00:00.000Z",
             updatedOn: "2024-10-16T00:00:00.000Z",
-            _id: "66fb7eea86ea2d7cf5743793"
-        }]);
+            _id: "66fb7eea86ea2d7cf5743793",
+        },
+    ]);
 });
 // PUT API to update an existing component in the component list
 app.put("/componentlist/updateComponent", (req, res) => {
     const { componentId, componentName, status, wareHouseLocation } = req.body;
     let result = {
         acknowledged: true,
-        modifiedCount: 1 || 0, //depends if any record got updated or not
+        modifiedCount: 1,
         upsertedId: null,
         upsertedCount: 0,
         matchedCount: 1 || 0,
@@ -325,7 +300,7 @@ app.get("/componentList/:compName", (req, res) => {
     res.status(200).send({
         componentMasterId: "CM-001",
         componentId: "C-001",
-        componentName: "Component A",
+        componentName: compName,
         qrCode: "",
         category: "Electronics",
         sentToDelivery: true,
@@ -337,6 +312,27 @@ app.get("/componentList/:compName", (req, res) => {
         _id: "66fb7eea86ea2d7cf5743791",
     });
 });
+////Purchase Order  --POST API
+app.post("/poorder/createpoorder", (req, res) => {
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p;
+    res.status(201).send({
+        _id: "102345678911",
+        description: (_b = (_a = req.body) === null || _a === void 0 ? void 0 : _a.description) !== null && _b !== void 0 ? _b : "Ordered 4 MRF tyres for car",
+        orderedBy: (_d = (_c = req.body) === null || _c === void 0 ? void 0 : _c.orderedBy) !== null && _d !== void 0 ? _d : "Sachin",
+        orderDetails: (_f = (_e = req.body) === null || _e === void 0 ? void 0 : _e.orderDetails) !== null && _f !== void 0 ? _f : [
+            {
+                componentMasterName: "Tyres",
+                quantity: 4,
+                expectedDate: "22-10-2023",
+            },
+        ],
+        orderedTo: (_h = (_g = req.body) === null || _g === void 0 ? void 0 : _g.orderedTo) !== null && _h !== void 0 ? _h : "MRF",
+        address: (_k = (_j = req.body) === null || _j === void 0 ? void 0 : _j.address) !== null && _k !== void 0 ? _k : "Hyderabad",
+        orderedDate: (_m = (_l = req.body) === null || _l === void 0 ? void 0 : _l.orderedDate) !== null && _m !== void 0 ? _m : "18-10-2023",
+        poId: (_p = (_o = req.body) === null || _o === void 0 ? void 0 : _o.poId) !== null && _p !== void 0 ? _p : "5678",
+    });
+});
+//////Transaction GET API
 app.get("/Transaction/findTransaction", (req, res) => {
     res.status(200).send([
         {
@@ -390,6 +386,98 @@ app.get("/Transaction/findTransaction", (req, res) => {
             feedback: "This is good product",
         },
     ]);
+});
+//Batch Apis
+//to create a Batch
+app.post("/batch/createBatch", (req, res) => {
+    const { batchNo, componentDetails, batchStartDate, batchEndDate, createdBy } = req.body;
+    res.status(201).send({
+        batchNo: batchNo || "B-001",
+        componentDetails: componentDetails || [
+            { componentMasterId: "CM-001", quantity: 10 },
+            { componentMasterId: "CM-002", quantity: 50 },
+        ],
+        batchStartDate: batchStartDate || "20/12/2025",
+        batchEndDate: batchEndDate || "20/2/2026",
+        createdBy: createdBy || "User123",
+    });
+});
+//to display all the batches
+app.get("/batch/findAllBatches", (req, res) => {
+    res.status(200).send([
+        {
+            batchNo: "B-001",
+            componentDetails: [
+                { componentMasterId: "CM-001", quantity: 10 },
+                { componentMasterId: "CM-002", quantity: 50 },
+            ],
+            batchStartDate: "20/12/2025",
+            batchEndDate: "20/02/2026",
+            createdBy: "User123",
+        },
+        {
+            batchNo: "B-002",
+            componentDetails: [
+                { componentMasterId: "CM-030", quantity: 100 },
+                { componentMasterId: "CM-012", quantity: 80 },
+            ],
+            batchStartDate: "20/05/2025",
+            batchEndDate: "20/01/2026",
+            createdBy: "User123",
+        },
+        {
+            batchNo: "B-003",
+            componentDetails: [
+                { componentMasterId: "CM-010", quantity: 60 },
+                { componentMasterId: "CM-022", quantity: 5 },
+            ],
+            batchStartDate: "20/09/2025",
+            batchEndDate: "20/03/2026",
+            createdBy: "User123",
+        },
+    ]);
+});
+//to get single batch details
+app.get("/batch/:batchNo", (req, res) => {
+    const batchNo = req.params.batchNo;
+    res.status(200).send({
+        batchNo: batchNo,
+        componentDetails: [
+            { componentMasterId: "CM-010", quantity: 60 },
+            { componentMasterId: "CM-022", quantity: 5 },
+        ],
+        batchStartDate: "20/09/2025",
+        batchEndDate: "20/03/2026",
+        createdBy: "User123",
+    });
+});
+//to update or edit the batch
+app.put("/batch/updateBatch", (req, res) => {
+    const data = req.body;
+    let result = {
+        acknowledged: true,
+        modifiedCount: 1 || 0, //depends on if any record got updated or not
+        upsertedId: null,
+        upsertedCount: 0,
+        matchedCount: 1 || 0,
+    };
+    if (!result.acknowledged) {
+        res.status(400).send({ msg: "Updating operation not acknowledged" });
+    }
+    else if (result.matchedCount == 0) {
+        res.status(200).send({ msg: "No Batch found" });
+    }
+    else if (result.modifiedCount > 0) {
+        res.status(200).send({ msg: "Batch Updated Successfully" });
+    }
+    else if (result.matchedCount > 0) {
+        res.status(200).send({ msg: "Already upto date" });
+    }
+    else {
+        res
+            .status(500)
+            .send({ msg: "An unexpected error occurred. Please try again later" });
+    }
 });
 let port = 7000;
 app.listen(port, () => {

@@ -212,26 +212,9 @@ app.get(
   }
 );
 
-//PurchaseOrder(PO) code is Below
 
-app.post("/poorder/createpoorder", (req:any, res:any) => {
-  res.status(201).send({
-    _id: "102345678911",
-    description: req.body?.description ?? "Ordered 4 MRF tyres for car",
-    orderedBy: req.body?.orderedBy ?? "Sachin",
-    orderDetails: req.body?.orderDetails ?? [
-      {
-        componentMasterName: "Tyres",
-        quantity: 4,
-        expectedDate: "22-10-2023",
-      },
-    ],
-    orderedTo: req.body?.orderedTo ?? "MRF",
-    address: req.body?.address ?? "Hyderabad",
-    orderedDate: req.body?.orderedDate ?? "18-10-2023",
-    poId: req.body?.poId ?? "5678",
-  });
-});
+
+
 // POST API to create a new component in the component list
 app.post("/componentList/createComponent", (req, res) => {
   const {
@@ -344,6 +327,7 @@ app.put("/componentlist/updateComponent", (req: Request, res: Response) => {
   }
 });
 // GET API to find a specific component by its name
+
 app.get("/componentList/:compName", (req: Request, res: Response) => {
   const compName = req.params.compName;
   res.status(200).send({
@@ -361,6 +345,30 @@ app.get("/componentList/:compName", (req: Request, res: Response) => {
     _id: "66fb7eea86ea2d7cf5743791",
   });
 });
+
+////Purchase Order  --POST API
+app.post("/poorder/createpoorder", (req: Request, res: Response) => {
+  res.status(201).send({
+    _id: "102345678911",
+    description: req.body?.description ?? "Ordered 4 MRF tyres for car",
+    orderedBy: req.body?.orderedBy ?? "Sachin",
+    orderDetails: req.body?.orderDetails ?? [
+      {
+        componentMasterName: "Tyres",
+        quantity: 4,
+        expectedDate: "22-10-2023",
+      },
+    ],
+    orderedTo: req.body?.orderedTo ?? "MRF",
+    address: req.body?.address ?? "Hyderabad",
+    orderedDate: req.body?.orderedDate ?? "18-10-2023",
+    poId: req.body?.poId ?? "5678",
+  });
+});
+
+
+
+//////Transaction GET API
 app.get("/Transaction/findTransaction", (req: Request, res: Response) => {
   res.status(200).send([
     {
