@@ -134,7 +134,7 @@ app.post(
 );
 
 //to fetch sub-components of a specific Component Master
-app.get("/inventory/:componentMasterId", (req: Request, res: Response) => {
+app.get("/componentMaster/view/:componentMasterId", (req: Request, res: Response) => {
   const componentMasterId = req.params.componentMasterId;
   res.status(200).send({
     componentMasterId: componentMasterId || "CM-001",
