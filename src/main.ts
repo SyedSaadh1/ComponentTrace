@@ -132,6 +132,25 @@ app.post(
     });
   }
 );
+
+//to fetch sub-components of a specific Component Master
+app.get("/inventory/:componentMasterId", (req: Request, res: Response) => {
+  const componentMasterId = req.params.componentMasterId;
+  res.status(200).send({
+    componentMasterId: componentMasterId || "CM-001",
+    components: [
+      { componentName: "Tyre", quantity: 4 },
+      {
+        componentName: "Seat",
+        quantity: 5,
+      },
+      {
+        componentName: "Engine",
+        quantity: 1,
+      },
+    ],
+  });
+});
 //to update the Component Master if entered any wrong info
 app.put(
   "/componentMaster/updateComponentMaster",
