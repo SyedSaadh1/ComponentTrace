@@ -460,10 +460,6 @@ app.get("/Transaction/findTransaction", (req: Request, res: Response) => {
     },
   ]);
 });
-
-//Batch Apis
-//to create a Batch
-//api to get grn info
 app.get("/getGrnInfo/:GRNId", (req: Request, res: Response) => {
   const GRNId = req.params.GRNId;
   res.status(200).send([
@@ -480,6 +476,11 @@ app.get("/getGrnInfo/:GRNId", (req: Request, res: Response) => {
     },
   ]);
 });
+
+//Batch Apis
+//to create a Batch
+//api to get grn info
+
 app.post("/batch/createBatch", (req: Request, res: Response) => {
   const { batchNo, componentDetails, batchStartDate, batchEndDate, createdBy } =
     req.body;
