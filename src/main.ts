@@ -370,59 +370,48 @@ app.post("/poorder/createpoorder", (req: Request, res: Response) => {
 app.get("/Transaction/findTransaction", (req: Request, res: Response) => {
   res.status(200).send([
     {
-      TransactionId: "TN0001",
       poId: "PO001",
-      componentId: ["COM001,COMOO2"],
-      from: "sup001",
-      to: "cus A",
+      componentName: ["COM001,COMOO2"],
+      poCreationDate: "20-10-2024",
       sentDate: "18-10-2024",
       receivedDate: "20-10-2024",
       grnNumber: "GRN001",
-      componentSummary: [
-        {
-          componentMasterId: "id1",
-          quantity: 2,
-          batchNo: "1",
-        },
-        {
-          componentMasterId: "id2",
-          quantity: 5,
-          batchNo: "2",
-        },
-      ],
-      receivedByCustomer: true,
+
       status: "completed",
       feedback: "This is good product",
     },
     {
-      TransactionId: "TN002",
       poId: "PO002",
       componentId: ["COM004,COMOO2"],
       from: "sup002",
       to: "cus B",
       sentDate: "18-10-2024",
-      receivedDate: "20-10-2024",
-      grnNumber: "GRN002",
-      componentSummary: [
-        {
-          componentMasterId: "id6",
-          quantity: 2,
-          batchNo: "1",
-        },
-        {
-          componentMasterId: "id5",
-          quantity: 5,
-          batchNo: "2",
-        },
-      ],
 
-      receivedByCustomer: true,
+      grnNumber: "GRN002",
+
       status: "completed",
       feedback: "This is good product",
     },
   ]);
 });
 
+//api to get grn info
+app.get("/getGrnInfo/:GRNId", (req: Request, res: Response) => {
+  const GRNId = req.params.GRNId;
+  res.status(200).send([
+    {
+      poId: "PO001",
+      componentName: ["COM001,COMOO2"],
+      poCreationDate: "20-10-2024",
+      sentDate: "18-10-2024",
+      receivedDate: "20-10-2024",
+      grnNumber: GRNId || "GRN001",
+
+      status: "completed",
+      feedback: "This is good product",
+    },
+  ]);
+});
 //Batch Apis
 //to create a Batch
 
