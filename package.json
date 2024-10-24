@@ -2,7 +2,7 @@
   "name": "componenttrace_api",
   "version": "1.0.0",
   "description": "Component trace app by Joiners",
-  "main": "dist/main.js",
+  "main": "dist/app.js",
   "scripts": {
     "start": "tsc && node .",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -44,7 +44,7 @@
     "js-yaml": "^4.0.0",
     "jwt-decode": "^3.1.2",
     "kafkajs": "^1.16.0",
-    "keycloak-connect": "^26.0.1",
+    "keycloak-connect": "^22.0.4",
     "logform": "^2.4.0",
     "mongoose": "^6.13.3",
     "multer": "^1.4.5-lts.1",
@@ -55,7 +55,6 @@
     "reflect-metadata": "^0.1.13",
     "sequelize": "6.33.0",
     "ts-node-dev": "^2.0.0",
-    "uuid": "^10.0.0",
     "winston": "^3.2.1",
     "xml-js": "^1.6.11",
     "xml-to-json-stream": "^1.1.0",
@@ -85,6 +84,7 @@
     "ts-loader": "^6.2.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.3",
+    "uuid": "^10.0.0",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
     "webpack-node-externals": "^1.7.2"
