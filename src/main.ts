@@ -134,23 +134,26 @@ app.post(
 );
 
 //to fetch sub-components of a specific Component Master
-app.get("/componentMaster/view/:componentMasterId", (req: Request, res: Response) => {
-  const componentMasterId = req.params.componentMasterId;
-  res.status(200).send({
-    componentMasterId: componentMasterId || "CM-001",
-    components: [
-      { componentName: "Tyre", quantity: 4 },
-      {
-        componentName: "Seat",
-        quantity: 5,
-      },
-      {
-        componentName: "Engine",
-        quantity: 1,
-      },
-    ],
-  });
-});
+app.get(
+  "/componentMaster/view/:componentMasterId",
+  (req: Request, res: Response) => {
+    const componentMasterId = req.params.componentMasterId;
+    res.status(200).send({
+      componentMasterId: componentMasterId || "CM-001",
+      components: [
+        { componentName: "Tyre", quantity: 4 },
+        {
+          componentName: "Seat",
+          quantity: 5,
+        },
+        {
+          componentName: "Engine",
+          quantity: 1,
+        },
+      ],
+    });
+  }
+);
 //to update the Component Master if entered any wrong info
 app.put(
   "/componentMaster/updateComponentMaster",
@@ -460,7 +463,23 @@ app.get("/Transaction/findTransaction", (req: Request, res: Response) => {
 
 //Batch Apis
 //to create a Batch
+//api to get grn info
+app.get("/getGrnInfo/:GRNId", (req: Request, res: Response) => {
+  const GRNId = req.params.GRNId;
+  res.status(200).send([
+    {
+      poId: "PO001",
+      componentName: ["COM001,COMOO2"],
+      poCreationDate: "20-10-2024",
+      sentDate: "18-10-2024",
+      receivedDate: "20-10-2024",
+      grnNumber: GRNId || "GRN001",
 
+      status: "completed",
+      feedback: "This is good product",
+    },
+  ]);
+});
 app.post("/batch/createBatch", (req: Request, res: Response) => {
   const { batchNo, componentDetails, batchStartDate, batchEndDate, createdBy } =
     req.body;
