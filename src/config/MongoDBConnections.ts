@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
  
-const url = "mongodb://localhost:27017/ComponentTraceability"
+const url = "mongodb://localhost:27017/ComponentTraceability" 
 class Connect {
     async DBConnect() {
         try {

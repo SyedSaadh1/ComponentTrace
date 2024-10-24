@@ -14,7 +14,7 @@ class InventoryClass {
     public model: mongoose.Model<Inventory>;
    
     constructor() {
-      const Inventoryschema:schema<Inventory> = new mongoose.Schema({
+      const Inventoryschema:Schema<Inventory> = new mongoose.Schema({
         componentName: {
           type: String,
           required: true,
@@ -44,4 +44,4 @@ class InventoryClass {
   }
 
 // Exporting the InventoryDetails  model directly
-export const InventoryDetails = new InventoryClass().model;
+export default new InventoryClass().model;
