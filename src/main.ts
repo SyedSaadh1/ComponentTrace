@@ -232,24 +232,18 @@ const componentList = [
  */
 
 app.get(
-  "/Inventory/findComponentsByMasterIds/:componentMasterIds",
+  "/Inventory/findComponentsByMasterIds/:componentMasterId",
   (req: Request, res: Response) => {
-    const componentMasterIds = req.params.componentMasterIds.split(",");
+    const componentMasterId = req.params.componentMasterId;
     let components;
-    if (req.params.componentMasterIds == "all") {
+    if (componentMasterId == "all") {
       components = componentList;
-    } else
-      components = componentList.filter((item) =>
-        componentMasterIds.includes(item.componentMasterId)
-      );
-
-    if (components.length > 0) {
       res.status(200).send(components);
     } else {
-      res.status(404).send({
-        error: "No components found for the given componentMasterIds",
-      });
+      components = componentList.filter((item) => item.componentMasterId === componentMasterId)
+      res.status(200).send(components);
     }
+    res.status(404).send({msg:"error"})
   }
 );
 
