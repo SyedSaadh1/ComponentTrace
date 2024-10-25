@@ -477,6 +477,18 @@ app.get("/getGrnInfo/:GRNId", (req: Request, res: Response) => {
   ]);
 });
 
+app.get("/poorder", (req: Request, res: Response) => {
+  res.status(200).send([
+    {
+      poId: "5678",
+      components: ["Tyres(COM001)"],
+      createdOn: "",
+      status: "pending",
+      grnList: ["GRN1", "GRN2", "GRN3"],
+    },
+  ]);
+});
+
 //Batch Apis
 //to create a Batch
 //api to get grn info
