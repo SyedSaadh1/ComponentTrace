@@ -36,9 +36,9 @@ app.get(
         componentMasterDescription: "Used for Vehicles",
         componentImage: "https://images.com/tyre.png",
         components: [
-          { componentName: "Keys", quantity: 100 },
+          { componentMasterName: "Keys", quantity: 100 },
           {
-            componentName: "Mother Board",
+            componentMasterName: "Mother Board",
             quantity: 1,
           },
         ],
@@ -70,13 +70,13 @@ app.get(
         componentMasterDescription: "It is a 4 wheeler",
         componentImage: "https://images.com/car.png",
         components: [
-          { componentName: "Tyre", quantity: 4 },
+          { componentMasterName: "Tyre", quantity: 4 },
           {
-            componentName: "Engine",
+            componentMasterName: "Engine",
             quantity: 1,
           },
           {
-            componentName: "Seats",
+            componentMasterName: "Seats",
             quantity: 5,
           },
         ],
@@ -145,11 +145,11 @@ app.get(
       components: [
         { componentName: "Tyre", quantity: 4 },
         {
-          componentName: "Seat",
+          componentMasterName: "Seat",
           quantity: 5,
         },
         {
-          componentName: "Engine",
+          componentMasterName: "Engine",
           quantity: 1,
         },
       ],
