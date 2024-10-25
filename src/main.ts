@@ -116,11 +116,11 @@ app.post(
       componentImage: componentImage || "https://images.com/mouse.png",
       components: components || [
         {
-          componentMasterId: "CM-002",
+          componentMasterName: "CM-002",
           quantity: 100,
         },
         {
-          componentMasterId: "CM-001",
+          componentMasterName: "CM-001",
           quantity: 1,
         },
       ],
@@ -143,7 +143,7 @@ app.get(
     res.status(200).send({
       componentMasterId: componentMasterId || "CM-001",
       components: [
-        { componentName: "Tyre", quantity: 4 },
+        { componentMasterName: "Tyre", quantity: 4 },
         {
           componentMasterName: "Seat",
           quantity: 5,
