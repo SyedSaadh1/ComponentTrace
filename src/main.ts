@@ -104,6 +104,7 @@ app.post(
       components,
       isFinalProduct,
       category,
+      quantity,
       productionStatus,
       createdBy,
     } = req.body; //this is req body format
@@ -123,6 +124,7 @@ app.post(
           quantity: 1,
         },
       ],
+      quantity: 1,
       isFinalProduct: isFinalProduct || false,
       category: category || "Plastic",
       productionStatus: productionStatus || "Active",
@@ -240,10 +242,12 @@ app.get(
       components = componentList;
       res.status(200).send(components);
     } else {
-      components = componentList.filter((item) => item.componentMasterId === componentMasterId)
+      components = componentList.filter(
+        (item) => item.componentMasterId === componentMasterId
+      );
       res.status(200).send(components);
     }
-    res.status(404).send({msg:"error"})
+    res.status(404).send({ msg: "error" });
   }
 );
 
