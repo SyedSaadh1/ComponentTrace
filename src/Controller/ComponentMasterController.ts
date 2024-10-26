@@ -42,6 +42,25 @@ class ComponentMasterController {
       return res.status(500).send({ msg: "Error Creating Component Master" });
     }
   };
+  async updateComponentMaster(req: Request, res: Response) {
+    const Data = req.body;
+    try {
+      const result = await Repo.updateComponentMaster(Data);
+      if (!result.acknowledged) {
+        res.status(400).send({ msg: "Updating operation not acknowledged" });
+      } else if (result.matchedCount == 0) {
+        res.status(404).send({ msg: "No Component Master found" });
+      } else if (result.modifiedCount > 0) {
+        res.status(200).send({ msg: "Component Master Updated Successfully" });
+      } else {
+        res.status(200).send({ msg: "Already upto date" });
+      }
+    } catch (error) {
+      res.status(500).send({
+        msgh: "An Error encountered. Please try again later " + error,
+      });
+    }
+  }
 }
 
 export default new ComponentMasterController();

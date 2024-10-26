@@ -14,6 +14,7 @@ class ComponentMasterRouter {
       "/createComponentMaster",
       Controller.createComponentMaster
     );
+    this.router.put("/updateComponentMaster", Controller.updateComponentMaster);
   }
 
   getRouter() {
