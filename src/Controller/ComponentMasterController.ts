@@ -15,6 +15,10 @@ class ComponentMasterController {
   createComponentMaster = async (req: Request, res: Response) => {
     const { error, value } = componentMasterBody.validate(req.body);
     const lastInsertedComponentMasterId = await generateId.idGenerate();
+    // const reqBody = {
+    //   ...value,
+    //   componentMasterId: lastInsertedComponentMasterId,
+    // };
     value.componentMasterId = lastInsertedComponentMasterId;
     if (error) {
       return res
