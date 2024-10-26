@@ -1,16 +1,22 @@
 import mongoose from "mongoose";
-const url = "mongodb://localhost:27017/ComponentMaster";
+import dotenv from "dotenv";
 
+dotenv.config();
+
+const url =
+  "mongodb://devuser:devuser%402024%23@20.198.90.15:27030/componentTrace_db?authSource=admin";
 class Connection {
   async connect() {
-    mongoose.pluralize(null);
-    mongoose.set("strictQuery", true);
+    // Disable pluralization of model names
+    mongoose.set("strictQuery", true); // Set strict query to true
     try {
       await mongoose.connect(url);
+      // mongoose.pluralize(null);
       console.log("DB Connection Established Successfully");
     } catch (error) {
-      console.error("Connecting DB Encountered an Error : " + error);
+      console.error("Connecting DB Encountered an Error: " + error);
     }
   }
 }
+
 export default new Connection();

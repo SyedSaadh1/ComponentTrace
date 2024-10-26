@@ -2,7 +2,7 @@ import mongoose, { Document, ObjectId } from "mongoose";
 import { randomUUID } from "crypto";
 import { Session } from "inspector";
 export interface Components {
-  componentName: string;
+  componentMasterName: string;
   quantity: number;
 }
 export interface IComponentMaster extends Document {
@@ -28,7 +28,7 @@ class ComponentMasterModel {
       components: {
         type: [
           {
-            componentName: { type: String },
+            componentMasterName: { type: String },
             quantity: { type: Number },
           },
         ],
@@ -40,9 +40,12 @@ class ComponentMasterModel {
       updatedOn: { type: Date, default: Date.now() },
     });
   }
+
   getModel() {
+    mongoose.pluralize(null);
+
     return mongoose.model<IComponentMaster>(
-      "ComponentMaster",
+      "ComponentMasterModel",
       this.componentMasterModel
     );
   }
