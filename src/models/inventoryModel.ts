@@ -38,7 +38,7 @@ class InventoryClass {
       });
       mongoose.pluralize(null);
 
-      this.model = mongoose.model<Inventory>('InventoryDetails', Inventoryschema);
+      this.model = mongoose.model<Inventory>('Inventory', Inventoryschema);
 
     }
   }

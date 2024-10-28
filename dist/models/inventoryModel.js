@@ -29,7 +29,7 @@ class InventoryClass {
             },
         });
         mongoose_1.default.pluralize(null);
-        this.model = mongoose_1.default.model('InventoryDetails', Inventoryschema);
+        this.model = mongoose_1.default.model('Inventory', Inventoryschema);
     }
 }
 // Exporting the InventoryDetails  model directly

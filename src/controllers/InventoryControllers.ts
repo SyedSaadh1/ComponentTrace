@@ -1,22 +1,24 @@
 import { Request, Response } from 'express';
 import InvRepo from '../repositories/InventoryRepository';
-import { deflateSync } from 'zlib';
+
 
 class InvController {
+  //get
   async findInventory(req: Request, res: Response) {
     try {
       const result = await InvRepo.findAllInv();
-      res.json(result);
+      res.status(200).json(result);
     } catch (error) {
-      res.json("Error : " + error)
+      res.status(500).json("Error : " + error)
     }
   }
+  // post 
   async createInventory(req: Request, res: Response) {
     try {
       const result = await InvRepo.createInv(req.body);
-      res.json(result);
+      res.status(200).json(result);
     } catch (error) {
-      res.json("Error in creating : " + error)
+      res.status(500).json("Error in creating : " + error)
     }
   }
 }
