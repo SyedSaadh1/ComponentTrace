@@ -1,7 +1,10 @@
 import express from "express";
 import { Request, Response } from "express";
 import cors from "cors";
+import mongoDBconnection from "./config/dbconfig";
+import transactionmodel from "./models/transactionmodel";
 
+mongoDBconnection.DBConnect();
 let app = express();
 app.use(express.json());
 app.use(cors());
@@ -367,50 +370,51 @@ app.post("/poorder/createpoorder", (req: Request, res: Response) => {
 });
 
 //////Transaction GET API
-app.get("/Transaction/findTransaction", (req: Request, res: Response) => {
-  res.status(200).send([
-    {
-      poId: "PO001",
-      componentName: ["COM001,COMOO2"],
-      poCreationDate: "20-10-2024",
-      sentDate: "18-10-2024",
-      receivedDate: "20-10-2024",
-      grnNumber: "GRN001",
+app.get("/Transaction/findTransaction", async (req: Request, res: Response) => {
+  let transaction: any = await transactionmodel.find();
+  res.status(200).json(transaction);
+  //     {
+  //       poId: "PO001",
+  //       componentName: ["COM001,COMOO2"],
+  //       poCreationDate: "20-10-2024",
+  //       sentDate: "18-10-2024",
+  //       receivedDate: "20-10-2024",
+  //       grnNumber: "GRN001",
 
-      status: "completed",
-      feedback: "This is good product",
-    },
-    {
-      poId: "PO002",
-      componentId: ["COM004,COMOO2"],
-      from: "sup002",
-      to: "cus B",
-      sentDate: "18-10-2024",
+  //       status: "completed",
+  //       feedback: "This is good product",
+  //     },
+  //     {
+  //       poId: "PO002",
+  //       componentId: ["COM004,COMOO2"],
+  //       from: "sup002",
+  //       to: "cus B",
+  //       sentDate: "18-10-2024",
 
-      grnNumber: "GRN002",
+  //       grnNumber: "GRN002",
 
-      status: "completed",
-      feedback: "This is good product",
-    },
-  ]);
-});
+  //       status: "completed",
+  //       feedback: "This is good product",
+  //     },
+  //   ]);
+  // });
 
-//api to get grn info
-app.get("/getGrnInfo/:GRNId", (req: Request, res: Response) => {
-  const GRNId = req.params.GRNId;
-  res.status(200).send([
-    {
-      poId: "PO001",
-      componentName: ["COM001,COMOO2"],
-      poCreationDate: "20-10-2024",
-      sentDate: "18-10-2024",
-      receivedDate: "20-10-2024",
-      grnNumber: GRNId || "GRN001",
+  // //api to get grn info
+  // app.get("/getGrnInfo/:GRNId", (req: Request, res: Response) => {
+  //   const GRNId = req.params.GRNId;
+  //   res.status(200).send([
+  //     {
+  //       poId: "PO001",
+  //       componentName: ["COM001,COMOO2"],
+  //       poCreationDate: "20-10-2024",
+  //       sentDate: "18-10-2024",
+  //       receivedDate: "20-10-2024",
+  //       grnNumber: GRNId || "GRN001",
 
-      status: "completed",
-      feedback: "This is good product",
-    },
-  ]);
+  //       status: "completed",
+  //       feedback: "This is good product",
+  //     },
+  //   ]);
 });
 //Batch Apis
 //to create a Batch
