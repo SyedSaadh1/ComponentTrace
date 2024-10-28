@@ -1,54 +1,75 @@
-import { ComponentList } from "../models/componentInterface";
-import * as repository from "../repositories/componentListRepository";
-import { Request, Response } from "express";
- 
-export let findAllComponents = async (req:Request,res:Response)=> {
-    let result = await repository.findAllComponents();  
-    try{
-        res.json(result);
-     }catch(err){
-        res.json(err);
-     }
-}
- 
- 
-export let storeComponents= async (req:Request,res:Response)=> {
-let components:ComponentList= req.body;
-try{
- let result = await repository.storeComponents(components);  
-   //res.json(result);
-   res.json({"msg":"Record inserted successfully"});
-}catch(err){
-   //res.json(ex);
-   res.json({"msg":"Record didn't insert"});
-}
-}
-export let updateComponents = async (req:Request,res:Response)=> {
-let components:ComponentList = req.body;
-let result = await repository.updateComponents(components);  
-try{
-      if(result.modifiedCount>0){
-      res.send("Record updated successfully")
-      }else if(result.matchedCount>0){
-      res.send("Record exists but didn't update")
-      }else {
-      res.send("Record didn't update")
+import { Request, Response } from 'express';
+import ClRepo from '../repositories/componentListRepository';
+
+class ComponentController {
+  // Find all components
+  async findAllComponents(req: Request, res: Response): Promise<any> {
+    try {
+      const filter = req.query || {}; // Optional filter from query params
+      console.log("filter-------->", filter);
+      const result:any = await ClRepo.findAllComponents(filter);
+      console.log("result :- ",result);
+      if (!result.length) {
+         return res.status(404).send({ msg: "No components found" });
+      }else
+       return res.status(200).send(result);
+    } catch (error) {
+      res.status(500).send({ msg: "Error fetching components: " + error });
+    }
+  }
+
+  // Store new components
+  async storeComponents(req: Request, res: Response): Promise<any>  {
+    try {
+      const components = req.body;
+      const result = await ClRepo.storeComponents(components);
+       res.status(201).json({ msg: "Components created successfully", data: result });
+    } catch (error) {
+      res.status(500).json({ msg: "Error in creating components: " + error });
+    }
+  }
+
+  // Update existing components
+  async updateComponents(req: Request, res: Response): Promise<any>  {
+    try {
+      const { componentId, componentName, wareHouseLocation, ...updateFields } = req.body;
+      if (!componentId) {
+        return res.status(400).json({ msg: "Component ID is required" });
       }
-}catch(err){
-   res.send(err);
-}
-}
-export let deleteComponents = async (req:Request,res:Response)=> {
-let componentMasterId:Number = eval(req.params._id);
-let result = await repository.deleteComponents(componentMasterId);  
-try{
-      if(result.deletedCount>0){
-             res.send("Record deleted successfully")
-      }else {
-             res.send("Record not present")
+
+      // Add componentName and wareHouseLocation to updateFields if provided
+      if (componentName) updateFields.componentName = componentName;
+      if (wareHouseLocation) updateFields.wareHouseLocation = wareHouseLocation;
+
+      const result = await ClRepo.updateComponents(componentId, updateFields); // Pass componentId as a string
+      if (result.modifiedCount > 0) {
+        res.status(200).json({ msg: "Component updated successfully" });
+      } else if (result.matchedCount > 0) {
+        res.status(200).json({ msg: "No changes made to the component" });
+      } else {
+        res.status(404).json({ msg: "Component not found" });
       }
-}catch(err){
-   res.send(err);
+    } catch (error) {
+      res.status(500).json({ msg: "Error in updating component: " + error });
+    }
+  }
+
+  // Find component by name
+  async findComponentByName(req: Request, res: Response) : Promise<any> {
+    try {
+      const { compName } = req.params;
+      if (!compName) {
+        return res.status(400).json({ msg: "Component name is required" });
+      }
+      const result = await ClRepo.findCompByName(compName);
+      if (!result.length) {
+        return res.status(404).json({ msg: "Component not found" });
+      }
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json({ msg: "Error in finding component: " + error });
+    }
+  }
 }
-}
- 
+
+export default  ComponentController;

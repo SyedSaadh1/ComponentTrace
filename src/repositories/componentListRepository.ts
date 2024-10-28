@@ -1,21 +1,26 @@
-import { ComponentList } from '../models/componentInterface';
-import { ComponentModel } from '../models/ComponentList';
- 
- 
-export let findAllComponents = ()=> {
-    return ComponentModel.find({});
-}
- 
-export let storeComponents = (components:ComponentList)=> {
-    return ComponentModel.insertMany(components);
+import componentModel, { IComponentList } from "../models/ComponentList"; // Adjust the import path as needed
+
+class ComponentRepository {
+  // Find all components with optional filter
+  findAllComponents(filter = {}) {
+    console.log("filter------")
+    return componentModel.find(filter);
+  }
+
+  // Create new components
+  storeComponents(components: IComponentList[]) {
+    return componentModel.insertMany(components);
+  }
+
+  // Update existing components
+  updateComponents(componentId: string, updateFields: Partial<IComponentList>) {
+    return componentModel.updateOne({ componentId }, { $set: updateFields });
+  }
+
+  // Find component by name
+  findCompByName(componentName: string) {
+    return componentModel.find({ componentName });
+  }
 }
 
-export let updateComponents = (components:ComponentList)=> {
-    return ComponentModel.updateOne({_id:components.componentId},{$set:{wareHouseLocation:components.wareHouseLocation}});
-}
- 
-export let deleteComponents = (componentMasterId:Number)=> {
-    return ComponentModel.deleteOne({_id:componentMasterId});
-}
- 
-
+export default new ComponentRepository();
