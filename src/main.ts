@@ -1,11 +1,16 @@
 import express from "express";
 import { Request, Response } from "express";
 import cors from "cors";
+import MongoDBConnections from "./Config/MongoDBConnections";
+import inventoryModel from "./Models/inventoryModel";
 
-// MongoDBConnections.DBConnect();
+MongoDBConnections.DBConnect();
 
 // console.log(connected to mongodb);
+import mongoDBconnection from "./config/dbconfig";
+import transactionmodel from "./models/transactionmodel";
 
+mongoDBconnection.DBConnect();
 let app = express();
 app.use(express.json());
 
@@ -192,8 +197,10 @@ app.put(
  * findInventory APi call will get all the Inventory  details
  */
 app.get("/Inventory/findInventory", async (req: Request, res: Response) => {
-  // let inventory: any = await inventoryModel.find();
-  // res.status(200).json(inventory);
+  let inventory: any = await inventoryModel.find();
+
+  res.status(200).json(inventory);
+
   //[
   // {
   //   componentMasterId: "CM-001",
@@ -409,60 +416,51 @@ app.post("/poorder/createpoorder", (req: Request, res: Response) => {
 });
 
 //////Transaction GET API
-app.get("/Transaction/findTransaction", (req: Request, res: Response) => {
-  res.status(200).send([
-    {
-      TransactionId: "TN0001",
-      poId: "PO001",
-      componentId: ["COM001,COMOO2"],
-      from: "sup001",
-      to: "cus A",
-      sentDate: "18-10-2024",
-      receivedDate: "20-10-2024",
-      grnNumber: "GRN001",
-      componentSummary: [
-        {
-          componentMasterId: "id1",
-          quantity: 2,
-          batchNo: "1",
-        },
-        {
-          componentMasterId: "id2",
-          quantity: 5,
-          batchNo: "2",
-        },
-      ],
-      receivedByCustomer: true,
-      status: "completed",
-      feedback: "This is good product",
-    },
-    {
-      TransactionId: "TN002",
-      poId: "PO002",
-      componentId: ["COM004,COMOO2"],
-      from: "sup002",
-      to: "cus B",
-      sentDate: "18-10-2024",
-      receivedDate: "20-10-2024",
-      grnNumber: "GRN002",
-      componentSummary: [
-        {
-          componentMasterId: "id6",
-          quantity: 2,
-          batchNo: "1",
-        },
-        {
-          componentMasterId: "id5",
-          quantity: 5,
-          batchNo: "2",
-        },
-      ],
+app.get("/Transaction/findTransaction", async (req: Request, res: Response) => {
+  let transaction: any = await transactionmodel.find();
+  res.status(200).json(transaction);
+  //     {
+  //       poId: "PO001",
+  //       componentName: ["COM001,COMOO2"],
+  //       poCreationDate: "20-10-2024",
+  //       sentDate: "18-10-2024",
+  //       receivedDate: "20-10-2024",
+  //       grnNumber: "GRN001",
 
-      receivedByCustomer: true,
-      status: "completed",
-      feedback: "This is good product",
-    },
-  ]);
+  //       status: "completed",
+  //       feedback: "This is good product",
+  //     },
+  //     {
+  //       poId: "PO002",
+  //       componentId: ["COM004,COMOO2"],
+  //       from: "sup002",
+  //       to: "cus B",
+  //       sentDate: "18-10-2024",
+
+  //       grnNumber: "GRN002",
+
+  //       status: "completed",
+  //       feedback: "This is good product",
+  //     },
+  //   ]);
+  // });
+
+  // //api to get grn info
+  // app.get("/getGrnInfo/:GRNId", (req: Request, res: Response) => {
+  //   const GRNId = req.params.GRNId;
+  //   res.status(200).send([
+  //     {
+  //       poId: "PO001",
+  //       componentName: ["COM001,COMOO2"],
+  //       poCreationDate: "20-10-2024",
+  //       sentDate: "18-10-2024",
+  //       receivedDate: "20-10-2024",
+  //       grnNumber: GRNId || "GRN001",
+
+  //       status: "completed",
+  //       feedback: "This is good product",
+  //     },
+  //   ]);
 });
 app.get("/getGrnInfo/:GRNId", (req: Request, res: Response) => {
   const GRNId = req.params.GRNId;
