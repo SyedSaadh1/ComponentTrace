@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 const componentMasterSchemaValidate = Joi.object({
-  componenMasterId: Joi.string().guid().optional(),
+  componenMasterId: Joi.string().optional(),
   componentMasterName: Joi.string().required(),
   componentMasterDescription: Joi.string().optional(),
   category: Joi.string().required(),
@@ -14,7 +14,7 @@ const componentMasterSchemaValidate = Joi.object({
       })
     )
     .optional(),
-  createdBy: Joi.string().required(),
+  createdBy: Joi.string().optional(),
 });
 
 export default componentMasterSchemaValidate;

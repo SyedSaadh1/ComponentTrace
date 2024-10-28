@@ -1,6 +1,4 @@
 import mongoose, { Document, ObjectId } from "mongoose";
-import { randomUUID } from "crypto";
-import { Session } from "inspector";
 export interface Components {
   componentMasterName: string;
   quantity: number;
@@ -21,23 +19,23 @@ class ComponentMasterModel {
   private componentMasterModel: mongoose.Schema<IComponentMaster>;
   constructor() {
     this.componentMasterModel = new mongoose.Schema({
-      componentMasterId: { type: String, default: randomUUID },
+      componentMasterId: { type: String, default: "CM-00X" },
       componentMasterName: { type: String, required: true },
       componentDescription: { type: String, required: false },
       category: { type: String, required: true },
       components: {
         type: [
           {
-            componentMasterName: { type: String },
-            quantity: { type: Number },
+            componentMasterName: { type: String, required: true },
+            quantity: { type: Number, required: true },
           },
         ],
         required: false,
       },
       quantity: { type: Number, required: true },
-      createdBy: { type: String, required: true },
-      createdOn: { type: Date, default: Date.now() },
-      updatedOn: { type: Date, default: Date.now() },
+      createdBy: { type: String, default: "User123" },
+      createdOn: { type: Date, default: Date.now },
+      updatedOn: { type: Date, default: Date.now },
     });
   }
 

@@ -19,20 +19,23 @@ class ComponentMasterController {
     //   ...value,
     //   componentMasterId: lastInsertedComponentMasterId,
     // };
-    value.componentMasterId = lastInsertedComponentMasterId;
-    if (error) {
-      return res
-        .status(400)
-        .send({ msg: "validation failed ", details: error.details });
-    }
-    const { componentMasterName } = value;
-    const isExist = await Repo.find({ componentMasterName });
-    if (isExist.length > 0) {
-      return res
-        .status(409)
-        .send({ msg: "Component Master already exists with that name" });
-    }
+
     try {
+      value.componentMasterId = lastInsertedComponentMasterId;
+      if (error) {
+        console.log("Error in Validation");
+        return res
+          .status(400)
+          .send({ msg: "validation failed ", details: error.details });
+      }
+      const { componentMasterName } = value;
+      const isExist = await Repo.find({ componentMasterName });
+      if (isExist.length > 0) {
+        console.log("Error in Creation");
+        return res
+          .status(409)
+          .send({ msg: "Component Master already exists with that name" });
+      }
       const result = await Repo.createComponentMaster(value);
       return res
         .status(201)

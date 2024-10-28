@@ -1,7 +1,7 @@
 import router from "./Router/ComponentMasterRouter";
 import Db from "./Config/DBConnection";
 import express, { Application } from "express";
-
+import cors from "cors";
 class App {
   port: Number;
   app: Application;
@@ -15,6 +15,20 @@ class App {
 
   initializeMiddleware() {
     this.app.use(express.json());
+    this.app.use(cors());
+    this.app.use((req, res, next) => {
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.setHeader(
+        "Access-Control-Allow-Methods",
+        "PUT, GET, POST, DELETE, OPTIONS"
+      );
+      res.setHeader(
+        "Access-Control-Allow-Headers",
+        "X-Requested-With, Content-Type"
+      );
+
+      next();
+    });
   }
 
   initializeRoutes() {
