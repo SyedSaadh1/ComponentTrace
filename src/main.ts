@@ -1,8 +1,8 @@
 import express from "express";
 import { Request, Response } from "express";
 import cors from "cors";
-import MongoDBConnections from "./config/MongoDBConnections";
-import inventoryModel from "./models/inventoryModel";
+import MongoDBConnections from "./Config/MongoDBConnections";
+import inventoryModel from "./Models/inventoryModel";
 
 
 MongoDBConnections.DBConnect();
