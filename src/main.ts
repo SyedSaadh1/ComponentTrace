@@ -1,7 +1,6 @@
 import express from "express";
 import { Request, Response } from "express";
 import cors from "cors";
-
 let app = express();
 app.use(express.json());
 
