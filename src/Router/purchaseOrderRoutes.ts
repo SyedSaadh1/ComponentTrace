@@ -1,5 +1,5 @@
 import express, { Router } from 'express';
-import POController from '../controllers/purchaseOrderController';
+import POController from '../Controller/purchaseOrderController';
 
 class PurchaseOrderRouter {
     public router: Router;
