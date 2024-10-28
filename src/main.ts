@@ -1,10 +1,8 @@
 import express from "express";
 import { Request, Response } from "express";
 import cors from "cors";
-import MongoDBConnections from "./Config/MongoDBConnections";
-import inventoryModel from "./Models/inventoryModel";
 
-MongoDBConnections.DBConnect();
+// MongoDBConnections.DBConnect();
 
 // console.log(connected to mongodb);
 import mongoDBconnection from "./config/dbconfig";
@@ -197,10 +195,8 @@ app.put(
  * findInventory APi call will get all the Inventory  details
  */
 app.get("/Inventory/findInventory", async (req: Request, res: Response) => {
-  let inventory: any = await inventoryModel.find();
-
-  res.status(200).json(inventory);
-
+  // let inventory: any = await inventoryModel.find();
+  // res.status(200).json(inventory);
   //[
   // {
   //   componentMasterId: "CM-001",

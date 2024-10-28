@@ -1,9 +1,9 @@
-import componentModel, { IComponentList } from "../models/ComponentList"; // Adjust the import path as needed
+import componentModel, { IComponentList } from "../Models/ComponentList"; // Adjust the import path as needed
 
 class ComponentRepository {
   // Find all components with optional filter
   findAllComponents(filter = {}) {
-    console.log("filter------")
+    console.log("filter------");
     return componentModel.find(filter);
   }
 
