@@ -1,6 +1,7 @@
 import router from "./Router/ComponentMasterRouter";
-import Db from "./Config/DBConnection";
+import Db from "./Config/ComponentMasterDBConnection";
 import express, { Application } from "express";
+import poRouter from "./Router/purchaseOrderRoutes";
 import cors from "cors";
 class App {
   port: Number;
@@ -33,6 +34,7 @@ class App {
 
   initializeRoutes() {
     this.app.use("/componentMaster", router);
+    this.app.use("/purchaseOrder", poRouter.router);
   }
 
   connectDatabase() {

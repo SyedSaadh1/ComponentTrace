@@ -14,14 +14,14 @@ class ComponentMasterController {
   }
   createComponentMaster = async (req: Request, res: Response) => {
     const { error, value } = componentMasterBody.validate(req.body);
-    const lastInsertedComponentMasterId = await generateId.idGenerate();
+    const ComponentMasterId = await generateId.idGenerate();
     // const reqBody = {
     //   ...value,
     //   componentMasterId: lastInsertedComponentMasterId,
     // };
 
     try {
-      value.componentMasterId = lastInsertedComponentMasterId;
+      value.componentMasterId = ComponentMasterId;
       if (error) {
         console.log("Error in Validation");
         return res

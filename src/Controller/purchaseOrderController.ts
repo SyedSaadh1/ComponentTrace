@@ -1,43 +1,53 @@
-import { Request, Response } from 'express';
-import PORepo from '../Repository/purchaseOrderRepository';
-//import CMRepo from '../Repository/ComponentMasterRepository';
+import { Request, Response } from "express";
+import PORepo from "../Repository/purchaseOrderRepository";
+import CMRepo from "../Repository/ComponentMasterRepository";
+import AutogenerateId from "../AutogenerateId/AutogenerateId";
 
 class POController {
   async createPurchaseOrder(req: Request, res: Response) {
+    const { orderDetails } = req.body;
+    const generatedPOId = await AutogenerateId.poIdGenerate();
+
     try {
-      const updatedObjects = [];
+      //Use map to create an array of promises to fetch component IDs
 
-      // Iterate through each object in the request body
-      for (const originalObject of req.body) {
-        const { componentMasterName } = originalObject.orderDetails; // Correct destructuring
-   
-         console.log("hello")
+      const orderedComponents = orderDetails.map(async (item: any) => {
+        const foundComponent = await CMRepo.find({
+          componentMasterName: item.componentMasterName,
+        });
 
-        const result1 = await CMRepo.find({ componentMasterName }, { componentMasterId: 1 }).catch(() => 
-        {
-
-          return [];
-       });
-
-        updatedObjects.push({
-         ...originalObject,
-          result1
+        if (foundComponent?.length > 0) {
+          return {
+            ...item,
+            componentMasterId: foundComponent[0].componentMasterId,
+          };
+        } else {
+          console.warn(
+            `Component Master not found: ${item.componentMasterName}`
+          );
+          return { ...item, componentMasterId: " " };
         }
-      );
-      }
+      });
 
+      //Resolve all promises
+      const resolvedOrders = await Promise.all(orderedComponents);
 
-      res.status(200).json(updatedObjects);
+      const order = {
+        ...req.body,
+        orderDetails: resolvedOrders,
+        poId: generatedPOId,
+      };
+
+      const result = await PORepo.createPo(order);
+      res
+        .status(201)
+        .send({ msg: "Purchase Order created successfully", result });
     } catch (error) {
-
-      console.log("hello")
-      res.status(500).json({ message: "Error in creating purchase order: " + error });
+      console.error("Error processing components:", error);
+      res.status(500).send({ msg: "Error processing components" });
     }
   }
-
-
-
-
 }
 
+// Export the controller instance
 export default new POController();

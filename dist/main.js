@@ -5,9 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const MongoDBConnections_1 = __importDefault(require("./config/MongoDBConnections"));
-const inventoryModel_1 = __importDefault(require("./models/inventoryModel"));
-MongoDBConnections_1.default.DBConnect();
+// MongoDBConnections.DBConnect();
 // console.log(connected to mongodb);
 let app = (0, express_1.default)();
 app.use(express_1.default.json());
@@ -31,9 +29,9 @@ app.get("/componentMaster/findComponentMaster", (req, res) => {
             componentMasterDescription: "Used for Vehicles",
             componentImage: "https://images.com/tyre.png",
             components: [
-                { componentName: "Keys", quantity: 100 },
+                { componentMasterName: "Keys", quantity: 100 },
                 {
-                    componentName: "Mother Board",
+                    componentMasterName: "Mother Board",
                     quantity: 1,
                 },
             ],
@@ -65,13 +63,13 @@ app.get("/componentMaster/findComponentMaster", (req, res) => {
             componentMasterDescription: "It is a 4 wheeler",
             componentImage: "https://images.com/car.png",
             components: [
-                { componentName: "Tyre", quantity: 4 },
+                { componentMasterName: "Tyre", quantity: 4 },
                 {
-                    componentName: "Engine",
+                    componentMasterName: "Engine",
                     quantity: 1,
                 },
                 {
-                    componentName: "Seats",
+                    componentMasterName: "Seats",
                     quantity: 5,
                 },
             ],
@@ -87,7 +85,7 @@ app.get("/componentMaster/findComponentMaster", (req, res) => {
 });
 // POST API to create a new ComponentMaster
 app.post("/componentMaster/createComponentMaster", (req, res) => {
-    const { componentMasterId, componentMasterName, componentMasterDescription, componentImage, components, isFinalProduct, category, productionStatus, createdBy, } = req.body; //this is req body format
+    const { componentMasterId, componentMasterName, componentMasterDescription, componentImage, components, isFinalProduct, category, quantity, productionStatus, createdBy, } = req.body; //this is req body format
     // Responding with the created component
     res.status(201).send({
         componentMasterId: componentMasterId || "CM-003",
@@ -96,14 +94,15 @@ app.post("/componentMaster/createComponentMaster", (req, res) => {
         componentImage: componentImage || "https://images.com/mouse.png",
         components: components || [
             {
-                componentMasterId: "CM-002",
+                componentMasterName: "CM-002",
                 quantity: 100,
             },
             {
-                componentMasterId: "CM-001",
+                componentMasterName: "CM-001",
                 quantity: 1,
             },
         ],
+        quantity: 1,
         isFinalProduct: isFinalProduct || false,
         category: category || "Plastic",
         productionStatus: productionStatus || "Active",
@@ -118,13 +117,13 @@ app.get("/componentMaster/view/:componentMasterId", (req, res) => {
     res.status(200).send({
         componentMasterId: componentMasterId || "CM-001",
         components: [
-            { componentName: "Tyre", quantity: 4 },
+            { componentMasterName: "Tyre", quantity: 4 },
             {
-                componentName: "Seat",
+                componentMasterName: "Seat",
                 quantity: 5,
             },
             {
-                componentName: "Engine",
+                componentMasterName: "Engine",
                 quantity: 1,
             },
         ],
@@ -162,8 +161,8 @@ app.put("/componentMaster/updateComponentMaster", (req, res) => {
  * findInventory APi call will get all the Inventory  details
  */
 app.get("/Inventory/findInventory", async (req, res) => {
-    let inventory = await inventoryModel_1.default.find();
-    res.status(200).json(inventory);
+    // let inventory: any = await inventoryModel.find();
+    // res.status(200).json(inventory);
     //[
     // {
     //   componentMasterId: "CM-001",
@@ -205,22 +204,18 @@ const componentList = [
 /**
  *  To findInventory APi to get from component List by component MasterId
  */
-app.get("/Inventory/findComponentsByMasterIds/:componentMasterIds", (req, res) => {
-    const componentMasterIds = req.params.componentMasterIds.split(",");
+app.get("/Inventory/findComponentsByMasterIds/:componentMasterId", (req, res) => {
+    const componentMasterId = req.params.componentMasterId;
     let components;
-    if (req.params.componentMasterIds == "all") {
+    if (componentMasterId == "all") {
         components = componentList;
-    }
-    else
-        components = componentList.filter((item) => componentMasterIds.includes(item.componentMasterId));
-    if (components.length > 0) {
         res.status(200).send(components);
     }
     else {
-        res.status(404).send({
-            error: "No components found for the given componentMasterIds",
-        });
+        components = componentList.filter((item) => item.componentMasterId === componentMasterId);
+        res.status(200).send(components);
     }
+    res.status(404).send({ msg: "error" });
 });
 // POST API to create a new component in the component list
 app.post("/componentList/createComponent", (req, res) => {
@@ -432,6 +427,17 @@ app.get("/getGrnInfo/:GRNId", (req, res) => {
             grnNumber: GRNId || "GRN001",
             status: "completed",
             feedback: "This is good product",
+        },
+    ]);
+});
+app.get("/poorder", (req, res) => {
+    res.status(200).send([
+        {
+            poId: "5678",
+            components: ["Tyres(COM001)"],
+            createdOn: "",
+            status: "pending",
+            grnList: ["GRN1", "GRN2", "GRN3"],
         },
     ]);
 });
