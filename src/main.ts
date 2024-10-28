@@ -7,10 +7,10 @@ import inventoryModel from "./Models/inventoryModel";
 MongoDBConnections.DBConnect();
 
 // console.log(connected to mongodb);
-import mongoDBconnection from "./config/dbconfig";
-import transactionmodel from "./models/transactionmodel";
 
-mongoDBconnection.DBConnect();
+import transactionmodel from "./Models/transactionmodel";
+
+MongoDBConnections.DBConnect();
 let app = express();
 app.use(express.json());
 

@@ -5,8 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-// MongoDBConnections.DBConnect();
+const MongoDBConnections_1 = __importDefault(require("./Config/MongoDBConnections"));
+const inventoryModel_1 = __importDefault(require("./Models/inventoryModel"));
+MongoDBConnections_1.default.DBConnect();
 // console.log(connected to mongodb);
+const transactionmodel_1 = __importDefault(require("./Models/transactionmodel"));
+MongoDBConnections_1.default.DBConnect();
 let app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
@@ -161,8 +165,8 @@ app.put("/componentMaster/updateComponentMaster", (req, res) => {
  * findInventory APi call will get all the Inventory  details
  */
 app.get("/Inventory/findInventory", async (req, res) => {
-    // let inventory: any = await inventoryModel.find();
-    // res.status(200).json(inventory);
+    let inventory = await inventoryModel_1.default.find();
+    res.status(200).json(inventory);
     //[
     // {
     //   componentMasterId: "CM-001",
@@ -361,59 +365,46 @@ app.post("/poorder/createpoorder", (req, res) => {
     });
 });
 //////Transaction GET API
-app.get("/Transaction/findTransaction", (req, res) => {
-    res.status(200).send([
-        {
-            TransactionId: "TN0001",
-            poId: "PO001",
-            componentId: ["COM001,COMOO2"],
-            from: "sup001",
-            to: "cus A",
-            sentDate: "18-10-2024",
-            receivedDate: "20-10-2024",
-            grnNumber: "GRN001",
-            componentSummary: [
-                {
-                    componentMasterId: "id1",
-                    quantity: 2,
-                    batchNo: "1",
-                },
-                {
-                    componentMasterId: "id2",
-                    quantity: 5,
-                    batchNo: "2",
-                },
-            ],
-            receivedByCustomer: true,
-            status: "completed",
-            feedback: "This is good product",
-        },
-        {
-            TransactionId: "TN002",
-            poId: "PO002",
-            componentId: ["COM004,COMOO2"],
-            from: "sup002",
-            to: "cus B",
-            sentDate: "18-10-2024",
-            receivedDate: "20-10-2024",
-            grnNumber: "GRN002",
-            componentSummary: [
-                {
-                    componentMasterId: "id6",
-                    quantity: 2,
-                    batchNo: "1",
-                },
-                {
-                    componentMasterId: "id5",
-                    quantity: 5,
-                    batchNo: "2",
-                },
-            ],
-            receivedByCustomer: true,
-            status: "completed",
-            feedback: "This is good product",
-        },
-    ]);
+app.get("/Transaction/findTransaction", async (req, res) => {
+    let transaction = await transactionmodel_1.default.find();
+    res.status(200).json(transaction);
+    //     {
+    //       poId: "PO001",
+    //       componentName: ["COM001,COMOO2"],
+    //       poCreationDate: "20-10-2024",
+    //       sentDate: "18-10-2024",
+    //       receivedDate: "20-10-2024",
+    //       grnNumber: "GRN001",
+    //       status: "completed",
+    //       feedback: "This is good product",
+    //     },
+    //     {
+    //       poId: "PO002",
+    //       componentId: ["COM004,COMOO2"],
+    //       from: "sup002",
+    //       to: "cus B",
+    //       sentDate: "18-10-2024",
+    //       grnNumber: "GRN002",
+    //       status: "completed",
+    //       feedback: "This is good product",
+    //     },
+    //   ]);
+    // });
+    // //api to get grn info
+    // app.get("/getGrnInfo/:GRNId", (req: Request, res: Response) => {
+    //   const GRNId = req.params.GRNId;
+    //   res.status(200).send([
+    //     {
+    //       poId: "PO001",
+    //       componentName: ["COM001,COMOO2"],
+    //       poCreationDate: "20-10-2024",
+    //       sentDate: "18-10-2024",
+    //       receivedDate: "20-10-2024",
+    //       grnNumber: GRNId || "GRN001",
+    //       status: "completed",
+    //       feedback: "This is good product",
+    //     },
+    //   ]);
 });
 app.get("/getGrnInfo/:GRNId", (req, res) => {
     const GRNId = req.params.GRNId;
