@@ -5,8 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const MongoDBConnections_1 = __importDefault(require("./config/MongoDBConnections"));
-const inventoryModel_1 = __importDefault(require("./models/inventoryModel"));
+const MongoDBConnections_1 = __importDefault(require("./Config/MongoDBConnections"));
+const inventoryModel_1 = __importDefault(require("./Models/inventoryModel"));
 MongoDBConnections_1.default.DBConnect();
 // console.log(connected to mongodb);
 let app = (0, express_1.default)();
