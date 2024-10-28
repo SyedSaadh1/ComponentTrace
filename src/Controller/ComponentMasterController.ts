@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import componentMasterBody from "../Validations/ComponentMaster.validation";
 import generateId from "../AutogenerateId/AutogenerateId";
 class ComponentMasterController {
-  async findAllComponentMaster(req: Request, res: Response) {
+  async findComponentMaster(req: Request, res: Response) {
     const filter = req.query;
     try {
       const result = await Repo.find(filter);

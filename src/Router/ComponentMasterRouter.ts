@@ -9,7 +9,7 @@ class ComponentMasterRouter {
   }
 
   initializeRoutes() {
-    this.router.get("/findComponentMaster", Controller.findAllComponentMaster);
+    this.router.get("/findComponentMaster", Controller.findComponentMaster);
     this.router.post(
       "/createComponentMaster",
       Controller.createComponentMaster
