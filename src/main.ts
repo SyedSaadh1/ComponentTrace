@@ -1,12 +1,6 @@
 import express from "express";
 import { Request, Response } from "express";
 import cors from "cors";
-import router from "./routes/purchaseOrderRoutes";
-import MonogoDBconnection from './config/DBConnection';
-
-
-MonogoDBconnection.DBConnect();
-
 let app = express();
 app.use(express.json());
 
@@ -586,7 +580,6 @@ app.put("/batch/updateBatch", (req: Request, res: Response) => {
       .send({ msg: "An unexpected error occurred. Please try again later" });
   }
 });
-app.use('/purchaseOrder', router.router)
 let port = 7000;
 app.listen(port, () => {
   console.log("server started on ", +port);
