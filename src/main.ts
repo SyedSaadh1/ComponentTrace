@@ -458,33 +458,12 @@ app.get("/Transaction/findTransaction", (req: Request, res: Response) => {
     },
   ]);
 });
-app.get("/getGrnInfo/:GRNId", (req: Request, res: Response) => {
-  const GRNId = req.params.GRNId;
-  res.status(200).send([
-    {
-      poId: "PO001",
-      componentName: ["COM001,COMOO2"],
-      poCreationDate: "20-10-2024",
-      sentDate: "18-10-2024",
-      receivedDate: "20-10-2024",
-      grnNumber: GRNId || "GRN001",
-
-      status: "completed",
-      feedback: "This is good product",
-    },
-  ]);
-});
-
-app.get("/poorder", (req: Request, res: Response) => {
-  res.status(200).send([
-    {
-      poId: "5678",
-      components: ["Tyres(COM001)"],
-      createdOn: "",
-      status: "pending",
-      grnList: ["GRN1", "GRN2", "GRN3"],
-    },
-  ]);
+app.get("/grn/view/:grnId", (req: Request, res: Response) => {
+  const grnId = req.params.grnId;
+  res.status(200).send({
+    grnId: grnId || "grn-001",
+    Dates: [{ sentDate: 20 - 2 - 2024, receivedDate: 24 - 2 - 2024 }],
+  });
 });
 
 //Batch Apis
