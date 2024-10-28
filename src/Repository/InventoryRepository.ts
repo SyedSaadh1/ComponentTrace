@@ -1,4 +1,4 @@
-
+// Repository
 import inventoryModel, { Inventory } from "../Models/inventoryModel";
 
 

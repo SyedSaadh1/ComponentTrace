@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import InvRepo from '../Repository/InventoryRepository';
 
-
+//controller
 class InvController {
   //get
   async findInventory(req: Request, res: Response) {
