@@ -6,7 +6,8 @@ import cors from "cors";
 
 // console.log(connected to mongodb);
 
-import transactionmodel from "./Models/transactionmodel";
+import transactionmodel from "./models/transactionmodel";
+import MongoDBConnections from "./Config/MongoDBConnections";
 
 MongoDBConnections.DBConnect();
 let app = express();
