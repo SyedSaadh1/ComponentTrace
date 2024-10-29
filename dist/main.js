@@ -8,7 +8,7 @@ const cors_1 = __importDefault(require("cors"));
 // MongoDBConnections.DBConnect();
 // console.log(connected to mongodb);
 const transactionmodel_1 = __importDefault(require("./Models/transactionmodel"));
-MongoDBConnections.DBConnect();
+// MongoDBConnections.DBConnect();
 let app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());

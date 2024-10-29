@@ -8,7 +8,7 @@ import cors from "cors";
 
 import transactionmodel from "./Models/transactionmodel";
 
-MongoDBConnections.DBConnect();
+// MongoDBConnections.DBConnect();
 let app = express();
 app.use(express.json());
 
