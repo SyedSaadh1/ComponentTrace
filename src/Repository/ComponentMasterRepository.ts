@@ -25,7 +25,6 @@ class ComponentMasterRepository {
       {
         $set: {
           componentMasterName: Data.componentMasterName,
-          quantity: Data.quantity,
           category: Data.category,
           componentDescription: Data.componentDescription,
           components: Data.components,

@@ -10,7 +10,6 @@ export interface IComponentMaster extends Document {
   componentDescription: string;
   category: string;
   components: Components[];
-  quantity: number;
   createdBy: string;
   createdOn: Date;
   updatedOn: Date;
@@ -32,7 +31,7 @@ class ComponentMasterModel {
         ],
         required: false,
       },
-      quantity: { type: Number, required: true },
+
       createdBy: { type: String, default: "User123" },
       createdOn: { type: Date, default: Date.now },
       updatedOn: { type: Date, default: Date.now },

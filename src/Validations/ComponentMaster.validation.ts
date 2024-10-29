@@ -5,7 +5,6 @@ const componentMasterSchemaValidate = Joi.object({
   componentMasterName: Joi.string().required(),
   componentMasterDescription: Joi.string().optional(),
   category: Joi.string().required(),
-  quantity: Joi.number().required(),
   components: Joi.array()
     .items(
       Joi.object({
