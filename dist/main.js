@@ -5,12 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const MongoDBConnections_1 = __importDefault(require("./Config/MongoDBConnections"));
-const inventoryModel_1 = __importDefault(require("./Models/inventoryModel"));
-MongoDBConnections_1.default.DBConnect();
+// MongoDBConnections.DBConnect();
 // console.log(connected to mongodb);
 const transactionmodel_1 = __importDefault(require("./Models/transactionmodel"));
-MongoDBConnections_1.default.DBConnect();
+MongoDBConnections.DBConnect();
 let app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
@@ -165,8 +163,8 @@ app.put("/componentMaster/updateComponentMaster", (req, res) => {
  * findInventory APi call will get all the Inventory  details
  */
 app.get("/Inventory/findInventory", async (req, res) => {
-    let inventory = await inventoryModel_1.default.find();
-    res.status(200).json(inventory);
+    // let inventory: any = await inventoryModel.find();
+    // res.status(200).json(inventory);
     //[
     // {
     //   componentMasterId: "CM-001",
