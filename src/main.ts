@@ -458,12 +458,22 @@ app.get("/Transaction/findTransaction", (req: Request, res: Response) => {
     },
   ]);
 });
-app.get("/grn/view/:grnId", (req: Request, res: Response) => {
-  const grnId = req.params.grnId;
-  res.status(200).send({
-    grnId: grnId || "grn-001",
-    Dates: [{ sentDate: 20 - 2 - 2024, receivedDate: 24 - 2 - 2024 }],
-  });
+app.get("/grn/view/:grnId?", (req: Request, res: Response) => {
+  const grnId = req.params.grnId || "grn-001";
+
+  // Define the sent and received dates in a simple string format
+  const sentDate = "2024-02-20"; // February 20, 2024
+  const receivedDate = "2024-02-24"; // February 24, 2024
+
+  // Construct the response
+  const response = {
+    grnId,
+    sentDate,
+    receivedDate,
+  };
+
+  // Send the response
+  res.status(200).send(response);
 });
 
 //Batch Apis
