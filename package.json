@@ -72,6 +72,7 @@
     "@types/express-serve-static-core": "4.17.28",
     "@types/express-session": "^1.15.16",
     "@types/http-errors": "^2.0.4",
+    "@types/joi": "^17.2.3",
     "@types/js-yaml": "^4.0.0",
     "@types/kafkajs": "^1.9.0",
     "@types/keycloak-connect": "^4.5.1",
