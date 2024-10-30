@@ -1,6 +1,9 @@
 import express from "express";
 import { Request, Response } from "express";
 import cors from "cors";
+import MongoDBConnections from "./Config/MongoDBConnection";
+
+MongoDBConnections.DBConnect();
 
 let app = express();
 app.use(express.json());
