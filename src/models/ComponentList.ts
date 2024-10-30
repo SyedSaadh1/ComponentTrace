@@ -10,7 +10,7 @@ export interface IComponentList extends Document {
     sentToDelivery?: boolean;  // Delivery status
     componentId: string;       // Unique component ID
     componentName: string;     // Name of the component
-    wareHouseLocation?: string; // Location in the warehouse
+    wareHouseLocation?: string; // Location of the warehouse
 }
 
 class ComponentModel {
