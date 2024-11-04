@@ -6,7 +6,6 @@ class TransactionController {
   async findtransaction(req: Request, res: Response) {
     try {
       const result = await TransactionRepo.findAlltransactions({
-        //risky code
         transactionId: "1",
       });
       res.json(result);
