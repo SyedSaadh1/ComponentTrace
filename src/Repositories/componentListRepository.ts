@@ -1,4 +1,4 @@
-import componentModel, { IComponentList } from "../Models/ComponentList"; // Adjust the import path as needed
+import componentModel, { IComponentList } from "../Models/ComponentListModel"; // Adjust the import path as needed
 
 class ComponentRepository {
   // Find all components with optional filter
