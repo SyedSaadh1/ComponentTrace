@@ -10,8 +10,8 @@ class InventoryRouter {
     }
 
     private initializeRoutes() {
-        this.router.get('/findInventory', InvController.findInventory);
-        this.router.post('/createInventory', InvController.createInventory);
+        this.router.get('/inventory', InvController.inventory);
+        // this.router.post('/createInventory', InvController.createInventory);
         // this.router.delete('/deletefindInventory', InvController.deletefindInventory);
     }
 }

@@ -192,7 +192,7 @@ app.put(
 /**
  * findInventory APi call will get all the Inventory  details
  */
-app.get("/findInventory", async (req: Request, res: Response) => {
+app.get("/inventory", async (req: Request, res: Response) => {
   try {
     let inventory: any = await inventoryModel.find();
     res.status(200).json(inventory);
