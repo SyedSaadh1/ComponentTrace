@@ -5,11 +5,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const dbconfig_1 = __importDefault(require("./config/dbconfig"));
-dbconfig_1.default.DBConnect();
+const MongoDBConnection_1 = __importDefault(require("./config/MongoDBConnection"));
+MongoDBConnection_1.default.DBConnect();
 let app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "X-Requested-With, Content-Type");
+    next();
+});
+//added cors
 // apis here.......
 /**
  * findComponentMaster APi call will get all the Component Master details
@@ -22,9 +29,9 @@ app.get("/componentMaster/findComponentMaster", (req, res) => {
             componentMasterDescription: "Used for Vehicles",
             componentImage: "https://images.com/tyre.png",
             components: [
-                { componentName: "Keys", quantity: 100 },
+                { componentMasterName: "Keys", quantity: 100 },
                 {
-                    componentName: "Mother Board",
+                    componentMasterName: "Mother Board",
                     quantity: 1,
                 },
             ],
@@ -56,13 +63,13 @@ app.get("/componentMaster/findComponentMaster", (req, res) => {
             componentMasterDescription: "It is a 4 wheeler",
             componentImage: "https://images.com/car.png",
             components: [
-                { componentName: "Tyre", quantity: 4 },
+                { componentMasterName: "Tyre", quantity: 4 },
                 {
-                    componentName: "Engine",
+                    componentMasterName: "Engine",
                     quantity: 1,
                 },
                 {
-                    componentName: "Seats",
+                    componentMasterName: "Seats",
                     quantity: 5,
                 },
             ],
@@ -78,7 +85,7 @@ app.get("/componentMaster/findComponentMaster", (req, res) => {
 });
 // POST API to create a new ComponentMaster
 app.post("/componentMaster/createComponentMaster", (req, res) => {
-    const { componentMasterId, componentMasterName, componentMasterDescription, componentImage, components, isFinalProduct, category, productionStatus, createdBy, } = req.body; //this is req body format
+    const { componentMasterId, componentMasterName, componentMasterDescription, componentImage, components, isFinalProduct, category, quantity, productionStatus, createdBy, } = req.body; //this is req body format
     // Responding with the created component
     res.status(201).send({
         componentMasterId: componentMasterId || "CM-003",
@@ -87,20 +94,39 @@ app.post("/componentMaster/createComponentMaster", (req, res) => {
         componentImage: componentImage || "https://images.com/mouse.png",
         components: components || [
             {
-                componentMasterId: "CM-002",
+                componentMasterName: "CM-002",
                 quantity: 100,
             },
             {
-                componentMasterId: "CM-001",
+                componentMasterName: "CM-001",
                 quantity: 1,
             },
         ],
+        quantity: 1,
         isFinalProduct: isFinalProduct || false,
         category: category || "Plastic",
         productionStatus: productionStatus || "Active",
         createdBy: createdBy || "user123",
         createdOn: new Date(),
         updatedOn: new Date(),
+    });
+});
+//to fetch sub-components of a specific Component Master
+app.get("/componentMaster/view/:componentMasterId", (req, res) => {
+    const componentMasterId = req.params.componentMasterId;
+    res.status(200).send({
+        componentMasterId: componentMasterId || "CM-001",
+        components: [
+            { componentMasterName: "Tyre", quantity: 4 },
+            {
+                componentMasterName: "Seat",
+                quantity: 5,
+            },
+            {
+                componentMasterName: "Engine",
+                quantity: 1,
+            },
+        ],
     });
 });
 //to update the Component Master if entered any wrong info
@@ -134,23 +160,25 @@ app.put("/componentMaster/updateComponentMaster", (req, res) => {
 /**
  * findInventory APi call will get all the Inventory  details
  */
-app.get("/Inventory/findInventory", (req, res) => {
-    res.status(200).send([
-        {
-            componentMasterId: "CM-001",
-            componentName: "Tyre",
-            quantity: 10,
-            userId: "xxx",
-            _id: "66faeca1d9b10bced59a7585",
-        },
-        {
-            componentMasterId: "CM-002",
-            componentName: "CPU",
-            quantity: 20,
-            userId: "xxx",
-            _id: "66faeca1d9b10bced59a7588",
-        },
-    ]);
+app.get("/Inventory/findInventory", async (req, res) => {
+    // let inventory: any = await inventoryModel.find();
+    // res.status(200).json(inventory);
+    //[
+    // {
+    //   componentMasterId: "CM-001",
+    //   componentName: "Tyre",
+    //   quantity: 10,
+    //   userId: "xxx",
+    //   _id: "66faeca1d9b10bced59a7585",
+    // },
+    // {
+    //   componentMasterId: "CM-002",
+    //   componentName: "CPU",
+    //   quantity: 20,
+    //   userId: "xxx",
+    //   _id: "66faeca1d9b10bced59a7588",
+    // },
+    //]
 });
 /**
  *  To findInventory APi to get from component List by component name
@@ -176,22 +204,18 @@ const componentList = [
 /**
  *  To findInventory APi to get from component List by component MasterId
  */
-app.get("/Inventory/findComponentsByMasterIds/:componentMasterIds", (req, res) => {
-    const componentMasterIds = req.params.componentMasterIds.split(",");
+app.get("/Inventory/findComponentsByMasterIds/:componentMasterId", (req, res) => {
+    const componentMasterId = req.params.componentMasterId;
     let components;
-    if (req.params.componentMasterIds == "all") {
+    if (componentMasterId == "all") {
         components = componentList;
-    }
-    else
-        components = componentList.filter((item) => componentMasterIds.includes(item.componentMasterId));
-    if (components.length > 0) {
         res.status(200).send(components);
     }
     else {
-        res.status(404).send({
-            error: "No components found for the given componentMasterIds",
-        });
+        components = componentList.filter((item) => item.componentMasterId === componentMasterId);
+        res.status(200).send(components);
     }
+    res.status(404).send({ msg: "error" });
 });
 // POST API to create a new component in the component list
 app.post("/componentList/createComponent", (req, res) => {
@@ -337,8 +361,10 @@ app.post("/poorder/createpoorder", (req, res) => {
     });
 });
 //////Transaction GET API
-app.get("/Transaction/findTransaction", (req, res) => {
-    res.status(200).send([
+app.get("/Transaction/findTransaction", async (req, res) => {
+    // let transaction: any = await transactionmodel.find();
+    res.status(200).json();
+    [
         {
             poId: "PO001",
             componentName: ["COM001,COMOO2"],
@@ -359,7 +385,7 @@ app.get("/Transaction/findTransaction", (req, res) => {
             status: "completed",
             feedback: "This is good product",
         },
-    ]);
+    ];
 });
 //api to get grn info
 app.get("/getGrnInfo/:GRNId", (req, res) => {
@@ -377,8 +403,23 @@ app.get("/getGrnInfo/:GRNId", (req, res) => {
         },
     ]);
 });
+app.get("/grn/view/:grnId?", (req, res) => {
+    const grnId = req.params.grnId || "grn-001";
+    // Define the sent and received dates in a simple string format
+    const sentDate = "2024-02-20"; // February 20, 2024
+    const receivedDate = "2024-02-24"; // February 24, 2024
+    // Construct the response
+    const response = {
+        grnId,
+        sentDate,
+        receivedDate,
+    };
+    // Send the response
+    res.status(200).send(response);
+});
 //Batch Apis
 //to create a Batch
+//api to get grn info
 app.post("/batch/createBatch", (req, res) => {
     const { batchNo, componentDetails, batchStartDate, batchEndDate, createdBy } = req.body;
     res.status(201).send({
