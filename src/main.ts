@@ -1,6 +1,9 @@
 import express from "express";
 import { Request, Response } from "express";
 import cors from "cors";
+import MongoDBConnections from "./Config/MongoDBConnection";
+
+MongoDBConnections.DBConnect();
 
 let app = express();
 app.use(express.json());
@@ -452,33 +455,22 @@ app.get("/getGrnInfo/:GRNId", (req: Request, res: Response) => {
     },
   ]);
 });
-app.get("/getGrnInfo/:GRNId", (req: Request, res: Response) => {
-  const GRNId = req.params.GRNId;
-  res.status(200).send([
-    {
-      poId: "PO001",
-      componentName: ["COM001,COMOO2"],
-      poCreationDate: "20-10-2024",
-      sentDate: "18-10-2024",
-      receivedDate: "20-10-2024",
-      grnNumber: GRNId || "GRN001",
+app.get("/grn/view/:grnId?", (req: Request, res: Response) => {
+  const grnId = req.params.grnId || "grn-001";
 
-      status: "completed",
-      feedback: "This is good product",
-    },
-  ]);
-});
+  // Define the sent and received dates in a simple string format
+  const sentDate = "2024-02-20"; // February 20, 2024
+  const receivedDate = "2024-02-24"; // February 24, 2024
 
-app.get("/poorder", (req: Request, res: Response) => {
-  res.status(200).send([
-    {
-      poId: "5678",
-      components: ["Tyres(COM001)"],
-      createdOn: "",
-      status: "pending",
-      grnList: ["GRN1", "GRN2", "GRN3"],
-    },
-  ]);
+  // Construct the response
+  const response = {
+    grnId,
+    sentDate,
+    receivedDate,
+  };
+
+  // Send the response
+  res.status(200).send(response);
 });
 
 //Batch Apis
