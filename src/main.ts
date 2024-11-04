@@ -2,6 +2,14 @@ import express from "express";
 import { Request, Response } from "express";
 import cors from "cors";
 
+// MongoDBConnections.DBConnect();
+
+// console.log(connected to mongodb);
+
+import transactionmodel from "./Models/transactionmodel";
+import MongoDBConnections from "./Config/MongoDBConnections";
+
+// MongoDBConnections.DBConnect();
 let app = express();
 app.use(express.json());
 
