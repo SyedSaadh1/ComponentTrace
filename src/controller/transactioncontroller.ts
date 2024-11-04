@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import TransactionRepo from "../repository/transactionrepository";
-import { deflateSync } from "zlib";
 
 class TransactionController {
   async findtransaction(req: Request, res: Response) {
