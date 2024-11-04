@@ -3,7 +3,7 @@ import componentModel, { IComponentList } from "../Models/ComponentList"; // Adj
 class ComponentRepository {
   // Find all components with optional filter
   findAllComponents(filter = {}) {
-    console.log("filter------");
+    console.log("filter------")
     return componentModel.find(filter);
   }
 

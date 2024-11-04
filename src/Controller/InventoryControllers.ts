@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import InvRepo from '../Repository/InventoryRepository';
+import InvRepo from '../Repositories/InventoryRepository';
 
 //controller
 class InvController {
