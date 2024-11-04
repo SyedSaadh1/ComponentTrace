@@ -1,4 +1,4 @@
-import transactionsModel, { ITransactions } from "../Models/transactionmodel";
+import transactionsModel, { ITransactions } from "../models/transactionmodel";
 
 class TransactionRepository {
   findAlltransactions(filter = {}) {

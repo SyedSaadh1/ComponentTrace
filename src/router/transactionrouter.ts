@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import Transactioncontroller from "../Controller/transactioncontroller";
+import Transactioncontroller from "../controller/transactioncontroller";
 
 class TransactionRouter {
   public router: Router;
