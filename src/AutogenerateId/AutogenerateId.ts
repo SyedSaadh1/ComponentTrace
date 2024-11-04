@@ -22,15 +22,15 @@ class AutogenerateId {
     console.log(lastInsertedPOId);
     if (lastInsertedPOId) {
       const id = lastInsertedPOId.poId;
-      const prefix: string = id.slice(0, 4);
-      let sequence: number = parseInt(id.slice(4));
+      const prefix: string = id.slice(0, 3);
+      let sequence: number = parseInt(id.slice(3));
       sequence++;
       console.log(prefix + sequence);
-      return prefix + sequence.toString().padStart(2, "0");
+      return prefix + sequence.toString().padStart(4, "0");
     } else {
-      const prefix: string = "PO-0";
+      const prefix: string = "PO-";
       const sequence: number = 1;
-      return prefix + sequence.toString().padStart(2, "0");
+      return prefix + sequence.toString().padStart(4, "0");
     }
   }
 }

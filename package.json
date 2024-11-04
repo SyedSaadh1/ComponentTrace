@@ -4,17 +4,16 @@
   "description": "Component trace app by Joiners",
   "main": "dist/main.js",
   "scripts": {
-    "start": "node .",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://dev.azure.com/RVDAS/ComponentTrace/_git/ComponentTrace_api",
+    "start": "tsc && node ./dist/main.js && echo $! > .pid",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc",
     "build": "webpack --progress",
     "compile": "webpack --progress --watch",
-    "start": "tsc && node ./dist/main.js && echo $! > .pid",
     "stop": "kill $(cat .pid)"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://dev.azure.com/RVDAS/ComponentTrace/_git/ComponentTrace_api"
   },
   "author": "",
   "license": "ISC",

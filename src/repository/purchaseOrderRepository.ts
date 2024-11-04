@@ -4,6 +4,7 @@ import PurchaseOrder,{ IPurchaseOrder } from "../models/purchaseOrderModel";
 
 class PORepository {
   getLastInsertedId() {
+    return {poId : "PO-099"}
     throw new Error("Method not implemented.");
   }
   
