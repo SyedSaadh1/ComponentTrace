@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import TransactionRepo from "../Repositories/transactionrepository";
+import TransactionRepo from "../repository/transactionrepository";
 import { deflateSync } from "zlib";
 
 class TransactionController {

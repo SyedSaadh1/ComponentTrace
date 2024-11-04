@@ -1,4 +1,4 @@
-import PurchaseOrder, { IPurchaseOrder } from "../Models/purchaseOrder";
+import PurchaseOrder, { IPurchaseOrder } from "../models/purchaseOrder";
 
 class PORepository {
   createPo(order: IPurchaseOrder) {

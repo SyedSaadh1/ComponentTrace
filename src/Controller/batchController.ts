@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import BatchRepository from '../Repositories/batchRepo'; // Adjust the path as needed to point to your Batch repository
-import Batch from '../Models/batchmodels'; // Adjust the path as needed to point to your Batch model
+import BatchRepository from '../repository/batchRepo'; // Adjust the path as needed to point to your Batch repository
+import Batch from '../models/batchmodels'; // Adjust the path as needed to point to your Batch model
 
 class BatchController {
   // Create a new batch

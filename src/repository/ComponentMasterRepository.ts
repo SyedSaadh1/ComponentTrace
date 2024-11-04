@@ -1,6 +1,6 @@
 import ComponentMasterModel, {
   IComponentMaster,
-} from "../Models/ComponentMasterModel";
+} from "../models/ComponentMasterModel";
 
 class ComponentMasterRepository {
   async find(filter = {}) {
@@ -9,9 +9,6 @@ class ComponentMasterRepository {
     } catch (error) {
       throw new Error("Error Retrieving Component Masters " + error);
     }
-  }
-  async findOne(filter = {}) {
-    return await ComponentMasterModel.findOne(filter);
   }
   async createComponentMaster(Data: IComponentMaster) {
     try {
@@ -28,7 +25,6 @@ class ComponentMasterRepository {
       {
         $set: {
           componentMasterName: Data.componentMasterName,
-          quantity: Data.quantity,
           category: Data.category,
           componentDescription: Data.componentDescription,
           components: Data.components,
