@@ -2,6 +2,7 @@ import express from "express";
 import { Request, Response } from "express";
 import cors from "cors";
 import MongoDBConnections from "./Config/MongoDBConnection";
+import inventoryModel from "./Models/inventoryModel";
 
 MongoDBConnections.DBConnect();
 
@@ -190,24 +191,27 @@ app.put(
 /**
  * findInventory APi call will get all the Inventory  details
  */
-app.get("/Inventory/findInventory", async (req: Request, res: Response) => {
-  // let inventory: any = await inventoryModel.find();
-  // res.status(200).json(inventory);
+app.get("/Inventory/findInventory", async(req: Request, res: Response) => {
+
+  let inventory: any = await inventoryModel.find();
+
+  res.status(200).json(inventory);
+
   //[
-  // {
-  //   componentMasterId: "CM-001",
-  //   componentName: "Tyre",
-  //   quantity: 10,
-  //   userId: "xxx",
-  //   _id: "66faeca1d9b10bced59a7585",
-  // },
-  // {
-  //   componentMasterId: "CM-002",
-  //   componentName: "CPU",
-  //   quantity: 20,
-  //   userId: "xxx",
-  //   _id: "66faeca1d9b10bced59a7588",
-  // },
+    // {
+    //   componentMasterId: "CM-001",
+    //   componentName: "Tyre",
+    //   quantity: 10,
+    //   userId: "xxx",
+    //   _id: "66faeca1d9b10bced59a7585",
+    // },
+    // {
+    //   componentMasterId: "CM-002",
+    //   componentName: "CPU",
+    //   quantity: 20,
+    //   userId: "xxx",
+    //   _id: "66faeca1d9b10bced59a7588",
+    // },
   //]
 });
 
