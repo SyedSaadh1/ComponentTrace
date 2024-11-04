@@ -47,7 +47,7 @@ class transactionClass {
   getModel() {
     mongoose.pluralize(null);
     return mongoose.model<ITransactions>(
-      "Transactions",
+      "TransactionsModel",
       this.transactionsModel
     );
   }
