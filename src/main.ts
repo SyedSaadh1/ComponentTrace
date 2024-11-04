@@ -1,7 +1,7 @@
 import express from "express";
 import { Request, Response } from "express";
 import cors from "cors";
-import MongoDBConnections from "./config/MongoDBConnection";
+import MongoDBConnections from "./Config/MongoDBConnection";
 
 MongoDBConnections.DBConnect();
 

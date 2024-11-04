@@ -1,5 +1,5 @@
 import express, { Router } from 'express';
-import InvController from '../controller/InventoryControllers';
+import InvController from '../Controller/InventoryControllers';
 
 class InventoryRouter {
     public router: Router;

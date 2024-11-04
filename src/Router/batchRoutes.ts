@@ -1,5 +1,5 @@
 import express, { Router } from 'express';
-import BatchController from '../controller/batchController'; 
+import BatchController from '../Controller/batchController'; 
 
 class BatchRouter {
     public router: Router;

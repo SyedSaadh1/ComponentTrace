@@ -1,4 +1,4 @@
-import BatchModel, { Batch } from "../models/batchmodels"; // Adjust the path as needed to point to your Batch model
+import BatchModel, { Batch } from "../Models/batchmodels"; // Adjust the path as needed to point to your Batch model
 
 class BatchRepository {
   // Get all batches

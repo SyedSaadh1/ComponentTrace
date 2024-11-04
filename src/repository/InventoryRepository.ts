@@ -1,5 +1,5 @@
 // Repository
-import inventoryModel, { Inventory } from "../models/inventoryModel";
+import inventoryModel, { Inventory } from "../Models/inventoryModel";
 
 
 class InvRepository {

@@ -1,4 +1,4 @@
-import PurchaseOrder,{ IPurchaseOrder } from "../models/purchaseOrderModel";
+import PurchaseOrder,{ IPurchaseOrder } from "../Models/purchaseOrderModel";
 
 
 
