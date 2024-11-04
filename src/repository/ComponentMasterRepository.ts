@@ -3,7 +3,7 @@ import ComponentMasterModel, {
 } from "../models/ComponentMasterModel";
 
 class ComponentMasterRepository {
-  async find(filter = {}) {
+  async find(filter = {}, p0: { componentMasterId: number; }) {
     try {
       return await ComponentMasterModel.find(filter);
     } catch (error) {
