@@ -1,35 +1,48 @@
-import { Request, Response } from 'express';
-import PORepo from '../repository/purchaseOrderRepository';
-import CMRepo from '../repository/ComponentMasterRepository';
+import { Request, Response } from "express";
+import PORepo from "../repository/purchaseOrderRepository";
+import CMRepo from "../repository/ComponentMasterRepository";
+import AutogenerateId from "../AutogenerateId/AutogenerateId";
 
 class POController {
   async createPurchaseOrder(req: Request, res: Response) {
+    const { orderDetails } = req.body;
+    const generatedPOId = await AutogenerateId.poIdGenerate();
+
     try {
-      const updatedObjects = [];
+        const orderedComponents = orderDetails.map(async (item: any) => {
+        const foundComponent = await CMRepo.find({
+          componentMasterName: item.componentMasterName,
+        });
 
-      // Iterate through each object in the request body
-      for (const originalObject of req.body) {
-        const { componentMasterName } = originalObject.orderDetails; // Correct destructuring
-        const result1 = await CMRepo.find({ componentMasterName }, { componentMasterId: 1 }).catch(() => 
-        {
-          return [];
-       });
-        updatedObjects.push({
-         ...originalObject,
-          result1
+        if (foundComponent?.length > 0) {
+          return {
+            ...item,
+            componentMasterId: foundComponent[0].componentMasterId,
+          };
+        } else {
+          
+          return { ...item, componentMasterId: " " };
         }
-      );
-      }
+      });
 
-      res.status(200).json(updatedObjects);
+      //Resolve all promises
+      const resolvedOrders = await Promise.all(orderedComponents);
+
+      const order = {
+        ...req.body,
+        orderDetails: resolvedOrders,
+        poId: generatedPOId,
+      };
+
+      const result = await PORepo.createPo(order);
+      res
+        .status(201)
+        .send({ msg: "Purchase Order created successfully", result });
     } catch (error) {
-      res.status(500).json({ message: "Error in creating purchase order: " + error });
+    
+      res.status(500).send({ msg: "Error processing components" });
     }
   }
-
-
-
-
 }
 
 export default new POController();
