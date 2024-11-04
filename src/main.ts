@@ -188,10 +188,11 @@ app.put(
     }
   }
 );
+
 /**
  * findInventory APi call will get all the Inventory  details
  */
-app.get("/Inventory/findInventory", async (req: Request, res: Response) => {
+app.get("/findInventory", async (req: Request, res: Response) => {
   try {
     let inventory: any = await inventoryModel.find();
     res.status(200).json(inventory);
@@ -204,50 +205,6 @@ app.get("/Inventory/findInventory", async (req: Request, res: Response) => {
 
 });
 
-/**
- *  To findInventory APi to get from component List by component name
- */
-
-const componentList = [
-  {
-    _id: "66fb7eea86ea2d7cf5743791",
-    componentMasterId: "1",
-    qrCode: "",
-    status: "available",
-    componentId: "COM001",
-    componentName: "Engine",
-  },
-  {
-    _id: "66fb8ffb87fb2d8df5743702",
-    componentMasterId: "2",
-    qrCode: "",
-    status: "pending",
-    componentId: "COM002",
-    componentName: "Transmission",
-  },
-];
-
-/**
- *  To findInventory APi to get from component List by component MasterId
- */
-
-app.get(
-  "/Inventory/findComponentsByMasterIds/:componentMasterId",
-  (req: Request, res: Response) => {
-    const componentMasterId = req.params.componentMasterId;
-    let components;
-    if (componentMasterId == "all") {
-      components = componentList;
-      res.status(200).send(components);
-    } else {
-      components = componentList.filter(
-        (item) => item.componentMasterId === componentMasterId
-      );
-      res.status(200).send(components);
-    }
-    res.status(404).send({ msg: "error" });
-  }
-);
 
 // POST API to create a new component in the component list
 app.post("/componentList/createComponent", (req, res) => {
