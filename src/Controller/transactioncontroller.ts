@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import TransactionRepo from "../repository/transactionrepository";
+import TransactionRepo from "../Repository/transactionrepository";
 
 class TransactionController {
   async findtransaction(req: Request, res: Response) {

@@ -191,28 +191,17 @@ app.put(
 /**
  * findInventory APi call will get all the Inventory  details
  */
-app.get("/Inventory/findInventory", async(req: Request, res: Response) => {
+app.get("/Inventory/findInventory", async (req: Request, res: Response) => {
+  try {
+    let inventory: any = await inventoryModel.find();
+    res.status(200).json(inventory);
+  }
+  catch (error) {
+    const errorMessage = (error as Error).message 
+    console.error("Error in fetching inventory:", error); 
+    res.status(500).json({ message: "Internal Server Error", error: errorMessage });
+  }
 
-  let inventory: any = await inventoryModel.find();
-
-  res.status(200).json(inventory);
-
-  //[
-    // {
-    //   componentMasterId: "CM-001",
-    //   componentName: "Tyre",
-    //   quantity: 10,
-    //   userId: "xxx",
-    //   _id: "66faeca1d9b10bced59a7585",
-    // },
-    // {
-    //   componentMasterId: "CM-002",
-    //   componentName: "CPU",
-    //   quantity: 20,
-    //   userId: "xxx",
-    //   _id: "66faeca1d9b10bced59a7588",
-    // },
-  //]
 });
 
 /**

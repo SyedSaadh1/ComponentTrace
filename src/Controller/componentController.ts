@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import ClRepo from '../repository/componentListRepository';
+import ClRepo from '../Repository/componentListRepository';
 
 class ComponentController {
   // Find all components

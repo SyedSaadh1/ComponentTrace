@@ -1,5 +1,5 @@
-import CMRepo from "../repository/ComponentMasterRepository";
-import PORepo from "../repository/purchaseOrderRepository";
+import CMRepo from "../Repository/ComponentMasterRepository";
+import PORepo from "../Repository/purchaseOrderRepository";
 class AutogenerateId {
   async idGenerate() {
     const lastInsertedCMId = await CMRepo.getLastInsertedId();

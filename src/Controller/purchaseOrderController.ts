@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import PORepo from "../repository/purchaseOrderRepository";
-import CMRepo from "../repository/ComponentMasterRepository";
 import AutogenerateId from "../AutogenerateId/AutogenerateId";
+import PORepo from '../Repository/purchaseOrderRepository';
+import CMRepo from '../Repository/ComponentMasterRepository';
 
 class POController {
   async createPurchaseOrder(req: Request, res: Response) {
@@ -39,7 +39,7 @@ class POController {
         .status(201)
         .send({ msg: "Purchase Order created successfully", result });
     } catch (error) {
-    
+      
       res.status(500).send({ msg: "Error processing components" });
     }
   }
