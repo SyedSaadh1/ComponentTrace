@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose';
-import { v4 as uuidv4 } from 'uuid'; // Use uuid for generating unique IDs
+import { v4 as uuidv4 } from 'uuid'; 
 
 // Interface for order details
 export interface OrderItemsDetails extends Document {
@@ -29,7 +29,7 @@ class PurchaseOrderClass {
       poId: {
         type: String,
         required: true,
-        default: uuidv4, // Generate a new UUID for each purchase order
+
       },
       orderDetails: {
         type: [{
@@ -47,7 +47,7 @@ class PurchaseOrderClass {
           },
           expectedDate: {
             type: Date,
-            default: Date.now,
+            required: true,
           }
 
         }], required: true
@@ -56,11 +56,7 @@ class PurchaseOrderClass {
         type: String,
         required: true,
       },
-      orderedDate: {
-        type: Date,
-        required: true,
-        default: Date.now,
-      },
+
       address: {
         type: String,
         required: true,
