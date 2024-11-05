@@ -1,5 +1,6 @@
 import mongoose, { Document, ObjectId } from "mongoose";
 export interface Components {
+  componentMasterId: string;
   componentMasterName: string;
   quantity: number;
 }
@@ -10,6 +11,7 @@ export interface IComponentMaster extends Document {
   componentDescription: string;
   category: string;
   components: Components[];
+  isFinalProduct: boolean;
   createdBy: string;
   createdOn: Date;
   updatedOn: Date;
@@ -25,13 +27,14 @@ class ComponentMasterModel {
       components: {
         type: [
           {
+            componentMasterId: { type: String, required: true },
             componentMasterName: { type: String, required: true },
             quantity: { type: Number, required: true },
           },
         ],
         required: false,
       },
-
+      isFinalProduct: { type: Boolean, required: true },
       createdBy: { type: String, default: "User123" },
       createdOn: { type: Date, default: Date.now },
       updatedOn: { type: Date, default: Date.now },

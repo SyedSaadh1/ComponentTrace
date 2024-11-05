@@ -12,6 +12,17 @@ class ComponentMasterController {
       return res.status(500).send({ msg: "Encountered an Error : " + error });
     }
   }
+  async findSubComponents(req: Request, res: Response) {
+    try {
+      const result = await Repo.getSubComponents();
+      return res.status(200).send(result);
+    } catch (error) {
+      return res.status(500).send({
+        msg:
+          "Encountered an Error while retrieving non final products : " + error,
+      });
+    }
+  }
   createComponentMaster = async (req: Request, res: Response) => {
     const { error, value } = componentMasterBody.validate(req.body);
     const lastInsertedComponentMasterId = await generateId.idGenerate();
@@ -41,7 +52,7 @@ class ComponentMasterController {
         .status(201)
         .send({ msg: "Component Master Created Successfully", Data: result });
     } catch (error) {
-      console.error("Error Encounter Creating Component Master", error);
+      console.error("Error Encountered while Creating Component Master", error);
       return res.status(500).send({ msg: "Error Creating Component Master" });
     }
   };
