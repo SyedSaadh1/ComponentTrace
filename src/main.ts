@@ -1,6 +1,7 @@
-import router from "./Router/ComponentMasterRouter";
+import componentMasterRouter from "./Router/ComponentMasterRouter";
 import Db from "./Config/MongoDBConnection";
 import express, { Application } from "express";
+import componentListRouter from "./Router/componentRouter";
 import cors from "cors";
 class Main {
   port: Number;
@@ -32,7 +33,8 @@ class Main {
   }
 
   initializeRoutes() {
-    this.app.use("/componentMaster", router);
+    this.app.use("/componentMaster", componentMasterRouter);
+    this.app.use("/components", componentListRouter);
   }
 
   connectDatabase() {
