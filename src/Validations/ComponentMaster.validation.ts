@@ -8,12 +8,14 @@ const componentMasterSchemaValidate = Joi.object({
   components: Joi.array()
     .items(
       Joi.object({
+        componentMasterId: Joi.string().required(),
         componentMasterName: Joi.string().required(),
         quantity: Joi.number().required(),
       })
     )
     .optional(),
   createdBy: Joi.string().optional(),
+  isFinalProduct: Joi.boolean().required(),
 });
 
 export default componentMasterSchemaValidate;

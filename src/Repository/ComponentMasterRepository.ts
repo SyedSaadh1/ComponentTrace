@@ -10,6 +10,13 @@ class ComponentMasterRepository {
       throw new Error("Error Retrieving Component Masters " + error);
     }
   }
+  async getSubComponents() {
+    try {
+      return await ComponentMasterModel.find({ isFinalProduct: false });
+    } catch (error) {
+      throw new Error("Error Retrieving Sub-Components " + error);
+    }
+  }
   async createComponentMaster(Data: IComponentMaster) {
     try {
       return await ComponentMasterModel.create(Data);
