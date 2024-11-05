@@ -12,10 +12,13 @@ class PurchaseOrderRouter {
     private initializeRoutes() {
         this.router.post('/createPurchaseOrder', POController.createPurchaseOrder);
     }
+    getRouter() {
+        return this.router;
+      }
 }
 
 // Export an instance of the PurchaseOrderRouter
-export default new PurchaseOrderRouter();
+export default new PurchaseOrderRouter().getRouter();
 
 
 

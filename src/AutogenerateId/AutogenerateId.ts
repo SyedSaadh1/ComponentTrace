@@ -19,13 +19,11 @@ class AutogenerateId {
   }
   async poIdGenerate() {
     const lastInsertedPOId = await PORepo.getLastInsertedId();
-    console.log(lastInsertedPOId);
-    if (lastInsertedPOId) {
+      if (lastInsertedPOId) {
       const id = lastInsertedPOId.poId;
       const prefix: string = id.slice(0, 3);
       let sequence: number = parseInt(id.slice(3));
       sequence++;
-      console.log(prefix + sequence);
       return prefix + sequence.toString().padStart(4, "0");
     } else {
       const prefix: string = "PO-";

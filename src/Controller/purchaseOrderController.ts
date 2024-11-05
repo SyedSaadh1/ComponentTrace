@@ -34,10 +34,10 @@ class POController {
         poId: generatedPOId,
       };
 
-      const result = await PORepo.createPo(order);
+      const createdPurchaseOrder = await PORepo.createPo(order);
       res
         .status(201)
-        .send({ msg: "Purchase Order created successfully", result });
+        .send({ msg: "Purchase Order created successfully",createdPurchaseOrder });
     } catch (error) {
       
       res.status(500).send({ msg: "Error processing components" });

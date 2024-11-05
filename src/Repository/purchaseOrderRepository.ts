@@ -1,17 +1,23 @@
-import PurchaseOrder,{ IPurchaseOrder } from "../Models/purchaseOrderModel";
+import purchaseOrderModel from "../Models/purchaseOrderModel";
+import PurchaseOrder, { IPurchaseOrder } from "../Models/purchaseOrderModel";
 
 
 
 class PORepository {
-  getLastInsertedId() {
-    return {poId : "PO-099"}
-    throw new Error("Method not implemented.");
+  async getLastInsertedId() {
+    try {
+      return await purchaseOrderModel.findOne().sort({ _id: -1 }).limit(1);
+    } catch (error) {
+      throw new Error(
+        "Error Encountered while fetching last inserted Id : " + error
+      );
+    }
   }
-  
+
   createPo(order: IPurchaseOrder) {
     return PurchaseOrder.create(order);
   }
-  
+
 }
 
 export default new PORepository();
