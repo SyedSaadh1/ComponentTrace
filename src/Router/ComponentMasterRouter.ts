@@ -11,6 +11,7 @@ class ComponentMasterRouter {
 
   initializeRoutes() {
     this.router.get("/findComponentMaster", Controller.findComponentMaster);
+    this.router.get("/findSubComponents", Controller.findSubComponents);
     this.router.post(
       "/createComponentMaster",
       Controller.createComponentMaster
