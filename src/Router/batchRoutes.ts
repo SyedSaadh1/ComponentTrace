@@ -2,8 +2,7 @@ import express, { Router } from 'express';
 import BatchController from '../Controller/batchController'; 
 
 class BatchRouter {
-    public router: Router;
-
+    router: Router;
     constructor() {
         this.router = express.Router();
         this.initializeRoutes();
@@ -14,9 +13,11 @@ class BatchRouter {
         this.router.get('/getAllBatches', BatchController.getAllBatches);
         this.router.get('/getBatchById/:id', BatchController.getBatchById);
         this.router.put('/updateBatch/:id', BatchController.updateBatch);
-        this.router.delete('/deleteBatch/:id', BatchController.deleteBatch);
+    }
+    getRouter(){
+        return this.router;
     }
 }
 
-// Export an instance of the BatchRouter
-export default new BatchRouter().router;
+
+export default new BatchRouter().getRouter();

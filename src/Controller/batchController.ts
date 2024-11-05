@@ -66,22 +66,6 @@ class BatchController {
       res.status(500).json({ message: "Failed to update batch", error });
     }
   }
-
-  // Delete a batch by ID
-  public async deleteBatch(req: Request, res: Response): Promise<void> {
-    try {
-      const deletedBatch = await BatchRepository.deleteBatch(req.params.id);
-
-      if (!deletedBatch) {
-        res.status(404).json({ message: "Batch not found" });
-        return;
-      }
-
-      res.status(200).json({ message: "Batch deleted successfully" });
-    } catch (error) {
-      res.status(500).json({ message: "Failed to delete batch", error });
-    }
-  }
 }
 
 export default new BatchController();

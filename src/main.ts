@@ -1,4 +1,10 @@
+<<<<<<< Updated upstream
 import componentMasterRouter from "./Router/ComponentMasterRouter";
+=======
+import router from "./Router/ComponentMasterRouter";
+import invRouter from "./Router/inventoryRoutes"; 
+import batchRouter from "./Router/batchRoutes";
+>>>>>>> Stashed changes
 import Db from "./Config/MongoDBConnection";
 import express, { Application } from "express";
 import componentListRouter from "./Router/componentRouter";
@@ -33,8 +39,14 @@ class Main {
   }
 
   initializeRoutes() {
+<<<<<<< Updated upstream
     this.app.use("/componentMaster", componentMasterRouter);
     this.app.use("/components", componentListRouter);
+=======
+    this.app.use("/componentMaster", router);
+    this.app.use("/inventoryDetails",invRouter);
+    this.app.use("/batch",batchRouter);
+>>>>>>> Stashed changes
   }
 
   connectDatabase() {

@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-// Interface for Batch details
+// Interface Batch details
 export interface Batch extends Document {
   batchNo: string;                  // Batch number
   componentDetails: string;         // Details of products and their quantities
@@ -38,10 +38,10 @@ class BatchClass {
       },
     });
 
-    mongoose.pluralize(null); // Prevents Mongoose from pluralizing the model name
+    mongoose.pluralize(null); 
     this.model = mongoose.model<Batch>('Batch', BatchSchema);
   }
 }
 
-// Exporting the Batch model directly
+
 export default new BatchClass().model;
