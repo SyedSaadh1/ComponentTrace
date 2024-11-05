@@ -35,7 +35,7 @@ class ComponentMasterRepository {
           category: Data.category,
           componentDescription: Data.componentDescription,
           components: Data.components,
-          updatedOn: Date.now(),
+          isFinalProduct: Data.isFinalProduct,
         },
       }
     );
