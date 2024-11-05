@@ -36,6 +36,7 @@ class Main {
 
   initializeRoutes() {
     this.app.use("/componentMaster", router);
+    this.app.use("/components",componentListRouter);
     this.app.use("/inventoryDetails",invRouter);
     this.app.use("/batch",batchRouter);
   }
