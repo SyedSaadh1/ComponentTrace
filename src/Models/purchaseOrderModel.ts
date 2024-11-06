@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose';
-import { v4 as uuidv4 } from 'uuid'; 
+import { v4 as uuidv4 } from 'uuid';
 
 // Interface for order details
 export interface OrderItemsDetails extends Document {
@@ -46,7 +46,7 @@ class PurchaseOrderClass {
             required: true,
           },
           expectedDate: {
-            type: Date,
+            type: String,
             required: true,
           }
 

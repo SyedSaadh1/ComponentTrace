@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import AutogenerateId from "../AutogenerateId/AutogenerateId";
 import PORepo from '../Repository/purchaseOrderRepository';
 import CMRepo from '../Repository/ComponentMasterRepository';
+import TransRepo from '../Repository/transactionrepository'
 
 class POController {
   async createPurchaseOrder(req: Request, res: Response) {
@@ -40,9 +41,39 @@ class POController {
         .send({ msg: "Purchase Order created successfully",createdPurchaseOrder });
     } catch (error) {
       
-      res.status(500).send({ msg: "Error processing components" });
+      res.status(500).send({ msg: "Error processing in creating Purchase Order" });
     }
   }
+  
+
+ // transcation
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 export default new POController();
