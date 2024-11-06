@@ -14,8 +14,8 @@ class PORepository {
     }
   }
 
-  createPo(order: IPurchaseOrder) {
-    return PurchaseOrder.create(order);
+  async createPo(order: IPurchaseOrder) {
+    return await PurchaseOrder.create(order);
   }
 
 }
