@@ -12,6 +12,7 @@ export interface IComponentList extends Document {
     componentId: string;       // Unique component ID
     componentName: string;     // Name of the component
     wareHouseLocation?: string; // Location in the warehouse
+    quantity?: number;          // Quantity 
 }
 
 class ComponentModel {
@@ -57,6 +58,10 @@ class ComponentModel {
             wareHouseLocation: {
                 type: String,
             },
+            quantity:{
+                type: Number,
+                required: true,
+            }
         });
 
         mongoose.pluralize(null); // Disable pluralization of model name

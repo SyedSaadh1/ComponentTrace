@@ -33,7 +33,7 @@ class AutogenerateId {
     }
   }
   async clIdGenerate() {
-    const lastInsertedCLId = await CLRepo.getLastInsertedId(); // Replace with your actual repo for component list
+    const lastInsertedCLId = await CLRepo.getLastInsertedId(); 
     if (lastInsertedCLId) {
         const id = lastInsertedCLId.componentId; 
         const prefix: string = id.slice(0, 3); // Extracts "CL-"
