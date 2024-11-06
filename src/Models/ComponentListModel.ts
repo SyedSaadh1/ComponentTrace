@@ -2,12 +2,13 @@ import mongoose, { Document, Schema } from "mongoose";
 
 // Interface for component details
 export interface IComponentList extends Document {
-    componentMasterId: number; // Master ID of the component
+    componentMasterId: string; // Master ID of the component
     createdBy: string;         // User who created the component
     createdOn?: Date;         // Date of creation
     currentOwner: string;      // Current owner of the component
     qrCode?: string;          // QR code for the component
     sentToDelivery?: boolean;  // Delivery status
+    componentState?: string;   // Assigning/ Assembling/ Available/ Service/ Scrap/ Sent to Delivery
     componentId: string;       // Unique component ID
     componentName: string;     // Name of the component
     wareHouseLocation?: string; // Location in the warehouse
@@ -19,12 +20,12 @@ class ComponentModel {
     constructor() {
         const componentSchema: Schema<IComponentList> = new mongoose.Schema({
             componentMasterId: {
-                type: Number,
+                type: String,
                 required: true,
             },
             createdBy: {
                 type: String,
-                required: true,
+              default:"User123"
             },
             createdOn: {
                 type: Date,
@@ -32,7 +33,7 @@ class ComponentModel {
             },
             currentOwner: {
                 type: String,
-                required: true,
+                default:"User123"
             },
             qrCode: {
                 type: String,
@@ -41,10 +42,13 @@ class ComponentModel {
                 type: Boolean,
                 default: false, // Default to false
             },
+            componentState: {
+                type: String,
+                required: true,
+            },
             componentId: {
                 type: String,
                 required: true,
-                unique: true, // Ensure uniqueness
             },
             componentName: {
                 type: String,

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import AutogenerateId from "../AutogenerateId/AutogenerateId";
-import componentListBody from "../Validations/componentListValidation";
+import componentListBody from "../Validations/componentList.validation";
 import ClRepo from '../Repository/componentListRepository';
 
 class ComponentController {
@@ -31,15 +31,11 @@ class ComponentController {
       }
 
       // Generate a unique ID for each component in the list
-      const components = await Promise.all(
-        value.map(async (component: any) => {
-          const componentListId = await AutogenerateId.idGenerate(); // Generate ID with prefix "CL"
-          return { ...component, componentListId }; // Add generated ID to component
-        })
-      );
+      const componentId=await AutogenerateId.clIdGenerate();
+      value.componentId=componentId;
 
       // Store components in the database
-      const result = await ClRepo.storeComponents(components);
+      const result = await ClRepo.storeComponents(value);
       res.status(201).json({ msg: "Components created successfully", data: result });
     } catch (error) {
       res.status(500).json({ msg: "Error in creating components: " + error });

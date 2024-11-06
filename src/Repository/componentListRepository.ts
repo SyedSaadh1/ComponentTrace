@@ -8,7 +8,7 @@ class ComponentRepository {
   }
 
   // Create new components
-  storeComponents(components: IComponentList[]) {
+  storeComponents(components: IComponentList) {
     return componentModel.insertMany(components);
   }
 
