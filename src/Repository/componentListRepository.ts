@@ -1,4 +1,4 @@
-import componentModel, { IComponentList } from "../Models/ComponentListModel"; // Adjust the import path as needed
+import componentModel, { IComponentList } from "../Models/ComponentListModel"; 
 
 class ComponentRepository {
   // Find all components with optional filter
@@ -20,6 +20,15 @@ class ComponentRepository {
   // Find component by name
   findCompByName(componentName: string) {
     return componentModel.find({ componentName });
+  }
+  async getLastInsertedId() {
+    try {
+      return await componentModel.findOne().sort({ _id: -1 }).limit(1);
+    } catch (error) {
+      throw new Error(
+        "Error encountered while fetching last inserted ID for component list: " + error
+      );
+    }
   }
 }
 

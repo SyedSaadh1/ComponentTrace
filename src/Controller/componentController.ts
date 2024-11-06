@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+import AutogenerateId from "../AutogenerateId/AutogenerateId";
+import componentListBody from "../Validations/componentListValidation";
 import ClRepo from '../Repository/componentListRepository';
 
 class ComponentController {
@@ -11,26 +13,41 @@ class ComponentController {
       console.log("result :- ",result);
       if (!result.length) {
          return res.status(404).send({ msg: "No components found" });
-      }else
-       return res.status(200).send(result);
+      } else {
+        return res.status(200).send(result);
+      }
     } catch (error) {
       res.status(500).send({ msg: "Error fetching components: " + error });
     }
   }
 
-  // Store new components
-  async storeComponents(req: Request, res: Response): Promise<any>  {
+  // Store new components with auto-generated ID
+  async storeComponents(req: Request, res: Response): Promise<any> {
     try {
-      const components = req.body;
+      // Validate request body
+      const { error, value } = componentListBody.validate(req.body);
+      if (error) {
+        return res.status(400).json({ msg: "Validation error", error: error.details });
+      }
+
+      // Generate a unique ID for each component in the list
+      const components = await Promise.all(
+        value.map(async (component: any) => {
+          const componentListId = await AutogenerateId.idGenerate(); // Generate ID with prefix "CL"
+          return { ...component, componentListId }; // Add generated ID to component
+        })
+      );
+
+      // Store components in the database
       const result = await ClRepo.storeComponents(components);
-       res.status(201).json({ msg: "Components created successfully", data: result });
+      res.status(201).json({ msg: "Components created successfully", data: result });
     } catch (error) {
       res.status(500).json({ msg: "Error in creating components: " + error });
     }
   }
 
   // Update existing components
-  async updateComponents(req: Request, res: Response): Promise<any>  {
+  async updateComponents(req: Request, res: Response): Promise<any> {
     try {
       const { componentId, componentName, wareHouseLocation, ...updateFields } = req.body;
       if (!componentId) {
@@ -55,7 +72,7 @@ class ComponentController {
   }
 
   // Find component by name
-  async findComponentByName(req: Request, res: Response) : Promise<any> {
+  async findComponentByName(req: Request, res: Response): Promise<any> {
     try {
       const { compName } = req.params;
       if (!compName) {
@@ -72,4 +89,4 @@ class ComponentController {
   }
 }
 
-export default  ComponentController;
+export default ComponentController;

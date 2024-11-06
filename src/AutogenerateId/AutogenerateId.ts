@@ -1,5 +1,6 @@
 import CMRepo from "../Repository/ComponentMasterRepository";
 import PORepo from "../Repository/purchaseOrderRepository";
+import CLRepo from "../Repository/componentListRepository";
 class AutogenerateId {
   async idGenerate() {
     const lastInsertedCMId = await CMRepo.getLastInsertedId();
@@ -31,6 +32,23 @@ class AutogenerateId {
       return prefix + sequence.toString().padStart(4, "0");
     }
   }
+  async clIdGenerate() {
+    const lastInsertedCLId = await CLRepo.getLastInsertedId(); // Replace with your actual repo for component list
+    console.log(lastInsertedCLId);
+    if (lastInsertedCLId) {
+        const id = lastInsertedCLId.componentId; 
+        const prefix: string = id.slice(0, 3); // Extracts "CL-"
+        let sequence: number = parseInt(id.slice(3)); // Extracts the numeric part
+        sequence++;
+        console.log(prefix + sequence);
+        return prefix + sequence.toString().padStart(2, "0"); // Pads to ensure two-digit format
+    } else {
+        const prefix: string = "CL-";
+        const sequence: number = 1;
+        return prefix + sequence.toString().padStart(2, "0");
+    }
+}
+
 }
 
 export default new AutogenerateId();
