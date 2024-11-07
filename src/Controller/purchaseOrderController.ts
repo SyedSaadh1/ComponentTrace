@@ -2,15 +2,35 @@ import { Request, Response } from "express";
 import AutogenerateId from "../AutogenerateId/AutogenerateId";
 import PORepo from '../Repository/purchaseOrderRepository';
 import CMRepo from '../Repository/ComponentMasterRepository';
-import TransRepo from '../Repository/transactionrepository'
+import TransRepo from '../Repository/transactionrepository';
 
 class POController {
   async createPurchaseOrder(req: Request, res: Response) {
-    const { orderDetails } = req.body;
-    const generatedPOId = await AutogenerateId.poIdGenerate();
-
     try {
-        const orderedComponents = orderDetails.map(async (item: any) => {
+      const { orderDetails } = req.body;
+      const generatedPOId = await AutogenerateId.poIdGenerate();
+
+      const datevalidation = /^\d{4}\/\d{2}\/\d{2}$/;
+
+      const updatedOrderDetails = await Promise.all(orderDetails.map(async (item: any) => {
+        if (item.expectedDate && typeof item.expectedDate === 'string') {
+
+          if (!datevalidation.test(item.expectedDate)) {
+
+            throw new Error(`Invalid date format for expectedDate: ${item.expectedDate}`);
+          }
+          const dateArray = item.expectedDate.split('/');
+
+          if (dateArray.length === 3) {
+
+            item.expectedDate = `${dateArray[2]}/${dateArray[1]}/${dateArray[0]}`;
+          }
+        }
+        return item;
+      }));
+
+
+      const orderedComponents = await Promise.all(updatedOrderDetails.map(async (item: any) => {
         const foundComponent = await CMRepo.find({
           componentMasterName: item.componentMasterName,
         });
@@ -21,57 +41,22 @@ class POController {
             componentMasterId: foundComponent[0].componentMasterId,
           };
         } else {
-          
           return { ...item, componentMasterId: " " };
         }
-      });
+      }));
 
-      //Resolve all promises
-      const resolvedOrders = await Promise.all(orderedComponents);
 
       const order = {
         ...req.body,
-        orderDetails: resolvedOrders,
+        orderDetails: orderedComponents,
         poId: generatedPOId,
       };
-
       const createdPurchaseOrder = await PORepo.createPo(order);
-      res
-        .status(201)
-        .send({ msg: "Purchase Order created successfully",createdPurchaseOrder });
+      res.status(201).send({ msg: "Purchase Order created successfully", createdPurchaseOrder });
     } catch (error) {
-      
       res.status(500).send({ msg: "Error processing in creating Purchase Order" });
     }
   }
-  
-
- // transcation
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
