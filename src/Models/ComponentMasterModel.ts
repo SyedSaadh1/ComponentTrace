@@ -1,11 +1,11 @@
-import mongoose, { Document, ObjectId } from "mongoose";
+import mongoose, { Document } from "mongoose";
 export interface Components {
   componentMasterId: string;
   componentMasterName: string;
   quantity: number;
 }
 export interface IComponentMaster extends Document {
-  _id: ObjectId;
+  _id: mongoose.Schema.Types.ObjectId;
   componentMasterId: string;
   componentMasterName: string;
   componentDescription: string;
@@ -13,32 +13,35 @@ export interface IComponentMaster extends Document {
   components: Components[];
   isFinalProduct: boolean;
   createdBy: string;
-  createdOn: Date;
-  updatedOn: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 class ComponentMasterModel {
   private componentMasterModel: mongoose.Schema<IComponentMaster>;
   constructor() {
-    this.componentMasterModel = new mongoose.Schema({
-      componentMasterId: { type: String, default: "CM-00X" },
-      componentMasterName: { type: String, required: true },
-      componentDescription: { type: String, required: false },
-      category: { type: String, required: true },
-      components: {
-        type: [
-          {
-            componentMasterId: { type: String, required: true },
-            componentMasterName: { type: String, required: true },
-            quantity: { type: Number, required: true },
-          },
-        ],
-        required: false,
+    this.componentMasterModel = new mongoose.Schema(
+      {
+        componentMasterId: { type: String, default: "CM-00X" },
+        componentMasterName: { type: String, required: true },
+        componentDescription: { type: String, required: false },
+        category: { type: String, required: true },
+        components: {
+          type: [
+            {
+              componentMasterId: { type: String, required: true },
+              componentMasterName: { type: String, required: true },
+              quantity: { type: Number, required: true },
+            },
+          ],
+          required: false,
+        },
+        isFinalProduct: { type: Boolean, required: true },
+        createdBy: { type: String, default: "User123" },
       },
-      isFinalProduct: { type: Boolean, required: true },
-      createdBy: { type: String, default: "User123" },
-      createdOn: { type: Date, default: Date.now },
-      updatedOn: { type: Date, default: Date.now },
-    });
+      {
+        timestamps: true,
+      }
+    );
   }
 
   getModel() {

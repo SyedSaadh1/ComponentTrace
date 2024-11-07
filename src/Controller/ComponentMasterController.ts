@@ -2,34 +2,11 @@ import Repo from "../Repository/ComponentMasterRepository";
 import { Request, Response } from "express";
 import componentMasterBody from "../Validations/ComponentMaster.validation";
 import generateId from "../AutogenerateId/AutogenerateId";
+
 class ComponentMasterController {
-  async findComponentMaster(req: Request, res: Response) {
-    const filter = req.query;
-    try {
-      const result = await Repo.find(filter);
-      return res.status(200).send(result);
-    } catch (error) {
-      return res.status(500).send({ msg: "Encountered an Error : " + error });
-    }
-  }
-  async findSubComponents(req: Request, res: Response) {
-    try {
-      const result = await Repo.getSubComponents();
-      return res.status(200).send(result);
-    } catch (error) {
-      return res.status(500).send({
-        msg:
-          "Encountered an Error while retrieving non final products : " + error,
-      });
-    }
-  }
   createComponentMaster = async (req: Request, res: Response) => {
     const { error, value } = componentMasterBody.validate(req.body);
     const lastInsertedComponentMasterId = await generateId.idGenerate();
-    // const reqBody = {
-    //   ...value,
-    //   componentMasterId: lastInsertedComponentMasterId,
-    // };
 
     try {
       value.componentMasterId = lastInsertedComponentMasterId;
@@ -56,7 +33,39 @@ class ComponentMasterController {
       return res.status(500).send({ msg: "Error Creating Component Master" });
     }
   };
-  async updateComponentMaster(req: Request, res: Response) {
+  findComponentMaster = async (req: Request, res: Response) => {
+    const filter = req.query;
+    try {
+      const result = await Repo.find(filter);
+      return res.status(200).send(result);
+    } catch (error) {
+      return res.status(500).send({ msg: "Encountered an Error : " + error });
+    }
+  };
+  findNFPComponents = async (req: Request, res: Response) => {
+    try {
+      const result = await Repo.getNonFPComponents();
+      return res.status(200).send(result);
+    } catch (error) {
+      return res.status(500).send({
+        msg:
+          "Encountered an Error while retrieving non final products : " + error,
+      });
+    }
+  };
+  findSubComponents = async (req: Request, res: Response) => {
+    try {
+      const componentMasterId = req.params.CMID;
+      const result = await Repo.getSubComponents(componentMasterId);
+      return res.status(200).send(result);
+    } catch (error) {
+      return res.status(500).send({
+        msg: "Encountered an error while fetching sub-components ",
+        error,
+      });
+    }
+  };
+  updateComponentMaster = async (req: Request, res: Response) => {
     const Data = req.body;
     try {
       const result = await Repo.updateComponentMaster(Data);
@@ -74,7 +83,7 @@ class ComponentMasterController {
         msgh: "An Error encountered. Please try again later " + error,
       });
     }
-  }
+  };
 }
 
 export default new ComponentMasterController();

@@ -10,11 +10,21 @@ class ComponentMasterRepository {
       throw new Error("Error Retrieving Component Masters " + error);
     }
   }
-  async getSubComponents() {
+  async getNonFPComponents() {
     try {
       return await ComponentMasterModel.find({ isFinalProduct: false });
     } catch (error) {
-      throw new Error("Error Retrieving Sub-Components " + error);
+      throw new Error("Error Retrieving Non-FP-Components " + error);
+    }
+  }
+  async getSubComponents(componentMasterId: string) {
+    try {
+      return await ComponentMasterModel.find(
+        { componentMasterId: componentMasterId },
+        { components: 1, _id: 0 }
+      );
+    } catch (error) {
+      throw new Error("Error Retrieving Sub-Components");
     }
   }
   async createComponentMaster(Data: IComponentMaster) {
@@ -35,7 +45,7 @@ class ComponentMasterRepository {
           category: Data.category,
           componentDescription: Data.componentDescription,
           components: Data.components,
-          updatedOn: Date.now(),
+          isFinalProduct: Data.isFinalProduct,
         },
       }
     );
