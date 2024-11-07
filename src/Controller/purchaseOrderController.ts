@@ -17,7 +17,7 @@ class POController {
 
           if (!datevalidation.test(item.expectedDate)) {
 
-            throw new Error(`Invalid date format for expectedDate: ${item.expectedDate}`);
+            return res.status(400).send(`Invalid date format for expectedDate: ${item.expectedDate}`);
           }
           const dateArray = item.expectedDate.split('/');
 
