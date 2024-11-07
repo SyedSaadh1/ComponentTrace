@@ -1,11 +1,11 @@
-import mongoose, { Document, Types } from "mongoose";
+import mongoose, { Document } from "mongoose";
 export interface Components {
   componentMasterId: string;
   componentMasterName: string;
   quantity: number;
 }
 export interface IComponentMaster extends Document {
-  _id: Types.ObjectId;
+  _id: mongoose.Schema.Types.ObjectId;
   componentMasterId: string;
   componentMasterName: string;
   componentDescription: string;
