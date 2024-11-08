@@ -7,7 +7,7 @@ export interface Inventory extends Document {
     quantity: number;          // Quantity of the component  
     componentMasterId:string; // ComponentMasterId of the component
     userId:string;            // userId of the component
-    stockStatus:string;       // stockstatus of the component 
+    reserved:number;       // stockstatus of the component 
 }
 
 class InventoryClass {
@@ -31,8 +31,8 @@ class InventoryClass {
             type: String,
             required:true,
         },
-        stockStatus: {
-            type: String,
+        reserved: {
+            type: Number,
             required:true,
         },
       });
