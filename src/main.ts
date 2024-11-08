@@ -4,7 +4,7 @@ import batchRouter from "./Router/batchRoutes";
 import Db from "./Config/MongoDBConnection";
 import express, { Application } from "express";
 import componentListRouter from "./Router/componentRouter";
-import poRouter from "./Router/purchaseOrderRoutes"
+import poRouter from "./Router/purchaseOrderRoutes";
 
 import cors from "cors";
 class Main {
@@ -41,8 +41,6 @@ class Main {
     this.app.use("/components", componentListRouter);
     this.app.use("/inventoryDetails", invRouter);
     this.app.use("/batch", batchRouter);
-    this.app.use("/componentMaster", componentListRouter);
-    this.app.use("/components", componentListRouter);
     this.app.use("/purchaseOrder", poRouter);
   }
 
