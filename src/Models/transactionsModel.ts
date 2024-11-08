@@ -5,33 +5,36 @@ import mongoose, { Document, Schema } from "mongoose";
 
 export interface componentsSummary extends Document {
   componentMasterId: string;
+  componentIds: [];
   quantity: number;
-  batchNo: string;
 }
 
 // Interface for transaction
 export interface ITransactions extends Document {
-  componentIds: [];
+  transactionId: string;
+  grnNumber: string;
+  poId: string;
   componentsSummary: componentsSummary[];
   from: string;
   to: string;
   sentDate: Date;
   receivedDate: Date;
-  grnNumber: string;
+  receievedByCustomer: boolean;
 }
 
 // Class for transaction
-class transactionClass {
+class TransactionClass {
   public transactionsModel: mongoose.Schema<ITransactions>;
   constructor() {
     this.transactionsModel = new mongoose.Schema({
-      componentIds: { type: [String], required: true },
+      transactionId: { type: String, required: true },
+      poId: { type: String, required: true },
       componentsSummary: {
         type: [
           {
             componentMasterId: { type: String, required: true },
             quantity: { type: Number, required: true },
-            batchNo: { type: String, required: true },
+            componentIds: { type: [String], required: true },
           },
         ],
         required: true,
@@ -40,8 +43,8 @@ class transactionClass {
       to: { type: String, required: true },
       sentDate: { type: Date, required: true, default: Date.now },
       receivedDate: { type: Date, required: true, default: Date.now },
-
-      grnNumber: { type: String, required: true },
+      receievedByCustomer: { type: Boolean, required: false, default: true },
+      grnNumber: { type: String, default: "GRN-00X" },
     });
   }
   getModel() {
@@ -54,4 +57,4 @@ class transactionClass {
 }
 
 // Exporting the transaction model directly
-export default new transactionClass().getModel();
+export default new TransactionClass().getModel();
