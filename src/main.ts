@@ -41,6 +41,10 @@ class Main {
     this.app.use("/components", componentListRouter);
     this.app.use("/inventoryDetails", invRouter);
     this.app.use("/batch", batchRouter);
+<<<<<<< Updated upstream
+=======
+    this.app.use("/componentMaster", componentListRouter);
+>>>>>>> Stashed changes
     this.app.use("/purchaseOrder", poRouter);
   }
 
