@@ -10,7 +10,8 @@ class POController {
       const { orderDetails } = req.body;
       const generatedPOId = await AutogenerateId.poIdGenerate();
 
-      const datevalidation = /^\d{4}\/\d{2}\/\d{2}$/;
+      const datevalidation = /^\d{4}-\d{2}-\d{2}$/;
+    
 
       const updatedOrderDetails = await Promise.all(orderDetails.map(async (item: any) => {
         if (item.expectedDate && typeof item.expectedDate === 'string') {
@@ -19,13 +20,7 @@ class POController {
 
             return res.status(400).send(`Invalid date format for expectedDate: ${item.expectedDate}`);
           }
-          const dateArray = item.expectedDate.split('/');
-
-          if (dateArray.length === 3) {
-
-            item.expectedDate = `${dateArray[2]}/${dateArray[1]}/${dateArray[0]}`;
           }
-        }
         return item;
       }));
 
