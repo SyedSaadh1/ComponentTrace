@@ -4,11 +4,18 @@ import inventoryModel, { Inventory } from "../Models/inventoryModel";
 
 class InvRepository {
   findAllInv(filter = {}) {
-    return inventoryModel.find(filter);
+    return inventoryModel.aggregate([
+      { $match: filter },  
+      {
+        $set: {
+          quantity: { $subtract: ["$quantity", "$reserved"] } 
+        }
+      }
+    ]);
   }
-  createInv(order: Inventory) {
-    return inventoryModel.create(order);
-  }
+  // createInv(order: Inventory) {
+  //   return inventoryModel.create(order);
+  // }
 }
 
 export default new InvRepository();
