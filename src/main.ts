@@ -1,7 +1,7 @@
-import router from "./Router/ComponentMasterRouter";
+import router from "./Router/componentMasterRouter";
 import invRouter from "./Router/inventoryRoutes";
 import batchRouter from "./Router/batchRoutes";
-import Db from "./Config/MongoDBConnection";
+import Db from "./Config/mongoDBConnection";
 import express, { Application } from "express";
 import componentListRouter from "./Router/componentRouter";
 import poRouter from "./Router/purchaseOrderRoutes";

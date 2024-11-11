@@ -1,4 +1,4 @@
-import CMRepo from "../Repository/ComponentMasterRepository";
+import CMRepo from "../Repository/componentMasterRepository";
 import PORepo from "../Repository/purchaseOrderRepository";
 import CLRepo from "../Repository/componentListRepository";
 class AutogenerateId {
@@ -20,7 +20,7 @@ class AutogenerateId {
   }
   async poIdGenerate() {
     const lastInsertedPOId = await PORepo.getLastInsertedId();
-      if (lastInsertedPOId) {
+    if (lastInsertedPOId) {
       const id = lastInsertedPOId.poId;
       const prefix: string = id.slice(0, 3);
       let sequence: number = parseInt(id.slice(3));
@@ -33,23 +33,22 @@ class AutogenerateId {
     }
   }
   async clIdGenerate() {
-    const lastInsertedCLId = await CLRepo.getLastInsertedId(); 
+    const lastInsertedCLId = await CLRepo.getLastInsertedId();
     if (lastInsertedCLId) {
-        const id = lastInsertedCLId.componentId; 
-        const prefix: string = id.slice(0, 3); // Extracts "CL-"
-        let sequence: number = parseInt(id.slice(3)); // Extracts the numeric part
-        sequence++;
-        console.log(prefix + sequence);
-        return prefix + sequence.toString().padStart(2, "0"); // Pads to ensure two-digit format
+      const id = lastInsertedCLId.componentId;
+      const prefix: string = id.slice(0, 3); // Extracts "CL-"
+      let sequence: number = parseInt(id.slice(3)); // Extracts the numeric part
+      sequence++;
+      console.log(prefix + sequence);
+      return prefix + sequence.toString().padStart(2, "0"); // Pads to ensure two-digit format
     } else {
-        const prefix: string = "CL-";
-        const sequence: number = 1;
-        console.log(prefix+sequence);
+      const prefix: string = "CL-";
+      const sequence: number = 1;
+      console.log(prefix + sequence);
 
-        return prefix + sequence.toString().padStart(2, "0");
+      return prefix + sequence.toString().padStart(2, "0");
     }
-}
-
+  }
 }
 
 export default new AutogenerateId();

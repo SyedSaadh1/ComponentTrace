@@ -1,9 +1,9 @@
 import ComponentMasterModel, {
   IComponentMaster,
-} from "../Models/ComponentMasterModel";
+} from "../Models/componentMasterModel";
 
 class ComponentMasterRepository {
-  async find(filter = {}, p0?: { componentMasterId: number; }) {
+  async find(filter = {}, p0?: { componentMasterId: number }) {
     try {
       return await ComponentMasterModel.find(filter);
     } catch (error) {
