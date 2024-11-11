@@ -5,6 +5,7 @@ const url =
 class Connect {
   async DBConnect() {
     try {
+      mongoose.set("strictQuery", true);
       await mongoose.connect(url);
       console.log("Connected");
     } catch (error) {

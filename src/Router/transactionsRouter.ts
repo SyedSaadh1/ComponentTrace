@@ -15,6 +15,7 @@ class TransactionRouter {
       "/createTransaction",
       transactionController.createTransaction
     );
+    this.router.put("/createGRNNumber", transactionController.createGRNNumber);
   }
   getRouter() {
     return this.router;

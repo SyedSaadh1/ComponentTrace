@@ -1,9 +1,8 @@
 import Joi from "joi";
 
 const transactionsValidation = Joi.object({
-  transactionId: Joi.string().required(),
   poId: Joi.string().required(),
-  componentsSummary: Joi.array()
+  componentsDetails: Joi.array()
     .items(
       Joi.object({
         componentMasterId: Joi.string().required(),
@@ -12,9 +11,13 @@ const transactionsValidation = Joi.object({
       })
     )
     .required(),
+  componentsSummary: Joi.string().required(),
   to: Joi.string().required(),
   from: Joi.string().required(),
   sentDate: Joi.date().required(),
 });
-
+// const grnValidation=Joi.object({
+//   poId:Joi.string().required(),
+//   receivedDate:Joi.date().required();
+// })
 export default transactionsValidation;

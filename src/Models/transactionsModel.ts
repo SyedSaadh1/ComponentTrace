@@ -3,7 +3,7 @@ import mongoose, { Document, Schema } from "mongoose";
 
 //interface for component Summary
 
-export interface componentsSummary extends Document {
+export interface components extends Document {
   componentMasterId: string;
   componentIds: [];
   quantity: number;
@@ -14,38 +14,48 @@ export interface ITransactions extends Document {
   transactionId: string;
   grnNumber: string;
   poId: string;
-  componentsSummary: componentsSummary[];
+  componentsSummary: string;
+  componentsDetails: components[];
   from: string;
   to: string;
   sentDate: Date;
   receivedDate: Date;
   receievedByCustomer: boolean;
+  createAt: Date;
+  updatedAt: Date;
+  transactionStatus: string;
 }
 
 // Class for transaction
 class TransactionClass {
   public transactionsModel: mongoose.Schema<ITransactions>;
   constructor() {
-    this.transactionsModel = new mongoose.Schema({
-      transactionId: { type: String, required: true },
-      poId: { type: String, required: true },
-      componentsSummary: {
-        type: [
-          {
-            componentMasterId: { type: String, required: true },
-            quantity: { type: Number, required: true },
-            componentIds: { type: [String], required: true },
-          },
-        ],
-        required: true,
+    this.transactionsModel = new mongoose.Schema(
+      {
+        transactionId: { type: String, required: true },
+        poId: { type: String, required: true },
+        componentsSummary: { type: String, required: true },
+        componentsDetails: {
+          type: [
+            {
+              componentMasterId: { type: String, required: true },
+              quantity: { type: Number, required: true },
+              componentIds: { type: [String], required: true },
+            },
+          ],
+          required: true,
+        },
+
+        from: { type: String, required: true },
+        to: { type: String, required: true },
+        sentDate: { type: Date, required: true, default: Date.now },
+        receivedDate: { type: Date, required: false },
+        receievedByCustomer: { type: Boolean, required: false },
+        grnNumber: { type: String, required: false },
+        transactionStatus: { type: String, required: false },
       },
-      from: { type: String, required: true },
-      to: { type: String, required: true },
-      sentDate: { type: Date, required: true, default: Date.now },
-      receivedDate: { type: Date, required: true, default: Date.now },
-      receievedByCustomer: { type: Boolean, required: false, default: true },
-      grnNumber: { type: String, default: "GRN-00X" },
-    });
+      { timestamps: true }
+    );
   }
   getModel() {
     mongoose.pluralize(null);
