@@ -1,4 +1,4 @@
-import Repo from "../Repository/ComponentMasterRepository";
+import Repo from "../Repository/componentMasterRepository";
 
 class AutogenerateId {
   async idGenerate() {

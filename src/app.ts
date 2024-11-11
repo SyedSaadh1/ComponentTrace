@@ -1,7 +1,7 @@
-import Db from "./Config/DBConnection";
+import Db from "./Config/dBConnection";
 import express, { Application } from "express";
 import cors from "cors";
-import ComponentMasterRouter from "./Router/ComponentMasterRouter";
+import ComponentMasterRouter from "./Router/componentMasterRouter";
 class App {
   port: Number;
   app: Application;
