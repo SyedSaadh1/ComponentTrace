@@ -1,7 +1,12 @@
-import Db from "./Config/DBConnection";
+import Db from "./Config/MongoDBConnection";
 import express, { Application } from "express";
 import cors from "cors";
 import ComponentMasterRouter from "./Router/componentMasterRouter";
+import invRouter from "./Router/inventoryRoutes";
+import batchRouter from "./Router/batchRoutes";
+import poRouter from "./Router/purchaseOrderRoutes";
+import componentListRouter from "./Router/componentRouter";
+
 class App {
   port: Number;
   app: Application;
@@ -33,10 +38,14 @@ class App {
 
   initializeRoutes() {
     this.app.use("/componentMaster", ComponentMasterRouter);
+    this.app.use("/components", componentListRouter);
+    this.app.use("/inventoryDetails", invRouter);
+    this.app.use("/batch", batchRouter);
+    this.app.use("/purchaseOrder", poRouter);
   }
 
   connectDatabase() {
-    Db.connect();
+    Db.DBConnect();
   }
 
   start() {
