@@ -1,4 +1,4 @@
-import CMRepo from "../Repository/ComponentMasterRepository";
+import CMRepo from "../Repository/componentMasterRepository";
 import PORepo from "../Repository/purchaseOrderRepository";
 import CLRepo from "../Repository/componentListRepository";
 class AutogenerateId {

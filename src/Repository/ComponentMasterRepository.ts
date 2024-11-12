@@ -1,6 +1,6 @@
 import ComponentMasterModel, {
   IComponentMaster,
-} from "../Models/ComponentMasterModel";
+} from "../Models/componentMasterModel";
 
 class ComponentMasterRepository {
   async find(filter = {}, p0?: { componentMasterId: number }) {

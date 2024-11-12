@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import AutogenerateId from "../AutogenerateId/AutogenerateId";
 import PORepo from "../Repository/purchaseOrderRepository";
-import CMRepo from "../Repository/ComponentMasterRepository";
+import CMRepo from "../Repository/componentMasterRepository";
 import TransRepo from "../Repository/transactionrepository";
 
 class POController {
@@ -50,12 +50,10 @@ class POController {
         poId: generatedPOId,
       };
       const createdPurchaseOrder = await PORepo.createPo(order);
-      res
-        .status(201)
-        .send({
-          msg: "Purchase Order created successfully",
-          createdPurchaseOrder,
-        });
+      res.status(201).send({
+        msg: "Purchase Order created successfully",
+        createdPurchaseOrder,
+      });
     } catch (error) {
       res
         .status(500)
