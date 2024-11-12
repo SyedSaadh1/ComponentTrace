@@ -1,13 +1,8 @@
-import router from "./Router/componentMasterRouter";
-import invRouter from "./Router/inventoryRoutes";
-import batchRouter from "./Router/batchRoutes";
-import Db from "./Config/MongoDBConnection";
+import Db from "./Config/DBConnection";
 import express, { Application } from "express";
-import componentListRouter from "./Router/componentRouter";
-import poRouter from "./Router/purchaseOrderRoutes";
-
 import cors from "cors";
-class Main {
+import ComponentMasterRouter from "./Router/componentMasterRouter";
+class App {
   port: Number;
   app: Application;
   constructor(port: Number) {
@@ -37,16 +32,11 @@ class Main {
   }
 
   initializeRoutes() {
-    this.app.use("/componentMaster", router);
-    this.app.use("/components", componentListRouter);
-    this.app.use("/inventoryDetails", invRouter);
-    this.app.use("/batch", batchRouter);
-    this.app.use("/componentMaster", componentListRouter);
-    this.app.use("/purchaseOrder", poRouter);
+    this.app.use("/componentMaster", ComponentMasterRouter);
   }
 
   connectDatabase() {
-    Db.DBConnect();
+    Db.connect();
   }
 
   start() {
@@ -58,5 +48,5 @@ class Main {
 
 // Create an instance of the Server class and start it
 const port = 7000;
-const server = new Main(port);
+const server = new App(port);
 server.start();
