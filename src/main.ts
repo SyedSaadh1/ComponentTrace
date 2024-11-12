@@ -1,4 +1,4 @@
-import router from "./Router/componentMasterRouter";
+import router from "./Router/ComponentMasterRouter";
 import invRouter from "./Router/inventoryRoutes";
 import batchRouter from "./Router/batchRoutes";
 import Db from "./Config/MongoDBConnection";

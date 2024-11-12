@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import AutogenerateId from "../AutogenerateId/AutogenerateId";
 import PORepo from "../Repository/purchaseOrderRepository";
-import CMRepo from "../Repository/componentMasterRepository";
+import CMRepo from "../Repository/ComponentMasterRepository";
 import TransRepo from "../Repository/transactionrepository";
 
 class POController {

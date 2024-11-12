@@ -1,6 +1,6 @@
-import Repo from "../Repository/componentMasterRepository";
+import Repo from "../Repository/ComponentMasterRepository";
 import { Request, Response } from "express";
-import componentMasterBody from "../Validations/componentMaster.validation";
+import componentMasterBody from "../Validations/ComponentMaster.validation";
 import generateId from "../AutogenerateId/AutogenerateId";
 
 class ComponentMasterController {

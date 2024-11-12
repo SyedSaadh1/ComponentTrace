@@ -45,7 +45,7 @@ class ComponentModel {
             },
             componentState: {
                 type: String,
-                required: true,
+                default:"Assembling"
             },
             componentId: {
                 type: String,
