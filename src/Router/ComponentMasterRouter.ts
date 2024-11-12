@@ -7,7 +7,7 @@ class ComponentMasterRouter {
     this.router = express.Router();
     this.initializeRoutes();
   }
-
+  //
   initializeRoutes() {
     //api to create Component Master
     this.router.post(
