@@ -1,4 +1,4 @@
-import Db from "./Config/dBConnection";
+import Db from "./Config/DBConnection";
 import express, { Application } from "express";
 import cors from "cors";
 import ComponentMasterRouter from "./Router/componentMasterRouter";
