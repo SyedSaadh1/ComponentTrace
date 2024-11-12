@@ -59,7 +59,7 @@ app.get(
         isFinalProduct: false,
         category: "Electronics",
         productionStatus: "Active",
-        createdBy: "miway",
+        createdBy: "miway-",
         createdOn: "2024-10-18T00:00:00.000Z",
         updatedOn: "2024-10-18T00:00:00.000Z",
         _id: "67122520a5768407fca14e22",
