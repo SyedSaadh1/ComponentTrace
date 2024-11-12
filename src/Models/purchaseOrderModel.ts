@@ -17,6 +17,7 @@ export interface IPurchaseOrder extends Document {
   address: string;
   description: string;
   poId: string;
+  deliveredComponents: OrderItemsDetails[];
 }
 
 // Class for Purchase Order Schema
@@ -61,10 +62,30 @@ class PurchaseOrderClass {
         type: String,
         required: true,
       },
-      description: {
-        type: String,
-        required: true,
-      },
+
+      deliveredComponents: {
+        type: [{
+          componentMasterId: {
+            type: String,
+            required: true,
+          },
+          componentMasterName: {
+            type: String,
+            required: true,
+          },
+          quantity: {
+            type: Number,
+            required: true,
+          },
+          expectedDate: {
+            type: String,
+            required: true,
+          }
+
+        }], required: true
+      }//
+      
+      
 
     });
 
