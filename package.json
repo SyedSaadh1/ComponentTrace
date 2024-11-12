@@ -2,7 +2,7 @@
   "name": "componenttrace_api",
   "version": "1.0.0",
   "description": "Component trace app by Joiners",
-  "main": "dist/app.js",
+  "main": "dist/main.js",
   "scripts": {
     "start": "tsc && node .",
     "test": "echo \"Error: no test specified\" && exit 1"

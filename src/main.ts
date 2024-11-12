@@ -6,7 +6,7 @@ import invRouter from "./Router/inventoryRoutes";
 import batchRouter from "./Router/batchRoutes";
 import poRouter from "./Router/purchaseOrderRoutes";
 import componentListRouter from "./Router/componentRouter";
-
+import transactionsRouter from "./Router/transactionsRouter";
 class App {
   port: Number;
   app: Application;
@@ -42,6 +42,7 @@ class App {
     this.app.use("/inventoryDetails", invRouter);
     this.app.use("/batch", batchRouter);
     this.app.use("/purchaseOrder", poRouter);
+    this.app.use("/transactions", transactionsRouter);
   }
 
   connectDatabase() {

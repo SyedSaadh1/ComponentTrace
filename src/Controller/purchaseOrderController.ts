@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import AutogenerateId from "../AutogenerateId/AutogenerateId";
 import PORepo from "../Repository/purchaseOrderRepository";
 import CMRepo from "../Repository/componentMasterRepository";
-import TransRepo from "../Repository/transactionrepository";
 import PoValidations from "../Validations/purchaseOrder.validation";
 
 class POController {
@@ -15,24 +14,30 @@ class POController {
           .status(400)
           .send({ msg: "Validation error in Joi " + error });
       }
+
       const generatedPOId = await AutogenerateId.poIdGenerate();
 
       const datevalidation = /^\d{4}-\d{2}-\d{2}$/;
 
+      // Validate all orderDetails
       const updatedOrderDetails = await Promise.all(
         orderDetails.map(async (item: any) => {
           if (item.expectedDate && typeof item.expectedDate === "string") {
             if (!datevalidation.test(item.expectedDate)) {
-              return res
-                .status(400)
-                .send(
-                  `Invalid date format for expectedDate: ${item.expectedDate}`
-                );
+              return {
+                error: `Invalid date format for expectedDate: ${item.expectedDate}`,
+              };
             }
           }
           return item;
         })
       );
+
+      // Check if any validation failed
+      const errorItem = updatedOrderDetails.find((item: any) => item.error);
+      if (errorItem) {
+        return res.status(400).send(errorItem.error);
+      }
 
       const orderedComponents = await Promise.all(
         updatedOrderDetails.map(async (item: any) => {
@@ -58,6 +63,7 @@ class POController {
         poId: generatedPOId,
         deliveredComponents: deliveredComponents,
       };
+
       const createdPurchaseOrder = await PORepo.createPo(order);
       res.status(201).send({
         msg: "Purchase Order created successfully",

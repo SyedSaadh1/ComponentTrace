@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import transactionsRepo from "../Repository/transactionsRepository";
 import validateTransaction from "../Validations/transactions.validation";
 import generateId from "../AutogenerateId/AutogenerateId";
+import PORepo from "../Repository/purchaseOrderRepository";
 class TransactionController {
   async createTransaction(req: Request, res: Response) {
     try {
@@ -24,12 +25,33 @@ class TransactionController {
   async createGRNNumber(req: Request, res: Response) {
     try {
       const grnData = req.body;
-      const { transactionId } = grnData;
+
+      const { transactionId, componentsDetails, poId } = grnData;
+      if (!Array.isArray(componentsDetails) || componentsDetails.length === 0) {
+        return res.status(400).send({ msg: "Invalid components details" });
+      }
+      const remainingQuantities = await Promise.all(
+        componentsDetails.map(async (component: any) => {
+          const quantity = await PORepo.updateDeliveredComponents(
+            component,
+            poId
+          );
+          return quantity;
+        })
+      );
+      const totalQuantity = remainingQuantities.reduce(
+        (sum, quantity) => sum + quantity,
+        0
+      );
+      console.log("totalQuantity-->" + totalQuantity);
+      let status = totalQuantity > 0 ? "Pending" : "Completed";
+
       const grnNumber: string = await generateId.generateGRNNumber();
       const result = await transactionsRepo.updateGRNNumber(
         transactionId,
         grnNumber,
-        grnData
+        grnData,
+        status
       );
       if (result.matchedCount === 0) {
         return res.status(404).send({ msg: "Purchase Order not found" });

@@ -1,5 +1,6 @@
 import transactionsModel, { ITransactions } from "../Models/transactionsModel";
 import gernerateGRN from "../AutogenerateId/AutogenerateId";
+
 class TransactionRepository {
   async createTransaction(Data: ITransactions) {
     return await transactionsModel.create(Data);
@@ -10,7 +11,8 @@ class TransactionRepository {
   async updateGRNNumber(
     transactionId: string,
     grnNumber: string,
-    grnData: any
+    grnData: any,
+    status: string
   ) {
     return await transactionsModel.updateOne(
       { transactionId },
@@ -19,6 +21,7 @@ class TransactionRepository {
           grnNumber: grnNumber,
           receivedDate: grnData.receivedDate,
           receievedByCustomer: true,
+          transactionStatus: status,
         },
       }
     );
