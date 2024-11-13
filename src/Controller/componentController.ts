@@ -42,15 +42,15 @@ class ComponentController {
 
   }
  
- 
-  // Store multiple components based on quantity
   async storeComponents(req: Request, res: Response): Promise<any> {
     try {
+      // Validate request body
       const { error, value } = componentListBody.validate(req.body);
       if (error) {
         return res.status(400).json({ msg: "Validation error", error: error.details });
       }
 
+      // Check available quantity in inventory for the componentMasterId
       const availableQuantity = await InventoryRepo.getAvailableQuantity(value.componentMasterId);
       if (availableQuantity < value.quantity) {
         return res.status(200).json({ 
@@ -61,6 +61,7 @@ class ComponentController {
 
       const savedComponents = [];
       for (let i = 0; i < value.quantity; i++) {
+        // Generate a unique component ID for each component
         const componentId = await AutogenerateId.clIdGenerate();
         const componentData = {
           ...value,
@@ -70,6 +71,9 @@ class ComponentController {
         // Store each component with unique ID in the database
         const result = await ClRepo.storeComponents(componentData);
         savedComponents.push(result);
+
+        // increase the inventory quantity by 1 for each created component
+        await InventoryRepo.updateQuantity(value.componentMasterId, +1);
       }
 
       res.status(201).json({ msg: "Components created successfully", data: savedComponents });
@@ -77,10 +81,7 @@ class ComponentController {
     } catch (error) {
       res.status(500).json({ msg: `Error in creating components: ${error}` });
     }
-    
   }
-  
-  
  
   // Update existing components
 
