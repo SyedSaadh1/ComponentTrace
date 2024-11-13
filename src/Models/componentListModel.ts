@@ -12,6 +12,8 @@ export interface IComponentList extends Document {
   componentId: string; // Unique component ID
   componentName: string; // Name of the component
   wareHouseLocation?: string; // Location in the warehouse
+  batchNo: string;                  // Batch number
+
 }
 
 class ComponentModel {
@@ -56,6 +58,10 @@ class ComponentModel {
       },
       wareHouseLocation: {
         type: String,
+      },
+      batchNo: {
+        type: String,
+        required: true,
       },
     
     });
