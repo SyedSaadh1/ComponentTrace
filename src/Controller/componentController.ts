@@ -50,15 +50,6 @@ class ComponentController {
         return res.status(400).json({ msg: "Validation error", error: error.details });
       }
 
-      // Check available quantity in inventory for the componentMasterId
-      const availableQuantity = await InventoryRepo.getAvailableQuantity(value.componentMasterId);
-      if (availableQuantity < value.quantity) {
-        return res.status(200).json({ 
-          msg: "Insufficient quantity in inventory", 
-          availableQuantity 
-        });
-      }
-
       const savedComponents = [];
       for (let i = 0; i < value.quantity; i++) {
         // Generate a unique component ID for each component
