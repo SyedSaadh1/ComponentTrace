@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 //Model
-// Interface for order details
+//  Interface for Inventory details
 export interface Inventory extends Document {
     componentName: string; // ID of the component
     quantity: number;          // Quantity of the component  
