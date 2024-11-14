@@ -11,8 +11,7 @@ class TransactionRepository {
   async updateGRNNumber(
     transactionId: string,
     grnNumber: string,
-    grnData: any,
-    status: string
+    grnData: any
   ) {
     return await transactionsModel.updateOne(
       { transactionId },
@@ -21,7 +20,7 @@ class TransactionRepository {
           grnNumber: grnNumber,
           receivedDate: grnData.receivedDate,
           receievedByCustomer: true,
-          transactionStatus: status,
+          transactionStatus: "Completed",
         },
       }
     );

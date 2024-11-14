@@ -44,15 +44,16 @@ class TransactionController {
         0
       );
       console.log("totalQuantity-->" + totalQuantity);
-      let status = totalQuantity > 0 ? "Pending" : "Completed";
 
       const grnNumber: string = await generateId.generateGRNNumber();
       const result = await transactionsRepo.updateGRNNumber(
         transactionId,
         grnNumber,
-        grnData,
-        status
+        grnData
       );
+      if (totalQuantity === 0) {
+        await PORepo.updatePOStatus(poId);
+      }
       if (result.matchedCount === 0) {
         return res.status(404).send({ msg: "Purchase Order not found" });
       }

@@ -1,10 +1,12 @@
 import { strict } from "assert";
+import { required } from "joi";
 import mongoose, { Document, Schema } from "mongoose";
 
 //interface for component Summary
 
 export interface components extends Document {
   componentMasterId: string;
+  componentMasterName: string;
   componentIds: [];
   quantity: number;
 }
@@ -39,6 +41,7 @@ class TransactionClass {
           type: [
             {
               componentMasterId: { type: String, required: true },
+              componentMasterName: { type: String, required: true },
               quantity: { type: Number, required: true },
               componentIds: { type: [String], required: true },
             },
@@ -52,7 +55,11 @@ class TransactionClass {
         receivedDate: { type: Date, required: false },
         receievedByCustomer: { type: Boolean, required: false },
         grnNumber: { type: String, required: false },
-        transactionStatus: { type: String, required: false },
+        transactionStatus: {
+          type: String,
+          required: true,
+          default: "Sent For Delivery",
+        },
       },
       { timestamps: true }
     );

@@ -1,3 +1,4 @@
+import { string } from "joi";
 import purchaseOrderModel from "../Models/purchaseOrderModel";
 import PurchaseOrder, { IPurchaseOrder } from "../Models/purchaseOrderModel";
 
@@ -17,6 +18,16 @@ class PORepository {
   }
   async findOrder(filter = {}) {
     return await purchaseOrderModel.findOne(filter);
+  }
+  async updatePOStatus(poId: string) {
+    await purchaseOrderModel.updateOne(
+      { poId },
+      {
+        $set: {
+          orderStatus: "Completed",
+        },
+      }
+    );
   }
   async updateDeliveredComponents(component: any, poId: string) {
     try {

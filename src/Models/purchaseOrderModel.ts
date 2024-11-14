@@ -1,3 +1,4 @@
+import { string } from "joi";
 import mongoose, { Document, Schema } from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 
@@ -13,11 +14,13 @@ export interface OrderItemsDetails extends Document {
 export interface IPurchaseOrder extends Document {
   orderDetails: OrderItemsDetails[];
   orderedTo: string;
-  orderedDate: Date;
+  orderedFrom: string;
+  poCreationDate: Date;
   address: string;
   description: string;
   poId: string;
   deliveredComponents: OrderItemsDetails[];
+  orderStatus: string;
 }
 
 // Class for Purchase Order Schema
@@ -62,7 +65,10 @@ class PurchaseOrderClass {
         type: String,
         required: true,
       },
-
+      orderStatus: {
+        type: String,
+        default: "Pending",
+      },
       deliveredComponents: {
         type: [
           {

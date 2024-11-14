@@ -6,6 +6,7 @@ const transactionsValidation = Joi.object({
     .items(
       Joi.object({
         componentMasterId: Joi.string().required(),
+        componentMasterName: Joi.string().required(),
         componentIds: Joi.array().items(Joi.string()).required(),
         quantity: Joi.number().positive().required(),
       })
