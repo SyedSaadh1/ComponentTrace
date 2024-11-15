@@ -14,9 +14,11 @@ class ComponentMasterRouter {
       "/createComponentMaster",
       Controller.createComponentMaster
     );
-    //apis to fetch component masters
+    //api to fetch component masters
     this.router.get("/findComponentMaster", Controller.findComponentMaster);
+    //api to get Non final Products
     this.router.get("/findNFPComponents", Controller.findNFPComponents);
+    //api to get sub components
     this.router.get("/findSubComponents/:CMID", Controller.findSubComponents);
     //api to update component master
     this.router.put("/updateComponentMaster", Controller.updateComponentMaster);

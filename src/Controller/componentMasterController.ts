@@ -25,6 +25,7 @@ class ComponentMasterController {
           .send({ msg: "Component Master already exists with that name" });
       }
       const result = await Repo.createComponentMaster(value);
+      //should have to minimize the response by sending only neccessary properties in response
       return res
         .status(201)
         .send({ msg: "Component Master Created Successfully", Data: result });
@@ -44,7 +45,7 @@ class ComponentMasterController {
   };
   findNFPComponents = async (req: Request, res: Response) => {
     try {
-      const result = await Repo.getNonFPComponents();
+      const result = await Repo.find({ isFinalProduct: false });
       return res.status(200).send(result);
     } catch (error) {
       return res.status(500).send({

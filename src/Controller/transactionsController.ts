@@ -19,7 +19,7 @@ class TransactionController {
       const result = await transactionsRepo.createTransaction(value);
       return res.status(201).json(result);
     } catch (error) {
-      return res.status(500).json("Error in creating : " + error);
+      return res.status(500).json("Error in creating Transaction: " + error);
     }
   }
   async createGRNNumber(req: Request, res: Response) {
@@ -27,8 +27,10 @@ class TransactionController {
       const grnData = req.body;
 
       const { transactionId, componentsDetails, poId } = grnData;
-      if (!Array.isArray(componentsDetails) || componentsDetails.length === 0) {
-        return res.status(400).send({ msg: "Invalid components details" });
+      if (componentsDetails.length === 0) {
+        return res
+          .status(400)
+          .send({ msg: "components details should not be empty" });
       }
       const remainingQuantities = await Promise.all(
         componentsDetails.map(async (component: any) => {
