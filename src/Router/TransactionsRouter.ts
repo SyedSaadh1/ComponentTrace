@@ -10,12 +10,12 @@ class TransactionRouter {
   }
 
   initializeRoutes() {
-    this.router.get("/findTransaction", transactionController.findTransactions);
-    this.router.post(
-      "/createTransaction",
-      transactionController.createTransaction
+    this.router.get("/", transactionController.findTransactions);
+    this.router.post("/", transactionController.createTransaction);
+    this.router.put(
+      "/:transactionId/grn",
+      transactionController.createGRNNumber
     );
-    this.router.put("/createGRNNumber", transactionController.createGRNNumber);
   }
   getRouter() {
     return this.router;

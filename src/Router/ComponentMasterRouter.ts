@@ -10,18 +10,18 @@ class ComponentMasterRouter {
   //
   initializeRoutes() {
     //api to create Component Master
-    this.router.post(
-      "/createComponentMaster",
-      Controller.createComponentMaster
-    );
+    this.router.post("/", Controller.createComponentMaster);
     //api to fetch component masters
-    this.router.get("/ComponentMaster", Controller.findComponentMaster);
+    this.router.get("/", Controller.findComponentMaster);
     //api to get Non final Products
-    this.router.get("/NFPComponents", Controller.findNFPComponents);
+    this.router.get("/nonFinalProducts", Controller.findNFPComponents);
     //api to get sub components
-    this.router.get("/SubComponents/:CMID", Controller.findSubComponents);
+    this.router.get(
+      "/subComponents/:componentMasterId",
+      Controller.findSubComponents
+    );
     //api to update component master
-    this.router.put("/updateComponentMaster", Controller.updateComponentMaster);
+    this.router.put("/:componentMasterId", Controller.updateComponentMaster);
   }
 
   getRouter() {

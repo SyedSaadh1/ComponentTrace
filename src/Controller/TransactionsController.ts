@@ -10,6 +10,7 @@ class TransactionController {
       const { error, value } = validateTransaction.validate(Data);
 
       if (error) {
+        console.log("Error while creating transaction is :" + error);
         return res
           .status(400)
           .send({ msg: "Error in Validation. check your data" });
