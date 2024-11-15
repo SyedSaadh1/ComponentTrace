@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import componentMasterBody from "../Validations/ComponentMaster.validation";
+import componentMaster from "../Validations/ComponentMaster.validation";
 import generateId from "../AutogenerateId/AutogenerateId";
 import Repo from "../Repository/ComponentMasterRepository";
 
 class ComponentMasterController {
   createComponentMaster = async (req: Request, res: Response) => {
-    const { error, value } = componentMasterBody.validate(req.body);
+    const { error, value } = componentMaster.validate(req.body);
     const lastInsertedComponentMasterId = await generateId.idGenerate();
 
     try {
