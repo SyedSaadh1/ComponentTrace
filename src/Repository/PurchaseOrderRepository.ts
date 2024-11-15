@@ -1,6 +1,6 @@
 import { string } from "joi";
-import purchaseOrderModel from "../Models/purchaseOrderModel";
-import PurchaseOrder, { IPurchaseOrder } from "../Models/purchaseOrderModel";
+import purchaseOrderModel from "../Models/PurchaseOrderModel";
+import PurchaseOrder, { IPurchaseOrder } from "../Models/PurchaseOrderModel";
 
 class PORepository {
   async getLastInsertedId() {

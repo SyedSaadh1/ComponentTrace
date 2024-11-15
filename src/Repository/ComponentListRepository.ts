@@ -1,4 +1,4 @@
-import componentModel, { IComponentList } from "../Models/componentListModel";
+import componentModel, { IComponentList } from "../Models/ComponentListModel";
 
 class ComponentRepository {
   // Find all components with optional filter

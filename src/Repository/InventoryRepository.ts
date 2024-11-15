@@ -1,15 +1,14 @@
 // Repository
-import inventoryModel, { Inventory } from "../Models/inventoryModel";
-
+import inventoryModel, { Inventory } from "../Models/InventoryModel";
 
 class InvRepository {
   findAllInv(filter = {}) {
     return inventoryModel.aggregate([
       {
         $set: {
-          quantity: { $subtract: ["$quantity", "$reserved"] } 
-        }
-      }
+          quantity: { $subtract: ["$quantity", "$reserved"] },
+        },
+      },
     ]);
   }
   createInv(order: Inventory) {

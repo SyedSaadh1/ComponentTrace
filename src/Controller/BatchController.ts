@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
-import BatchRepository from '../Repository/batchRepo'; 
-import Batch from '../Models/batchmodels'; 
+import { Request, Response } from "express";
+import BatchRepository from "../Repository/BatchRepo";
+import Batch from "../Models/Batchmodels";
 
 class BatchController {
   // Create a new batch
@@ -11,7 +11,7 @@ class BatchController {
         componentDetails: req.body.componentDetails,
         createdBy: req.body.createdBy,
         startedDate: req.body.startedDate || new Date(),
-        finishedDate: req.body.finishedDate || new Date()
+        finishedDate: req.body.finishedDate || new Date(),
       });
 
       const savedBatch = await BatchRepository.createBatch(newBatch);
@@ -53,7 +53,7 @@ class BatchController {
         componentDetails: req.body.componentDetails,
         createdBy: req.body.createdBy,
         startedDate: req.body.startedDate,
-        finishedDate: req.body.finishedDate
+        finishedDate: req.body.finishedDate,
       });
 
       if (!updatedBatch) {

@@ -1,7 +1,7 @@
-import CMRepo from "../Repository/componentMasterRepository";
-import PORepo from "../Repository/purchaseOrderRepository";
-import CLRepo from "../Repository/componentListRepository";
-import transactionsRepository from "../Repository/transactionsRepository";
+import CMRepo from "../Repository/ComponentMasterRepository";
+import PORepo from "../Repository/PurchaseOrderRepository";
+import CLRepo from "../Repository/ComponentListRepository";
+import transactionsRepository from "../Repository/TransactionsRepository";
 
 class AutogenerateId {
   async idGenerate() {

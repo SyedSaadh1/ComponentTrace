@@ -1,4 +1,4 @@
-import transactionsModel, { ITransactions } from "../Models/transactionsModel";
+import transactionsModel, { ITransactions } from "../Models/TransactionsModel";
 import gernerateGRN from "../AutogenerateId/AutogenerateId";
 
 class TransactionRepository {

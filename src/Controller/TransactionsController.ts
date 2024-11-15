@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import transactionsRepo from "../Repository/transactionsRepository";
-import validateTransaction from "../Validations/transactions.validation";
+import transactionsRepo from "../Repository/TransactionsRepository";
+import validateTransaction from "../Validations/Transactions.validation";
 import generateId from "../AutogenerateId/AutogenerateId";
-import PORepo from "../Repository/purchaseOrderRepository";
+import PORepo from "../Repository/PurchaseOrderRepository";
 class TransactionController {
   async createTransaction(req: Request, res: Response) {
     try {

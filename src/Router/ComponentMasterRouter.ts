@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import Controller from "../Controller/componentMasterController";
+import Controller from "../Controller/ComponentMasterController";
 
 class ComponentMasterRouter {
   router: Router;
@@ -15,11 +15,11 @@ class ComponentMasterRouter {
       Controller.createComponentMaster
     );
     //api to fetch component masters
-    this.router.get("/findComponentMaster", Controller.findComponentMaster);
+    this.router.get("/ComponentMaster", Controller.findComponentMaster);
     //api to get Non final Products
-    this.router.get("/findNFPComponents", Controller.findNFPComponents);
+    this.router.get("/NFPComponents", Controller.findNFPComponents);
     //api to get sub components
-    this.router.get("/findSubComponents/:CMID", Controller.findSubComponents);
+    this.router.get("/SubComponents/:CMID", Controller.findSubComponents);
     //api to update component master
     this.router.put("/updateComponentMaster", Controller.updateComponentMaster);
   }

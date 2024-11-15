@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import componentMasterBody from "../Validations/componentMaster.validation";
+import componentMasterBody from "../Validations/ComponentMaster.validation";
 import generateId from "../AutogenerateId/AutogenerateId";
-import Repo from "../Repository/componentMasterRepository";
+import Repo from "../Repository/ComponentMasterRepository";
 
 class ComponentMasterController {
   createComponentMaster = async (req: Request, res: Response) => {
