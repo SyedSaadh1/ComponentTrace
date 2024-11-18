@@ -6,10 +6,8 @@ import Repo from "../Repository/ComponentMasterRepository";
 class ComponentMasterController {
   createComponentMaster = async (req: Request, res: Response) => {
     const { error, value } = componentMaster.validate(req.body);
-    const lastInsertedComponentMasterId = await generateId.CMIdGenerate();
 
     try {
-      value.componentMasterId = lastInsertedComponentMasterId;
       if (error) {
         console.log("Error in Validation");
         return res
@@ -24,6 +22,9 @@ class ComponentMasterController {
           .status(409)
           .send({ msg: "Component Master already exists with that name" });
       }
+      const lastInsertedComponentMasterId = await generateId.CMIdGenerate();
+      value.componentMasterId = lastInsertedComponentMasterId;
+
       const result = await Repo.createComponentMaster(value);
       //should have to minimize the response by sending only neccessary properties in response
       return res
