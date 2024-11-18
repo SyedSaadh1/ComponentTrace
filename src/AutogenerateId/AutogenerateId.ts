@@ -2,16 +2,18 @@ import CMRepo from "../Repository/ComponentMasterRepository";
 import PORepo from "../Repository/PurchaseOrderRepository";
 import CLRepo from "../Repository/ComponentListRepository";
 import transactionsRepository from "../Repository/TransactionsRepository";
+import CounterRepo from "../Repository/CounterRepository";
 
 class AutogenerateId {
-  async idGenerate() {
+  async CMIdGenerate() {
     const lastInsertedCMId = await CMRepo.getLastInsertedId();
     console.log(lastInsertedCMId);
     if (lastInsertedCMId) {
       const id = lastInsertedCMId.componentMasterId;
       const prefix: string = id.slice(0, 4);
-      let sequence: number = parseInt(id.slice(4));
-      sequence++;
+      const result = await CounterRepo.getSequence();
+      let sequence: number = result.sequence;
+
       console.log(prefix + sequence);
       return prefix + sequence.toString().padStart(2, "0");
     } else {

@@ -6,7 +6,7 @@ import Repo from "../Repository/ComponentMasterRepository";
 class ComponentMasterController {
   createComponentMaster = async (req: Request, res: Response) => {
     const { error, value } = componentMaster.validate(req.body);
-    const lastInsertedComponentMasterId = await generateId.idGenerate();
+    const lastInsertedComponentMasterId = await generateId.CMIdGenerate();
 
     try {
       value.componentMasterId = lastInsertedComponentMasterId;
