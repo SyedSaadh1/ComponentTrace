@@ -6,7 +6,7 @@ export interface OrderItemsDetails extends Document {
   componentMasterId: string;
   componentMasterName: string;
   quantity: number;
-  expectedDate: Date;
+    expectedDate: Date;
 }
 
 // Interface for purchase orders
