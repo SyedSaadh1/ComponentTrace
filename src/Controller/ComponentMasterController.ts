@@ -2,12 +2,17 @@ import { Request, Response } from "express";
 import componentMaster from "../Validations/ComponentMaster.validation";
 import generateId from "../AutogenerateId/AutogenerateId";
 import Repo from "../Repository/ComponentMasterRepository";
+import { Mutex } from "async-mutex";
 
 class ComponentMasterController {
+  private mutex: Mutex;
+  constructor() {
+    this.mutex = new Mutex();
+  }
   createComponentMaster = async (req: Request, res: Response) => {
-    const { error, value } = componentMaster.validate(req.body);
-
     try {
+      const { error, value } = componentMaster.validate(req.body);
+
       if (error) {
         console.log("Error in Validation");
         return res
@@ -17,19 +22,42 @@ class ComponentMasterController {
       const { componentMasterName } = value;
       const isExist = await Repo.find({ componentMasterName });
       if (isExist.length > 0) {
-        console.log("Error in Creation");
+        console.log("Error in Creation ,Duplicate Component Master Name");
         return res
           .status(409)
           .send({ msg: "Component Master already exists with that name" });
       }
-      const lastInsertedComponentMasterId = await generateId.CMIdGenerate();
-      value.componentMasterId = lastInsertedComponentMasterId;
+      const release = await this.mutex.acquire();
 
-      const result = await Repo.createComponentMaster(value);
+      let result: any;
+      try {
+        value.componentMasterId = await generateId.CMIdGenerate();
+        console.log(value.componentMasterId);
+        result = await Repo.createComponentMaster(value);
+      } finally {
+        release();
+      }
+      const {
+        componentMasterId,
+        category,
+        componentDescription,
+        components,
+        createdBy,
+        isFinalProduct,
+      } = result;
+
+      return res.status(201).send({
+        msg: "Component Master Created Successfully",
+        Data: componentMasterId,
+        componentMasterName,
+        category,
+        componentDescription,
+        components,
+        createdBy,
+        isFinalProduct,
+      });
+
       //should have to minimize the response by sending only neccessary properties in response
-      return res
-        .status(201)
-        .send({ msg: "Component Master Created Successfully", Data: result });
     } catch (error) {
       console.error("Error Encountered while Creating Component Master", error);
       return res.status(500).send({ msg: "Error Creating Component Master" });

@@ -3,23 +3,41 @@ import PORepo from "../Repository/PurchaseOrderRepository";
 import CLRepo from "../Repository/ComponentListRepository";
 import transactionsRepository from "../Repository/TransactionsRepository";
 import CounterRepo from "../Repository/CounterRepository";
-
+import { Mutex } from "async-mutex";
 class AutogenerateId {
+  private mutex: Mutex;
+  constructor() {
+    this.mutex = new Mutex();
+  }
   async CMIdGenerate() {
-    const lastInsertedCMId = await CMRepo.getLastInsertedId();
-    console.log(lastInsertedCMId);
-    if (lastInsertedCMId) {
-      const id = lastInsertedCMId.componentMasterId;
-      const prefix: string = id.slice(0, 4);
-      const result = await CounterRepo.getSequence();
-      let sequence: number = result.sequence;
-
-      console.log(prefix + sequence);
-      return prefix + sequence.toString().padStart(2, "0");
-    } else {
-      const prefix: string = "CM-0";
-      const sequence: number = 1;
-      return prefix + sequence.toString().padStart(2, "0");
+    const release = await this.mutex.acquire();
+    try {
+      const lastInsertedCMId = await CMRepo.getLastInsertedId();
+      console.log("latest Record from DB found : " + lastInsertedCMId);
+      if (lastInsertedCMId) {
+        const id = lastInsertedCMId.componentMasterId;
+        const prefix: string = id.slice(0, 3);
+        // const result = await CounterRepo.getSequence();
+        // let sequence = result.sequence;
+        let sequence: number = parseInt(id.slice(3));
+        sequence++;
+        console.log(sequence + " In AutogenerateId " + prefix);
+        console.log("Gnenerated ID : " + prefix + sequence);
+        return prefix + sequence.toString().padStart(2, "0");
+      } else {
+        // let prefix = "CM-";
+        // const result = await CounterRepo.getSequence();
+        // let sequence = result.sequence;
+        // const prefix: string = "CM-0";
+        // const sequence: number = 1;
+        // console.log(prefix + sequence + " first ID");
+        // return prefix + sequence.toString().padStart(2, "0");
+        return "CM-01";
+      }
+    } catch (error) {
+      throw new Error("Error while generating ID :" + error);
+    } finally {
+      release();
     }
   }
   async poIdGenerate() {
