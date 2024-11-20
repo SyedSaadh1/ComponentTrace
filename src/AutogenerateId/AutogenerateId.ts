@@ -3,14 +3,14 @@ import PORepo from "../Repository/PurchaseOrderRepository";
 import CLRepo from "../Repository/ComponentListRepository";
 import transactionsRepository from "../Repository/TransactionsRepository";
 import CounterRepo from "../Repository/CounterRepository";
-import { Mutex } from "async-mutex";
+// import { Mutex } from "async-mutex";
 class AutogenerateId {
-  private mutex: Mutex;
-  constructor() {
-    this.mutex = new Mutex();
-  }
+  // private mutex: Mutex;
+  // constructor() {
+  //   this.mutex = new Mutex();
+  // }
   async CMIdGenerate() {
-    const release = await this.mutex.acquire();
+    // const release = await this.mutex.acquire();
     try {
       const lastInsertedCMId = await CMRepo.getLastInsertedId();
       console.log("latest Record from DB found : " + lastInsertedCMId);
@@ -36,9 +36,9 @@ class AutogenerateId {
       }
     } catch (error) {
       throw new Error("Error while generating ID :" + error);
-    } finally {
-      release();
-    }
+    } // finally {
+    //   release();
+    // }
   }
   async poIdGenerate() {
     const lastInsertedPOId = await PORepo.getLastInsertedId();
