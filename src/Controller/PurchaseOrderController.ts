@@ -3,9 +3,13 @@ import AutogenerateId from "../AutogenerateId/AutogenerateId";
 import PORepo from "../Repository/PurchaseOrderRepository";
 import CMRepo from "../Repository/ComponentMasterRepository";
 import PoValidations from "../Validations/PurchaseOrder.validation";
-
+import { Mutex } from "async-mutex";
 class POController {
-  async createPurchaseOrder(req: Request, res: Response) {
+  private mutex: Mutex;
+  constructor() {
+    this.mutex = new Mutex();
+  }
+  createPurchaseOrder = async (req: Request, res: Response) => {
     try {
       const { orderDetails } = req.body;
       const { error, value } = await PoValidations.validate(req.body);
@@ -14,8 +18,6 @@ class POController {
           .status(400)
           .send({ msg: "Validation error in Joi " + error });
       }
-
-      const generatedPOId = await AutogenerateId.poIdGenerate();
 
       const datevalidation = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -55,16 +57,21 @@ class POController {
           }
         })
       );
-
       const deliveredComponents = orderedComponents;
       const order = {
         ...value,
         orderDetails: orderedComponents,
-        poId: generatedPOId,
         deliveredComponents: deliveredComponents,
       };
-
-      const createdPurchaseOrder = await PORepo.createPo(order);
+      const release = await this.mutex.acquire();
+      let createdPurchaseOrder;
+      try {
+        const generatedPOId = await AutogenerateId.poIdGenerate();
+        order.poId = generatedPOId;
+        createdPurchaseOrder = await PORepo.createPo(order);
+      } finally {
+        release();
+      }
       res.status(201).send({
         msg: "Purchase Order created successfully",
         createdPurchaseOrder,
@@ -73,9 +80,17 @@ class POController {
       console.log(error);
       res
         .status(500)
-        .send({ msg: "Error processing in creating Purchase Order" });
+        .send({ msg: "Error processing in creating Purchase Order" + error });
     }
-  }
+  };
+  findOrders = async (req: Request, res: Response) => {
+    try {
+      const result = await PORepo.findOrders();
+      res.status(200).send(result);
+    } catch (error) {
+      console.log("Error in finding order : " + error);
+    }
+  };
 }
 
 export default new POController();

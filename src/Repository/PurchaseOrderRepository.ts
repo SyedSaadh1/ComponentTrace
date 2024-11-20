@@ -19,6 +19,10 @@ class PORepository {
   async findOrder(filter = {}) {
     return await purchaseOrderModel.findOne(filter);
   }
+
+  async findOrders(filter = {}) {
+    return await purchaseOrderModel.find(filter);
+  }
   async updatePOStatus(poId: string) {
     await purchaseOrderModel.updateOne(
       { poId },
