@@ -1,11 +1,13 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-export interface subComponents {
+// Subcomponent interface
+export interface SubComponent {
   componentIds: string[];
   componentName: string;
   quantity: number;
 }
 
+// Component list interface
 export interface IComponentList extends Document {
   componentMasterId: string;
   createdBy: string;
@@ -15,16 +17,16 @@ export interface IComponentList extends Document {
   sentToDelivery?: boolean;
   componentState?: string;
   componentId: string;
-  subComponents: subComponents[];
+  subComponents: SubComponent[];
   componentName: string;
   wareHouseLocation?: string;
-  // batchNo: string;
 }
 
 class ComponentModel {
   public model: mongoose.Model<IComponentList>;
 
   constructor() {
+    // Define the schema
     const componentSchema: Schema<IComponentList> = new mongoose.Schema({
       componentMasterId: { type: String, required: true },
       createdBy: { type: String, default: "User123" },
@@ -36,7 +38,6 @@ class ComponentModel {
       componentId: { type: String, required: true },
       componentName: { type: String, required: true },
       wareHouseLocation: { type: String },
-      // batchNo: { type: String, required: true },
       subComponents: {
         type: [
           {
@@ -45,16 +46,15 @@ class ComponentModel {
             quantity: { type: Number, required: true },
           },
         ],
-        default: [],
+        default: [], // Ensures subComponents is an empty array by default
       },
     });
 
+    // Prevent pluralization of collection name
     mongoose.pluralize(null);
 
-    this.model = mongoose.model<IComponentList>(
-      "componentList",
-      componentSchema
-    );
+    // Initialize the model
+    this.model = mongoose.model<IComponentList>("componentList", componentSchema);
   }
 }
 

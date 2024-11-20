@@ -1,130 +1,157 @@
 import { Request, Response } from "express";
-
 import AutogenerateId from "../AutogenerateId/AutogenerateId";
-
 import componentListBody from "../Validations/componentList.validation";
-
 import ClRepo from "../Repository/componentListRepository";
-
 import InventoryRepo from "../Repository/InventoryRepository";
 
 class ComponentController {
-  // Find all components
-
-  async findAllComponents(req: Request, res: Response): Promise<any> {
+  async findAllComponents(req: Request, res: Response): Promise<void> {
     try {
       const filter = req.query || {};
+      console.log("Filter applied: ", filter);
 
-      console.log("filter-------->", filter);
+      const components = await ClRepo.findAllComponents(filter);
 
-      const result: any = await ClRepo.findAllComponents(filter);
-
-      console.log("result :- ", result);
-
-      if (!result.length) {
-        return res.status(404).send({ msg: "No components found" });
-      } else {
-        return res.status(200).send(result);
+      if (!components.length) {
+        res.status(404).json({ msg: "No components found" });
+        return;
       }
+
+      res.status(200).json(components);
     } catch (error) {
-      res.status(500).send({ msg: "Error fetching components: " + error });
+      console.error("Error fetching components:", error);
+      res.status(500).json({ msg: "Error fetching components", error });
     }
   }
 
-  // Store multiple components based on quantity
-  async storeComponents(req: Request, res: Response): Promise<any> {
+  async storeComponents(req: Request, res: Response): Promise<void> {
     try {
       const { error, value } = componentListBody.validate(req.body);
       if (error) {
-        return res
-          .status(400)
-          .json({ msg: "Validation error", error: error.details });
+        res.status(400).json({ msg: "Validation error", error: error.details });
+        return;
       }
 
       const availableQuantity = await InventoryRepo.getAvailableQuantity(
         value.componentMasterId
       );
+
       if (availableQuantity < value.quantity) {
-        return res.status(200).json({
+        res.status(400).json({
           msg: "Insufficient quantity in inventory",
           availableQuantity,
         });
+        return;
       }
 
       const savedComponents = [];
       for (let i = 0; i < value.quantity; i++) {
         const componentId = await AutogenerateId.clIdGenerate();
-        const componentData = {
-          ...value,
-          componentId, // Unique ID for each entry
-        };
+        const componentData = { ...value, componentId };
 
-        // Store each component with unique ID in the database
-        const result = await ClRepo.storeComponents(componentData);
-        savedComponents.push(result);
+        const component = await ClRepo.storeComponent(componentData);
+        savedComponents.push(component);
       }
 
-      res
-        .status(201)
-        .json({
-          msg: "Components created successfully",
-          data: savedComponents,
-        });
+      res.status(201).json({
+        msg: "Components created successfully",
+        data: savedComponents,
+      });
     } catch (error) {
-      res.status(500).json({ msg: `Error in creating components: ${error}` });
+      console.error("Error creating components:", error);
+      res.status(500).json({ msg: "Error creating components", error });
     }
   }
 
-  // Update existing components
-
-  async updateComponents(req: Request, res: Response): Promise<any> {
+  async updateComponents(req: Request, res: Response): Promise<void> {
     try {
-      const { componentId, componentName, wareHouseLocation, ...updateFields } =
-        req.body;
+      const { componentId, ...updateFields } = req.body;
 
       if (!componentId) {
-        return res.status(400).json({ msg: "Component ID is required" });
+        res.status(400).json({ msg: "Component ID is required" });
+        return;
       }
 
-      // Add componentName and wareHouseLocation to updateFields if provided
+      const updateResult = await ClRepo.updateComponent(componentId, updateFields);
 
-      if (componentName) updateFields.componentName = componentName;
-
-      if (wareHouseLocation) updateFields.wareHouseLocation = wareHouseLocation;
-
-      const result = await ClRepo.updateComponents(componentId, updateFields);
-
-      if (result.modifiedCount > 0) {
+      if (updateResult.modifiedCount > 0) {
         res.status(200).json({ msg: "Component updated successfully" });
-      } else if (result.matchedCount > 0) {
+      } else if (updateResult.matchedCount > 0) {
         res.status(200).json({ msg: "No changes made to the component" });
       } else {
         res.status(404).json({ msg: "Component not found" });
       }
     } catch (error) {
-      res.status(500).json({ msg: "Error in updating component: " + error });
+      console.error("Error updating component:", error);
+      res.status(500).json({ msg: "Error updating component", error });
     }
   }
 
-  // Find component by name
-
-  async findComponentByName(req: Request, res: Response): Promise<any> {
+  async findComponentByName(req: Request, res: Response): Promise<void> {
     try {
       const { compName } = req.params;
 
       if (!compName) {
-        return res.status(400).json({ msg: "Component name is required" });
+        res.status(400).json({ msg: "Component name is required" });
+        return;
       }
 
-      const result = await ClRepo.findCompByName(compName);
+      const components = await ClRepo.findComponentByName(compName);
 
-      if (!result.length) {
-        return res.status(404).json({ msg: "Component not found" });
+      if (!components.length) {
+        res.status(404).json({ msg: "Component not found" });
+        return;
       }
 
-      res.status(200).json(result);
+      res.status(200).json(components);
     } catch (error) {
-      res.status(500).json({ msg: "Error in finding component: " + error });
+      console.error("Error finding component by name:", error);
+      res.status(500).json({ msg: "Error finding component", error });
+    }
+  }
+
+  async createSubComponents(req: Request, res: Response): Promise<void> {
+    try {
+      const { parentComponentId, subComponents } = req.body;
+
+      if (!parentComponentId || !subComponents?.length) {
+        res.status(400).json({
+          msg: "Parent component ID and subcomponents data are required",
+        });
+        return;
+      }
+
+      const parentComponent = await ClRepo.findComponentById(parentComponentId);
+      if (!parentComponent) {
+        res.status(404).json({ msg: "Parent component not found" });
+        return;
+      }
+
+      for (const subComponent of subComponents) {
+        const availableQuantity = await InventoryRepo.getAvailableQuantity(
+          subComponent.componentMasterId
+        );
+
+        if (availableQuantity < subComponent.quantity) {
+          res.status(400).json({
+            msg: `Insufficient inventory for componentMasterId: ${subComponent.componentMasterId}`,
+            availableQuantity,
+          });
+          return;
+        }
+
+        subComponent.componentId = await AutogenerateId.clIdGenerate();
+      }
+
+      const result = await ClRepo.addSubComponents(parentComponentId, subComponents);
+
+      res.status(201).json({
+        msg: "Subcomponents created and added successfully",
+        result,
+      });
+    } catch (error) {
+      console.error("Error creating subcomponents:", error);
+      res.status(500).json({ msg: "Error creating subcomponents", error });
     }
   }
 }
