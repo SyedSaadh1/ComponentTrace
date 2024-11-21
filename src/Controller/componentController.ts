@@ -2,9 +2,9 @@ import { Request, Response } from "express";
 
 import AutogenerateId from "../AutogenerateId/AutogenerateId";
 
-import componentListBody from "../Validations/componentList.validation";
+import componentListBody from "../Validations/ComponentList.validation";
 
-import ClRepo from "../Repository/componentListRepository";
+import ClRepo from "../Repository/ComponentListRepository";
 
 import InventoryRepo from "../Repository/InventoryRepository";
 
@@ -64,12 +64,10 @@ class ComponentController {
         savedComponents.push(result);
       }
 
-      res
-        .status(201)
-        .json({
-          msg: "Components created successfully",
-          data: savedComponents,
-        });
+      res.status(201).json({
+        msg: "Components created successfully",
+        data: savedComponents,
+      });
     } catch (error) {
       res.status(500).json({ msg: `Error in creating components: ${error}` });
     }

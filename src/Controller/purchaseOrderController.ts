@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
 import AutogenerateId from "../AutogenerateId/AutogenerateId";
-import PORepo from "../Repository/purchaseOrderRepository";
-import CMRepo from "../Repository/componentMasterRepository";
-import TransRepo from "../Repository/transactionrepository";
-import PoValidations from "../Validations/purchaseOrder.validation";
+import PORepo from "../Repository/PurchaseOrderRepository";
+import CMRepo from "../Repository/ComponentMasterRepository";
+import PoValidations from "../Validations/PurchaseOrder.validation";
 
 class POController {
   async createPurchaseOrder(req: Request, res: Response) {

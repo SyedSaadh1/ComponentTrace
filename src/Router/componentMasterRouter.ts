@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import Controller from "../Controller/componentMasterController";
+import Controller from "../Controller/ComponentMasterController";
 
 class ComponentMasterRouter {
   router: Router;

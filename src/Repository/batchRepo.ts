@@ -1,4 +1,4 @@
-import BatchModel, { Batch } from "../Models/batchmodels"; // Adjust the path as needed to point to your Batch model
+import BatchModel, { Batch } from "../Models/Batchmodels"; // Adjust the path as needed to point to your Batch model
 
 class BatchRepository {
   public async findAllBatches(filter = {}): Promise<Batch[]> {
@@ -13,7 +13,10 @@ class BatchRepository {
     return BatchModel.findById(id);
   }
 
-  public async updateBatch(id: string, updatedData: Partial<Batch>): Promise<Batch | null> {
+  public async updateBatch(
+    id: string,
+    updatedData: Partial<Batch>
+  ): Promise<Batch | null> {
     return BatchModel.findByIdAndUpdate(id, updatedData, { new: true });
   }
 }

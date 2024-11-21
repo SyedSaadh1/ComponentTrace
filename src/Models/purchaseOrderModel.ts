@@ -1,5 +1,5 @@
-import mongoose, { Document, Schema } from 'mongoose';
-import { v4 as uuidv4 } from 'uuid';
+import mongoose, { Document, Schema } from "mongoose";
+import { v4 as uuidv4 } from "uuid";
 
 // Interface for order details
 export interface OrderItemsDetails extends Document {
@@ -22,36 +22,36 @@ export interface IPurchaseOrder extends Document {
 
 // Class for Purchase Order Schema
 class PurchaseOrderClass {
-  private PurchaseOrderSchema: Schema<IPurchaseOrder>
+  private PurchaseOrderSchema: Schema<IPurchaseOrder>;
 
   constructor() {
-
     this.PurchaseOrderSchema = new mongoose.Schema({
       poId: {
         type: String,
         required: true,
-
       },
       orderDetails: {
-        type: [{
-          componentMasterId: {
-            type: String,
-            required: true,
+        type: [
+          {
+            componentMasterId: {
+              type: String,
+              required: true,
+            },
+            componentMasterName: {
+              type: String,
+              required: true,
+            },
+            quantity: {
+              type: Number,
+              required: true,
+            },
+            expectedDate: {
+              type: String,
+              required: true,
+            },
           },
-          componentMasterName: {
-            type: String,
-            required: true,
-          },
-          quantity: {
-            type: Number,
-            required: true,
-          },
-          expectedDate: {
-            type: String,
-            required: true,
-          }
-
-        }], required: true
+        ],
+        required: true,
       }, // Reference to order detail schema
       orderedTo: {
         type: String,
@@ -64,39 +64,40 @@ class PurchaseOrderClass {
       },
 
       deliveredComponents: {
-        type: [{
-          componentMasterId: {
-            type: String,
-            required: true,
+        type: [
+          {
+            componentMasterId: {
+              type: String,
+              required: true,
+            },
+            componentMasterName: {
+              type: String,
+              required: true,
+            },
+            quantity: {
+              type: Number,
+              required: true,
+            },
+            expectedDate: {
+              type: String,
+              required: true,
+            },
           },
-          componentMasterName: {
-            type: String,
-            required: true,
-          },
-          quantity: {
-            type: Number,
-            required: true,
-          },
-          expectedDate: {
-            type: String,
-            required: true,
-          }
-
-        }], required: true
-      }//
-      
-      
-
+        ],
+        required: true,
+      }, //
     });
 
     // Ensure pluralization is disabled
     mongoose.pluralize(null);
 
     // Create the model from the schema
-
   }
   getModel() {
-    return mongoose.model<IPurchaseOrder>('PurchaseOrder', this.PurchaseOrderSchema);
+    return mongoose.model<IPurchaseOrder>(
+      "PurchaseOrder",
+      this.PurchaseOrderSchema
+    );
   }
 }
 
