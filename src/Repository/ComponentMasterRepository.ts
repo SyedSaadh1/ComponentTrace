@@ -10,13 +10,13 @@ class ComponentMasterRepository {
       throw new Error("Error Retrieving Component Masters " + error);
     }
   }
-  async getNonFPComponents() {
-    try {
-      return await ComponentMasterModel.find({ isFinalProduct: false });
-    } catch (error) {
-      throw new Error("Error Retrieving Non-FP-Components " + error);
-    }
-  }
+  // async getNonFPComponents() {
+  //   try {
+  //     return await ComponentMasterModel.find({ isFinalProduct: false });
+  //   } catch (error) {
+  //     throw new Error("Error Retrieving Non-FP-Components " + error);
+  //   }
+  // }
   async getSubComponents(componentMasterId: string) {
     try {
       return await ComponentMasterModel.find(

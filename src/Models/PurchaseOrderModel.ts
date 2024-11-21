@@ -13,11 +13,13 @@ export interface OrderItemsDetails extends Document {
 export interface IPurchaseOrder extends Document {
   orderDetails: OrderItemsDetails[];
   orderedTo: string;
-  orderedDate: Date;
+  orderedFrom: string;
+  poCreationDate: String;
   address: string;
   description: string;
   poId: string;
   deliveredComponents: OrderItemsDetails[];
+  orderStatus: string;
 }
 
 // Class for Purchase Order Schema
@@ -46,7 +48,7 @@ class PurchaseOrderClass {
               required: true,
             },
             expectedDate: {
-              type: String,
+              type: Date,
               required: true,
             },
           },
@@ -57,12 +59,22 @@ class PurchaseOrderClass {
         type: String,
         required: true,
       },
-
+      orderedFrom: {
+        type: String,
+        required: true,
+      },
+      poCreationDate: {
+        type: Date,
+        default: Date.now(),
+      },
       address: {
         type: String,
         required: true,
       },
-
+      orderStatus: {
+        type: String,
+        default: "Pending",
+      },
       deliveredComponents: {
         type: [
           {

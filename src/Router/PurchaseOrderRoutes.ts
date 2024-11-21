@@ -10,7 +10,8 @@ class PurchaseOrderRouter {
   }
 
   private initializeRoutes() {
-    this.router.post("/createPurchaseOrder", POController.createPurchaseOrder);
+    this.router.post("/", POController.createPurchaseOrder);
+    this.router.get("/", POController.findOrders);
   }
   getRouter() {
     return this.router;

@@ -1,15 +1,18 @@
 import { Request, Response } from "express";
-import componentMasterBody from "../Validations/ComponentMaster.validation";
+import componentMaster from "../Validations/ComponentMaster.validation";
 import generateId from "../AutogenerateId/AutogenerateId";
 import Repo from "../Repository/ComponentMasterRepository";
+import { Mutex } from "async-mutex";
 
 class ComponentMasterController {
+  private mutex: Mutex;
+  constructor() {
+    this.mutex = new Mutex();
+  }
   createComponentMaster = async (req: Request, res: Response) => {
-    const { error, value } = componentMasterBody.validate(req.body);
-    const lastInsertedComponentMasterId = await generateId.idGenerate();
-
     try {
-      value.componentMasterId = lastInsertedComponentMasterId;
+      const { error, value } = componentMaster.validate(req.body);
+
       if (error) {
         console.log("Error in Validation");
         return res
@@ -19,15 +22,42 @@ class ComponentMasterController {
       const { componentMasterName } = value;
       const isExist = await Repo.find({ componentMasterName });
       if (isExist.length > 0) {
-        console.log("Error in Creation");
+        console.log("Error in Creation ,Duplicate Component Master Name");
         return res
           .status(409)
           .send({ msg: "Component Master already exists with that name" });
       }
-      const result = await Repo.createComponentMaster(value);
-      return res
-        .status(201)
-        .send({ msg: "Component Master Created Successfully", Data: result });
+      const release = await this.mutex.acquire();
+
+      let result: any;
+      try {
+        value.componentMasterId = await generateId.CMIdGenerate();
+        console.log(value.componentMasterId);
+        result = await Repo.createComponentMaster(value);
+      } finally {
+        release();
+      }
+      const {
+        componentMasterId,
+        category,
+        componentDescription,
+        components,
+        createdBy,
+        isFinalProduct,
+      } = result;
+
+      return res.status(201).send({
+        msg: "Component Master Created Successfully",
+        Data: componentMasterId,
+        componentMasterName,
+        category,
+        componentDescription,
+        components,
+        createdBy,
+        isFinalProduct,
+      });
+
+      //should have to minimize the response by sending only neccessary properties in response
     } catch (error) {
       console.error("Error Encountered while Creating Component Master", error);
       return res.status(500).send({ msg: "Error Creating Component Master" });
@@ -44,7 +74,7 @@ class ComponentMasterController {
   };
   findNFPComponents = async (req: Request, res: Response) => {
     try {
-      const result = await Repo.getNonFPComponents();
+      const result = await Repo.find({ isFinalProduct: false });
       return res.status(200).send(result);
     } catch (error) {
       return res.status(500).send({
@@ -55,7 +85,7 @@ class ComponentMasterController {
   };
   findSubComponents = async (req: Request, res: Response) => {
     try {
-      const componentMasterId = req.params.CMID;
+      const componentMasterId = req.params.componentMasterId;
       const result = await Repo.getSubComponents(componentMasterId);
       return res.status(200).send(result);
     } catch (error) {

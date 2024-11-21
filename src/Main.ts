@@ -6,7 +6,7 @@ import invRouter from "./Router/InventoryRoutes";
 import batchRouter from "./Router/BatchRoutes";
 import poRouter from "./Router/PurchaseOrderRoutes";
 import componentListRouter from "./Router/ComponentRouter";
-
+import transactionsRouter from "./Router/TransactionsRouter";
 class App {
   port: Number;
   app: Application;
@@ -37,11 +37,12 @@ class App {
   }
 
   initializeRoutes() {
-    this.app.use("/componentMaster", ComponentMasterRouter);
+    this.app.use("/componentMasters", ComponentMasterRouter);
     this.app.use("/components", componentListRouter);
     this.app.use("/inventoryDetails", invRouter);
     this.app.use("/batch", batchRouter);
-    this.app.use("/purchaseOrder", poRouter);
+    this.app.use("/purchaseOrders", poRouter);
+    this.app.use("/transactions", transactionsRouter);
   }
 
   connectDatabase() {

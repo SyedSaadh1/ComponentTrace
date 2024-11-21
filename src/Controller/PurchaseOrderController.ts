@@ -3,35 +3,43 @@ import AutogenerateId from "../AutogenerateId/AutogenerateId";
 import PORepo from "../Repository/PurchaseOrderRepository";
 import CMRepo from "../Repository/ComponentMasterRepository";
 import PoValidations from "../Validations/PurchaseOrder.validation";
-
+import { Mutex } from "async-mutex";
 class POController {
-  async createPurchaseOrder(req: Request, res: Response) {
+  private mutex: Mutex;
+  constructor() {
+    this.mutex = new Mutex();
+  }
+  createPurchaseOrder = async (req: Request, res: Response) => {
     try {
-      const { orderDetails } = req.body;
+      const { orderDetails, orderedTo } = req.body;
       const { error, value } = await PoValidations.validate(req.body);
       if (error) {
         return res
           .status(400)
           .send({ msg: "Validation error in Joi " + error });
       }
-      const generatedPOId = await AutogenerateId.poIdGenerate();
 
       const datevalidation = /^\d{4}-\d{2}-\d{2}$/;
 
+      // Validate all orderDetails
       const updatedOrderDetails = await Promise.all(
         orderDetails.map(async (item: any) => {
           if (item.expectedDate && typeof item.expectedDate === "string") {
             if (!datevalidation.test(item.expectedDate)) {
-              return res
-                .status(400)
-                .send(
-                  `Invalid date format for expectedDate: ${item.expectedDate}`
-                );
+              return {
+                error: `Invalid date format for expectedDate: ${item.expectedDate}`,
+              };
             }
           }
           return item;
         })
       );
+
+      // Check if any validation failed
+      const errorItem = updatedOrderDetails.find((item: any) => item.error);
+      if (errorItem) {
+        return res.status(400).send(errorItem.error);
+      }
 
       const orderedComponents = await Promise.all(
         updatedOrderDetails.map(async (item: any) => {
@@ -49,15 +57,21 @@ class POController {
           }
         })
       );
-
       const deliveredComponents = orderedComponents;
       const order = {
         ...value,
         orderDetails: orderedComponents,
-        poId: generatedPOId,
         deliveredComponents: deliveredComponents,
       };
-      const createdPurchaseOrder = await PORepo.createPo(order);
+      const release = await this.mutex.acquire();
+      let createdPurchaseOrder;
+      try {
+        const generatedPOId = await AutogenerateId.poIdGenerate(orderedTo);
+        order.poId = generatedPOId;
+        createdPurchaseOrder = await PORepo.createPo(order);
+      } finally {
+        release();
+      }
       res.status(201).send({
         msg: "Purchase Order created successfully",
         createdPurchaseOrder,
@@ -66,9 +80,17 @@ class POController {
       console.log(error);
       res
         .status(500)
-        .send({ msg: "Error processing in creating Purchase Order" });
+        .send({ msg: "Error processing in creating Purchase Order" + error });
     }
-  }
+  };
+  findOrders = async (req: Request, res: Response) => {
+    try {
+      const result = await PORepo.findOrders();
+      res.status(200).send(result);
+    } catch (error) {
+      console.log("Error in finding order : " + error);
+    }
+  };
 }
 
 export default new POController();
