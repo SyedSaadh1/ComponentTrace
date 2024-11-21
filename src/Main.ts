@@ -1,11 +1,11 @@
 import Db from "./Config/MongoDBConnection";
 import express, { Application } from "express";
 import cors from "cors";
-import ComponentMasterRouter from "./Router/ComponentMasterRouter";
-import invRouter from "./Router/InventoryRoutes";
+import ComponentMasterRouter from "./Router/componentMasterRouter";
+import invRouter from "./Router/inventoryRoutes";
 import batchRouter from "./Router/BatchRoutes";
-import poRouter from "./Router/PurchaseOrderRoutes";
-import componentListRouter from "./Router/ComponentRouter";
+import poRouter from "./Router/purchaseOrderRoutes";
+import componentListRouter from "./Router/componentRouter";
 import transactionsRouter from "./Router/TransactionsRouter";
 class App {
   port: Number;
