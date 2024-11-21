@@ -15,7 +15,7 @@ export interface IPurchaseOrder extends Document {
   orderDetails: OrderItemsDetails[];
   orderedTo: string;
   orderedFrom: string;
-  poCreationDate: Date;
+  poCreationDate: String;
   address: string;
   description: string;
   poId: string;
@@ -60,7 +60,14 @@ class PurchaseOrderClass {
         type: String,
         required: true,
       },
-
+      orderedFrom: {
+        type: String,
+        required: true,
+      },
+      poCreationDate: {
+        type: Date,
+        default: Date.now(),
+      },
       address: {
         type: String,
         required: true,

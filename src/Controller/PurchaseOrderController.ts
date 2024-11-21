@@ -11,7 +11,7 @@ class POController {
   }
   createPurchaseOrder = async (req: Request, res: Response) => {
     try {
-      const { orderDetails } = req.body;
+      const { orderDetails, orderedTo } = req.body;
       const { error, value } = await PoValidations.validate(req.body);
       if (error) {
         return res
@@ -66,7 +66,7 @@ class POController {
       const release = await this.mutex.acquire();
       let createdPurchaseOrder;
       try {
-        const generatedPOId = await AutogenerateId.poIdGenerate();
+        const generatedPOId = await AutogenerateId.poIdGenerate(orderedTo);
         order.poId = generatedPOId;
         createdPurchaseOrder = await PORepo.createPo(order);
       } finally {
