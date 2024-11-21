@@ -85,7 +85,7 @@ class ComponentMasterController {
   };
   findSubComponents = async (req: Request, res: Response) => {
     try {
-      const componentMasterId = req.params.CMID;
+      const componentMasterId = req.params.componentMasterId
       const result = await Repo.getSubComponents(componentMasterId);
       return res.status(200).send(result);
     } catch (error) {

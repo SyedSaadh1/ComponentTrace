@@ -21,7 +21,7 @@ class ComponentMasterModel {
   constructor() {
     this.componentMasterModel = new mongoose.Schema(
       {
-        componentMasterId: { type: String, default: "CM-00X", unique: true },
+        componentMasterId: { type: String, unique: true },
         componentMasterName: { type: String, required: true, unique: true },
         componentDescription: { type: String, required: false },
         category: { type: String, required: true },
