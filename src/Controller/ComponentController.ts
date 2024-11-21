@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 
 import AutogenerateId from "../AutogenerateId/AutogenerateId";
 
-import componentListBody from "../Validations/componentList.validation";
+import componentListBody from "../Validations/ComponentList.validation";
 
 import ClRepo from "../Repository/ComponentListRepository";
 
