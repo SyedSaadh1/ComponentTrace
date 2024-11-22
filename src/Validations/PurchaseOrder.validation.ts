@@ -10,7 +10,7 @@ const purchaseOrderSchemaValidation = Joi.object({
       })
     )
     .required(),
-  orderedFrom: Joi.string().required(),
+  //orderedFrom: Joi.string().required(),
   orderedTo: Joi.string().required(),
   address: Joi.string().required(),
   description: Joi.string().optional(),
