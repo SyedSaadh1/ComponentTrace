@@ -1,13 +1,9 @@
 import { Request, Response } from "express";
-
 import AutogenerateId from "../AutogenerateId/AutogenerateId";
-
 import componentListBody from "../Validations/ComponentList.validation";
-
 import ClRepo from "../Repository/ComponentListRepository";
-
 import InventoryRepo from "../Repository/InventoryRepository";
-
+import QRCode from "qrcode";
 class ComponentController {
   // Find all components
 
@@ -33,8 +29,16 @@ class ComponentController {
 
   // Store multiple components based on quantity
   async storeComponents(req: Request, res: Response): Promise<any> {
+    const componentData = req.body;
+    const { componentName, componentMasterId } = componentData;
+    let qrData = {
+      componentName,
+      componentMasterId,
+      createdAt: new Date().toISOString(),
+    };
+    const qrCode = await QRCode.toDataURL(JSON.stringify(qrData));
     try {
-      const { error, value } = componentListBody.validate(req.body);
+      const { error, value } = componentListBody.validate(componentData);
       if (error) {
         return res
           .status(400)
@@ -56,6 +60,7 @@ class ComponentController {
         const componentId = await AutogenerateId.clIdGenerate();
         const componentData = {
           ...value,
+          qrCode,
           componentId, // Unique ID for each entry
         };
 

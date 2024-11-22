@@ -1,4 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
+import qrcode from "qrcode";
 
 export interface subComponents {
   componentIds: string[];
@@ -7,16 +8,16 @@ export interface subComponents {
 }
 
 export interface IComponentList extends Document {
+  componentId: string;
+  componentName: string;
   componentMasterId: string;
   createdBy: string;
-  createdOn?: Date;
+  createdOn: Date;
   currentOwner: string;
-  qrCode?: string;
-  sentToDelivery?: boolean;
-  componentState?: string;
-  componentId: string;
+  qrCode: string;
+  sentToDelivery: boolean;
+  componentState: string;
   subComponents: subComponents[];
-  componentName: string;
   wareHouseLocation?: string;
   // batchNo: string;
 }
