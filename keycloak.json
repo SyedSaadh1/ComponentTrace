@@ -1,0 +1,8 @@
+{
+  "realm": "RealWare",
+  "bearer-only": true,
+  "auth-server-url": "https://auth.innovation.realware.app",
+  "ssl-required": "none",
+  "resource": "realware-config-dev",
+  "confidential-port": 0
+}
