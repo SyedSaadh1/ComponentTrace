@@ -62,7 +62,7 @@ class PurchaseOrderClass {
       },
       orderedFrom: {
         type: String,
-        required: true,
+        default: "OEM",
       },
       poCreationDate: {
         type: Date,
