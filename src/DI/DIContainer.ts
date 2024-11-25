@@ -2,36 +2,42 @@ export class DI {
   static destroy() {
     this.context.resolvedInstances = {};
   }
+
   private static context: DI;
+
   private resolvedInstances: { [key: string]: any };
-  private resolvedPermanentInstances: { [key: string]: any };
-  private permanentClasses!: ["DBConnection"];
+  private resolvedPerminantInstances: { [key: string]: any };
+  private perminantClasses = ["DBConnection"];
+
   private constructor() {
     this.resolvedInstances = {};
-    this.resolvedPermanentInstances = {};
+    this.resolvedPerminantInstances = {};
   }
+
   static get<T>(className: any, ...params: any): T {
     if (this.context === undefined || this.context === null) {
       this.context = new DI();
     }
-    if (this.context.permanentClasses.indexOf(className) > -1) {
+    if (this.context.perminantClasses.indexOf(className.name) > -1) {
       if (
-        this.context.resolvedPermanentInstances[className.name] === undefined ||
-        this.context.resolvedPermanentInstances[className] === null
+        this.context.resolvedPerminantInstances[className.name] === undefined ||
+        this.context.resolvedPerminantInstances[className.name] === null
       ) {
-        this.context.resolvedPermanentInstances[className] = new className(
+        this.context.resolvedPerminantInstances[className.name] = new className(
           ...params
         );
       }
-      return this.context.resolvedPermanentInstances[className];
+      return this.context.resolvedPerminantInstances[className.name];
     } else {
       if (
-        this.context.resolvedInstances[className] === undefined ||
-        this.context.resolvedInstances[className] === null
+        this.context.resolvedInstances[className.name] === undefined ||
+        this.context.resolvedInstances[className.name] === null
       ) {
-        this.context.resolvedInstances[className] = new className(...params);
+        this.context.resolvedInstances[className.name] = new className(
+          ...params
+        );
       }
-      return this.context.resolvedInstances[className];
+      return this.context.resolvedInstances[className.name];
     }
   }
 }

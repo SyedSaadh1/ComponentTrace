@@ -7,18 +7,43 @@ import batchRouter from "./Router/BatchRoutes";
 import poRouter from "./Router/PurchaseOrderRoutes";
 import componentListRouter from "./Router/ComponentRouter";
 import transactionsRouter from "./Router/TransactionsRouter";
+import keycloak from "./Config/KeycloakMultiRealm";
+import { DI } from "./DI/DIContainer";
+import session, { MemoryStore } from "express-session";
+import crypto from "crypto";
+import { UserSession } from "./Security/SecurityContext";
+const memoryStore = DI.get<typeof MemoryStore>(MemoryStore);
+import { SecurityContext } from "./Security/SecurityContext";
 class App {
-  port: Number;
-  app: Application;
+  private port: Number;
+  private securityContext: SecurityContext;
+  private app: Application;
+  private Keycloak: typeof keycloak;
   constructor(port: Number) {
     this.port = port;
     this.app = express();
+    this.Keycloak = DI.get(keycloak);
+    this.securityContext = DI.get(SecurityContext);
+
     this.initializeMiddleware();
-    this.initializeRoutes();
+
     this.connectDatabase();
+
+    this.initializeRoutes();
   }
 
   initializeMiddleware() {
+    const secretKey = crypto.randomBytes(32).toString("hex"); // Generates a random key
+
+    this.app.use(
+      session({
+        secret: secretKey,
+        resave: false, // Ensure to set this explicitly
+        saveUninitialized: false, // Ensure to set this explicitly
+        store: new MemoryStore(), // Uncomment if using a session store
+      })
+    );
+
     this.app.use(express.json());
     this.app.use(cors());
     this.app.use((req, res, next) => {
@@ -34,15 +59,31 @@ class App {
 
       next();
     });
+
+    this.app.use(keycloak.configure());
+    this.app.use(keycloak.middleware());
+    this.app.use((req, res, next) => {
+      const UserSession: UserSession | undefined =
+        this.securityContext.session(req);
+      if (UserSession) {
+        req.userSession = UserSession;
+        console.log("UserSession : " + UserSession);
+      }
+      next();
+    });
   }
 
   initializeRoutes() {
-    this.app.use("/componentMasters", ComponentMasterRouter);
-    this.app.use("/components", componentListRouter);
-    this.app.use("/inventoryDetails", invRouter);
-    this.app.use("/batch", batchRouter);
-    this.app.use("/purchaseOrders", poRouter);
-    this.app.use("/transactions", transactionsRouter);
+    this.app.use(
+      "/componentMasters",
+      this.Keycloak.protect(),
+      ComponentMasterRouter
+    );
+    this.app.use("/components", this.Keycloak.protect(), componentListRouter);
+    this.app.use("/inventoryDetails", this.Keycloak.protect(), invRouter);
+    this.app.use("/batch", this.Keycloak.protect(), batchRouter);
+    this.app.use("/purchaseOrders", this.Keycloak.protect(), poRouter);
+    this.app.use("/transactions", this.Keycloak.protect(), transactionsRouter);
   }
 
   connectDatabase() {
