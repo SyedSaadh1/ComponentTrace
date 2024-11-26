@@ -6,6 +6,7 @@ import invRouter from "./Router/InventoryRoutes";
 import batchRouter from "./Router/BatchRoutes";
 import poRouter from "./Router/PurchaseOrderRoutes";
 import componentListRouter from "./Router/ComponentRouter";
+import UserRouter from "./Router/UserRouter";
 import transactionsRouter from "./Router/TransactionsRouter";
 import { KeycloakMultiRealm as keycloak } from "./Config/KeycloakMultiRealm";
 import { DI } from "./di/DIContainer";
@@ -82,6 +83,7 @@ class App {
     this.app.use("/batch", this.Keycloak.protect(), batchRouter);
     this.app.use("/purchaseOrders", this.Keycloak.protect(), poRouter);
     this.app.use("/transactions", this.Keycloak.protect(), transactionsRouter);
+    this.app.use("/", UserRouter);
   }
 
   connectDatabase() {

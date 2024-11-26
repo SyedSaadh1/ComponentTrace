@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 export interface IUser {
   userName: string;
-  password: string;
+  userId: string;
 }
 
 class User {
@@ -10,7 +10,7 @@ class User {
   constructor() {
     this.UserSchema = new mongoose.Schema({
       userName: { type: String, required: true },
-      password: { type: String, required: true },
+      userId: { type: String, default: "USERXXX" },
     });
   }
   getModel() {

@@ -6,7 +6,9 @@ class UserRepo {
       return result;
     } catch (error) {
       console.log("Error: " + error);
+      return error;
     }
   }
   async findUser() {}
 }
+export default new UserRepo();
