@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { DI } from "../DI/DIContainer";
+import { DI } from "../di/DIContainer";
 import jwt_decode from "jwt-decode";
 
 export class SecurityContext {
@@ -37,13 +37,8 @@ export class UserSession {
   private userName: string;
   private realm: string;
 
-  constructor(
-    userName: string,
-
-    realm: string
-  ) {
+  constructor(userName: string, realm: string) {
     this.userName = userName;
-
     this.realm = realm;
   }
 

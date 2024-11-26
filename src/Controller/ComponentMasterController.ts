@@ -34,8 +34,10 @@ class ComponentMasterController {
         value.componentMasterId = await generateId.CMIdGenerate();
         console.log(value.componentMasterId);
         result = await Repo.createComponentMaster(value);
+        console.log("doc created : " + result);
       } finally {
         release();
+        console.log("lock released");
       }
       const {
         componentMasterId,
@@ -45,8 +47,8 @@ class ComponentMasterController {
         createdBy,
         isFinalProduct,
       } = result;
-
-      return res.status(201).send({
+      console.log("sending response");
+      res.status(201).send({
         msg: "Component Master Created Successfully",
         Data: componentMasterId,
         componentMasterName,
@@ -56,11 +58,17 @@ class ComponentMasterController {
         createdBy,
         isFinalProduct,
       });
+      return;
 
       //should have to minimize the response by sending only neccessary properties in response
     } catch (error) {
-      console.error("Error Encountered while Creating Component Master", error);
-      return res.status(500).send({ msg: "Error Creating Component Master" });
+      console.error(
+        "Error Encountered while Creating Component Master:",
+        error
+      );
+      return res
+        .status(500)
+        .send({ msg: "Error Creating Component Master:" + error });
     }
   };
   findComponentMaster = async (req: Request, res: Response) => {
@@ -85,7 +93,7 @@ class ComponentMasterController {
   };
   findSubComponents = async (req: Request, res: Response) => {
     try {
-      const componentMasterId = req.params.componentMasterId
+      const componentMasterId = req.params.componentMasterId;
       const result = await Repo.getSubComponents(componentMasterId);
       return res.status(200).send(result);
     } catch (error) {

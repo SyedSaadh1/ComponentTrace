@@ -7,22 +7,22 @@ import batchRouter from "./Router/BatchRoutes";
 import poRouter from "./Router/PurchaseOrderRoutes";
 import componentListRouter from "./Router/ComponentRouter";
 import transactionsRouter from "./Router/TransactionsRouter";
-import keycloak from "./Config/KeycloakMultiRealm";
-import { DI } from "./DI/DIContainer";
+import { KeycloakMultiRealm as keycloak } from "./Config/KeycloakMultiRealm";
+import { DI } from "./di/DIContainer";
 import session, { MemoryStore } from "express-session";
 import crypto from "crypto";
 import { UserSession } from "./Security/SecurityContext";
-const memoryStore = DI.get<typeof MemoryStore>(MemoryStore);
+// const memoryStore = DI.get<MemoryStore>(MemoryStore);
 import { SecurityContext } from "./Security/SecurityContext";
 class App {
   private port: Number;
   private securityContext: SecurityContext;
   private app: Application;
-  private Keycloak: typeof keycloak;
+  private Keycloak: keycloak;
   constructor(port: Number) {
     this.port = port;
     this.app = express();
-    this.Keycloak = DI.get(keycloak);
+    this.Keycloak = DI.get<keycloak>(keycloak);
     this.securityContext = DI.get(SecurityContext);
 
     this.initializeMiddleware();
@@ -33,11 +33,9 @@ class App {
   }
 
   initializeMiddleware() {
-    const secretKey = crypto.randomBytes(32).toString("hex"); // Generates a random key
-
     this.app.use(
       session({
-        secret: secretKey,
+        secret: "MySecrekeyKey",
         resave: false, // Ensure to set this explicitly
         saveUninitialized: false, // Ensure to set this explicitly
         store: new MemoryStore(), // Uncomment if using a session store
@@ -60,14 +58,14 @@ class App {
       next();
     });
 
-    this.app.use(keycloak.configure());
-    this.app.use(keycloak.middleware());
+    this.app.use(this.Keycloak.configure());
+    this.app.use(this.Keycloak.middleware());
     this.app.use((req, res, next) => {
       const UserSession: UserSession | undefined =
         this.securityContext.session(req);
       if (UserSession) {
         req.userSession = UserSession;
-        console.log("UserSession : " + UserSession);
+        console.log("UserSession : " + JSON.stringify(UserSession));
       }
       next();
     });
