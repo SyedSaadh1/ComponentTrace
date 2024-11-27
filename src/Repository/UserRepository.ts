@@ -9,6 +9,14 @@ class UserRepo {
       return error;
     }
   }
-  async findUser() {}
+  async findUser(filter = {}) {
+    try {
+      const result = await UserModel.findOne(filter);
+      return result;
+    } catch (error) {
+      console.log("error in fetching user : " + error);
+      throw error;
+    }
+  }
 }
 export default new UserRepo();

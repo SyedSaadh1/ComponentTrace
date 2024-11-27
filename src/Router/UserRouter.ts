@@ -1,4 +1,4 @@
-import Controller from "../Controller/UserController";
+import UserController from "../Controller/UserController";
 import express, { Router } from "express";
 class UserRouter {
   router: Router;
@@ -7,7 +7,7 @@ class UserRouter {
     this.initializeRoutes();
   }
   initializeRoutes() {
-    this.router.post("/", Controller.registerUser);
+    this.router.post("/", UserController.registerUser);
   }
   getRouter() {
     return this.router;

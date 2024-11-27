@@ -11,7 +11,6 @@ import transactionsRouter from "./Router/TransactionsRouter";
 import { KeycloakMultiRealm as keycloak } from "./Config/KeycloakMultiRealm";
 import { DI } from "./di/DIContainer";
 import session, { MemoryStore } from "express-session";
-import crypto from "crypto";
 import { UserSession } from "./Security/SecurityContext";
 // const memoryStore = DI.get<MemoryStore>(MemoryStore);
 import { SecurityContext } from "./Security/SecurityContext";

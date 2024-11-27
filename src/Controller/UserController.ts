@@ -1,14 +1,20 @@
-import { Request, Response } from "express-serve-static-core";
+import { Request, Response } from "express";
 import UserRepo from "../Repository/UserRepository";
-import { UserSession } from "../Security/SecurityContext";
 
 class UserController {
-  registerUser = async (req: Request, res: Response): Promise<Response> => {
+  registerUser = async (req: Request, res: Response) => {
     try {
-      const data = req.body;
-      const userName = data.UserSession.getUsername();
-      //   const isExist
-      const result = await UserRepo.createUser(userName);
+      const userSession = req.userSession;
+      if (!userSession) {
+        return res.status(400).send({ msg: "Invalid User Session" });
+      }
+      const { userName } = userSession;
+      const isExist = await UserRepo.findUser({ userName });
+      if (isExist) {
+        return res.status(200).send({ msg: `Welcome ${userName}` });
+      }
+
+      const result = await UserRepo.createUser(userSession);
       console.log("User Registered");
       return res.status(201).send(result);
     } catch (error) {

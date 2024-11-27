@@ -14,7 +14,8 @@ class User {
     });
   }
   getModel() {
-    return mongoose.model<IUser>("UserDetails", this.UserSchema);
+    mongoose.pluralize(null);
+    return mongoose.model<IUser>("Users", this.UserSchema);
   }
 }
 
