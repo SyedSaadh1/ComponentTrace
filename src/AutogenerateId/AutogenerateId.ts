@@ -3,6 +3,7 @@ import PORepo from "../Repository/PurchaseOrderRepository";
 import CLRepo from "../Repository/ComponentListRepository";
 import transactionsRepository from "../Repository/TransactionsRepository";
 import CounterRepo from "../Repository/CounterRepository";
+import BatchRepo from "../Repository/BatchRepo";
 // import { Mutex } from "async-mutex";
 class AutogenerateId {
   // private mutex: Mutex;
@@ -60,11 +61,11 @@ class AutogenerateId {
     const lastInsertedCLId = await CLRepo.getLastInsertedId();
     if (lastInsertedCLId) {
       const id = lastInsertedCLId.componentId;
-      const prefix: string = id.slice(0, 3); // Extracts "CL-"
-      let sequence: number = parseInt(id.slice(3)); // Extracts the numeric part
+      const prefix: string = id.slice(0, 3);
+      let sequence: number = parseInt(id.slice(3)); 
       sequence++;
       console.log(prefix + sequence);
-      return prefix + sequence.toString().padStart(2, "0"); // Pads to ensure two-digit format
+      return prefix + sequence.toString().padStart(2, "0"); 
     } else {
       const prefix: string = "CL-";
       const sequence: number = 1;
@@ -106,6 +107,98 @@ class AutogenerateId {
       return transactionId;
     }
   }
+  // async batchIdGenerate(): Promise<string> {
+  //   const lastInsertedBatchId = await BatchRepo.getLastInsertedId();
+  
+  //   if (lastInsertedBatchId) {
+  //     const id = lastInsertedBatchId.batchNo;
+  //     const prefix: string = id.slice(0, 2);
+  //     let sequence: number = parseInt(id.slice(2)); 
+  //     sequence++;
+  //     console.log(prefix + sequence);
+      
+  
+  //     return prefix + sequence.toString().padStart(4, "0");
+  //   } else {
+  //     const prefix: string = "BN";
+  //     const sequence: number = 1; 
+  //     console.log(prefix + sequence);
+      
+  //     return prefix + sequence.toString().padStart(4, "0");
+  //   }
+  // async batchIdGenerate(): Promise<string> {
+  //   const lastInsertedBatchId = await BatchRepo.getLastInsertedId();
+  
+  //   if (lastInsertedBatchId && lastInsertedBatchId.batchNo) {
+  //     const id = lastInsertedBatchId.batchNo;
+  //     const prefix: string = id.slice(0, 2); 
+  //     let sequence: number = parseInt(id.slice(2)); 
+  //     sequence++; 
+  //     return prefix + sequence.toString().padStart(4, "0"); 
+  //   } else {
+  //     const prefix: string = "BN";
+  //     const sequence: number = 1;
+  //     return prefix + sequence.toString().padStart(4, "0");
+  //   }
+  // }
+
+  // async batchIdGenerate(): Promise<string> {
+  //   const lastInsertedBatchId = await BatchRepo.getLastInsertedId();
+  
+  //   if (lastInsertedBatchId) {
+  //     const id = lastInsertedBatchId.batchNo;
+  //     const prefix: string = id.slice(0, 2); // Assume prefix is "BN"
+  //     let sequence: number = parseInt(id.slice(2));
+  //     sequence++;
+  //     return prefix + sequence.toString().padStart(4, "0");
+  //   } else {
+  //     const prefix: string = "BN";
+  //     return prefix + "0001";
+  //   }
+  // }
+
+  // async batchIdGenerate(): Promise<string> {
+  //   try {
+  //     const lastInsertedBatch = await BatchRepo.getLastInsertedId();
+      
+  //     if (lastInsertedBatch) {
+  //       const id = lastInsertedBatch.batchNo;
+  //       const prefix: string = id.slice(0, 2);
+  //       let sequence: number = parseInt(id.slice(2), 10);
+  //       sequence++;
+  //       return prefix + sequence.toString().padStart(4, "0");
+  //     } else {
+  //       const prefix: string = "BN";
+  //       return prefix + "0001";
+  //     }
+  //   } catch (error: unknown) {
+  //     if (error instanceof Error) {
+  //       throw new Error("Error generating batch ID: " + error.message);
+  //     } else {
+  //       throw new Error("An unknown error occurred while generating the batch ID.");
+  //     }
+  //   }
+  // }  
+
+  async batchIdGenerate(): Promise<string> {
+    try {
+        const lastInsertedBatch = await BatchRepo.getLastInsertedId();
+        if (lastInsertedBatch && lastInsertedBatch.batchNo) {
+            const id = lastInsertedBatch.batchNo;
+            const prefix = id.slice(0, 2);
+            let sequence = parseInt(id.slice(2), 10);
+            sequence++;
+            return prefix + sequence.toString().padStart(4, "0");
+        } else {
+            return "BN0001"; 
+        }
+    } catch (error) {
+        throw new Error(
+            "Error generating batch ID: " + (error instanceof Error ? error.message : "Unknown error")
+        );
+    }
+}
+
 }
 
 export default new AutogenerateId();

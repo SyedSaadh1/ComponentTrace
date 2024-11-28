@@ -1,12 +1,12 @@
-import BatchModel, { Batch } from "../Models/Batchmodels"; // Adjust the path as needed to point to your Batch model
+import BatchModel, { Batch } from "../Models/BatchModel";
 
 class BatchRepository {
   public async findAllBatches(filter = {}): Promise<Batch[]> {
     return BatchModel.find(filter);
   }
 
-  public async createBatch(batch: Batch): Promise<Batch> {
-    return BatchModel.create(batch);
+  public async createBatch(batch: Partial<Batch>) {
+    return BatchModel.insertMany(batch);
   }
 
   public async findBatchById(id: string): Promise<Batch | null> {
@@ -18,6 +18,18 @@ class BatchRepository {
     updatedData: Partial<Batch>
   ): Promise<Batch | null> {
     return BatchModel.findByIdAndUpdate(id, updatedData, { new: true });
+  }
+
+  async getLastInsertedId() {
+    try {
+      const lastInsertedBatch = await BatchModel.findOne().sort({ _id: -1 }).limit(1);
+      return lastInsertedBatch || { batchNo: "BN0000" };  
+    } catch (error) {
+      throw new Error(
+        "Error encountered while fetching last inserted ID for batch list: " +
+          error
+      );
+    }
   }
 }
 
