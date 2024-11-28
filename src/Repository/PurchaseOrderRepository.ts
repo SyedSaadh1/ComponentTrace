@@ -1,4 +1,3 @@
-import { string } from "joi";
 import purchaseOrderModel from "../Models/PurchaseOrderModel";
 import PurchaseOrder, { IPurchaseOrder } from "../Models/PurchaseOrderModel";
 

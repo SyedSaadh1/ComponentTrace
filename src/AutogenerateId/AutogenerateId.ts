@@ -45,11 +45,11 @@ class AutogenerateId {
     if (lastInsertedPOId) {
       const id = lastInsertedPOId.poId;
 
-      const getinglastponumber:string = id.split("-")[1];
+      const getinglastponumber: string = id.split("-")[1];
       const prefix: string = `PO${orderedTo}-`;
       let sequence: number = parseInt(getinglastponumber);
       sequence++;
-      return prefix + sequence.toString().padStart(4, "0");      
+      return prefix + sequence.toString().padStart(4, "0");
     } else {
       const prefix: string = `PO${orderedTo}-`;
       const sequence: number = 1;

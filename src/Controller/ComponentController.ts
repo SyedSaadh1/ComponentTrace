@@ -1,13 +1,9 @@
 import { Request, Response } from "express";
-
 import AutogenerateId from "../AutogenerateId/AutogenerateId";
-
 import componentListBody from "../Validations/ComponentList.validation";
-
 import ClRepo from "../Repository/ComponentListRepository";
-
 import InventoryRepo from "../Repository/InventoryRepository";
-
+import QRCode from "qrcode";
 class ComponentController {
   // Find all components
 
@@ -31,10 +27,18 @@ class ComponentController {
     }
   }
 
+  // Store multiple components based on quantity
   async storeComponents(req: Request, res: Response): Promise<any> {
+    const componentData = req.body;
+    const { componentName, componentMasterId } = componentData;
+    let qrData = {
+      componentName,
+      componentMasterId,
+      createdAt: new Date().toISOString(),
+    };
+    const qrCode = await QRCode.toDataURL(JSON.stringify(qrData));
     try {
-      const { error, value } = componentListBody.validate(req.body);
-
+      const { error, value } = componentListBody.validate(componentData);
       if (error) {
         return res
           .status(400)
@@ -42,30 +46,35 @@ class ComponentController {
       }
 
       const availableQuantity = await InventoryRepo.getAvailableQuantity(
-        value.componentId
+        value.componentMasterId
       );
-
       if (availableQuantity < value.quantity) {
         return res.status(200).json({
           msg: "Insufficient quantity in inventory",
-
           availableQuantity,
         });
       }
 
-      const componentId = await AutogenerateId.clIdGenerate();
+      const savedComponents = [];
+      for (let i = 0; i < value.quantity; i++) {
+        const componentId = await AutogenerateId.clIdGenerate();
+        const componentData = {
+          ...value,
+          qrCode,
+          componentId, // Unique ID for each entry
+        };
 
-      value.componentId = componentId;
+        // Store each component with unique ID in the database
+        const result = await ClRepo.storeComponents(componentData);
+        savedComponents.push(result);
+      }
 
-      // Store component in the database as a single object
-
-      const result = await ClRepo.storeComponents(value); // Pass 'value' directly
-
-      res
-        .status(201)
-        .json({ msg: "Component created successfully", data: result });
+      res.status(201).json({
+        msg: "Components created successfully",
+        data: savedComponents,
+      });
     } catch (error) {
-      res.status(500).json({ msg: `Error in creating component: ${error}` });
+      res.status(500).json({ msg: `Error in creating components: ${error}` });
     }
   }
 

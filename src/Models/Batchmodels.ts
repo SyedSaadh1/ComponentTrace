@@ -1,12 +1,12 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema } from "mongoose";
 
 // Interface Batch details
 export interface Batch extends Document {
-  batchNo: string;                  // Batch number
-  componentDetails: string;         // Details of products and their quantities
-  createdBy: string;                // UserId who created this batch
-  startedDate: Date;                // Start date of the batch
-  finishedDate: Date;               // Finished date of the batch
+  batchNo: string; // Batch number
+  componentDetails: string; // Details of products and their quantities
+  createdBy: string; // UserId who created this batch
+  startedDate: Date; // Start date of the batch
+  finishedDate: Date; // Finished date of the batch
 }
 
 class BatchClass {
@@ -38,10 +38,9 @@ class BatchClass {
       },
     });
 
-    mongoose.pluralize(null); 
-    this.model = mongoose.model<Batch>('Batch', BatchSchema);
+    mongoose.pluralize(null);
+    this.model = mongoose.model<Batch>("Batch", BatchSchema);
   }
 }
-
 
 export default new BatchClass().model;
