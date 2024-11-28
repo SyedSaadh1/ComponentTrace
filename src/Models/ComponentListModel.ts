@@ -19,7 +19,7 @@ export interface IComponentList extends Document {
   componentState: string;
   subComponents: subComponents[];
   wareHouseLocation?: string;
-  // batchNo: string;
+  batchNo: string;
 }
 
 class ComponentModel {
@@ -37,7 +37,7 @@ class ComponentModel {
       componentId: { type: String, required: true },
       componentName: { type: String, required: true },
       wareHouseLocation: { type: String },
-      // batchNo: { type: String, required: true },
+      batchNo: { type: String, required:true },
       subComponents: {
         type: [
           {

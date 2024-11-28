@@ -1,12 +1,15 @@
 import { Request, Response } from "express";
-import AutogenerateId from "../AutogenerateId/AutogenerateId";
+import AutogenerateId from "../AutogenerateId/AutogenerateId"; 
 import componentListBody from "../Validations/ComponentList.validation";
 import ClRepo from "../Repository/ComponentListRepository";
 import InventoryRepo from "../Repository/InventoryRepository";
+import BatchRepo from "../Repository/BatchRepo";
+import Batchmodels from "../Models/BatchModel";
 import QRCode from "qrcode";
+import { finished } from "stream";
+
 class ComponentController {
   // Find all components
-
   async findAllComponents(req: Request, res: Response): Promise<any> {
     try {
       const filter = req.query || {};
@@ -31,43 +34,49 @@ class ComponentController {
   async storeComponents(req: Request, res: Response): Promise<any> {
     const componentData = req.body;
     const { componentName, componentMasterId } = componentData;
+
+    // Prepare QR Code data
     let qrData = {
       componentName,
       componentMasterId,
       createdAt: new Date().toISOString(),
     };
-    const qrCode = await QRCode.toDataURL(JSON.stringify(qrData));
+
     try {
+      const qrCode = await QRCode.toDataURL(JSON.stringify(qrData));
       const { error, value } = componentListBody.validate(componentData);
       if (error) {
         return res
           .status(400)
           .json({ msg: "Validation error", error: error.details });
       }
-
-      const availableQuantity = await InventoryRepo.getAvailableQuantity(
-        value.componentMasterId
-      );
-      if (availableQuantity < value.quantity) {
-        return res.status(200).json({
-          msg: "Insufficient quantity in inventory",
-          availableQuantity,
-        });
-      }
-
+      
+      const batchId = await AutogenerateId.batchIdGenerate();
+    
       const savedComponents = [];
+      const createdIds=[];
       for (let i = 0; i < value.quantity; i++) {
         const componentId = await AutogenerateId.clIdGenerate();
-        const componentData = {
+
+       createdIds.push(componentId)
+        const newComponentData = {
           ...value,
           qrCode,
-          componentId, // Unique ID for each entry
+          componentId,
+          batchNo: batchId,
         };
 
-        // Store each component with unique ID in the database
-        const result = await ClRepo.storeComponents(componentData);
+        // Store each component with unique data in the database
+        const result = await ClRepo.storeComponents(newComponentData);
         savedComponents.push(result);
       }
+      const batchBody={
+        batchNo:batchId,
+        componentName:componentName,
+        createdBy:"User123",
+        componentIds:createdIds
+      }
+      await BatchRepo.createBatch(batchBody)
 
       res.status(201).json({
         msg: "Components created successfully",
@@ -79,7 +88,6 @@ class ComponentController {
   }
 
   // Update existing components
-
   async updateComponents(req: Request, res: Response): Promise<any> {
     try {
       const { componentId, componentName, wareHouseLocation, ...updateFields } =
@@ -90,9 +98,7 @@ class ComponentController {
       }
 
       // Add componentName and wareHouseLocation to updateFields if provided
-
       if (componentName) updateFields.componentName = componentName;
-
       if (wareHouseLocation) updateFields.wareHouseLocation = wareHouseLocation;
 
       const result = await ClRepo.updateComponents(componentId, updateFields);
@@ -110,7 +116,6 @@ class ComponentController {
   }
 
   // Find component by name
-
   async findComponentByName(req: Request, res: Response): Promise<any> {
     try {
       const { compName } = req.params;

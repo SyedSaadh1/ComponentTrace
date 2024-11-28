@@ -1,27 +1,42 @@
 import { Request, Response } from "express";
 import BatchRepository from "../Repository/BatchRepo";
-import Batch from "../Models/Batchmodels";
+import Batch from "../Models/BatchModel";
+import AutogenerateId from "../AutogenerateId/AutogenerateId";
 
 class BatchController {
-  // Create a new batch
   public async createBatch(req: Request, res: Response): Promise<void> {
     try {
+      // Generate a unique batch number
+      const generatedBatchNo = await AutogenerateId.batchIdGenerate();
+
+      // Create a new batch object with the generated batch number
       const newBatch = new Batch({
-        batchNo: req.body.batchNo,
+        batchNo: generatedBatchNo, // Assign the generated batch number
         componentDetails: req.body.componentDetails,
         createdBy: req.body.createdBy,
         startedDate: req.body.startedDate || new Date(),
         finishedDate: req.body.finishedDate || new Date(),
       });
 
+      // Save the batch in the database
       const savedBatch = await BatchRepository.createBatch(newBatch);
-      res.status(201).json(savedBatch);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to create batch", error });
+      res.status(201).json({
+        message: "Batch created successfully",
+        batch: savedBatch,
+      });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        res.status(500).json({
+          message: "Error in creating batch: " + error.message,
+        });
+      } else {
+        res.status(500).json({
+          message: "An unknown error occurred.",
+        });
+      }
     }
   }
 
-  // Get all batches
   public async getAllBatches(req: Request, res: Response): Promise<void> {
     try {
       const batches = await BatchRepository.findAllBatches();
@@ -31,7 +46,6 @@ class BatchController {
     }
   }
 
-  // Get a batch by ID
   public async getBatchById(req: Request, res: Response): Promise<void> {
     try {
       const batch = await BatchRepository.findBatchById(req.params.id);
@@ -45,14 +59,12 @@ class BatchController {
     }
   }
 
-  // Update a batch by ID
   public async updateBatch(req: Request, res: Response): Promise<void> {
     try {
       const updatedBatch = await BatchRepository.updateBatch(req.params.id, {
         batchNo: req.body.batchNo,
-        componentDetails: req.body.componentDetails,
+        componentName: req.body.componentName,
         createdBy: req.body.createdBy,
-        startedDate: req.body.startedDate,
         finishedDate: req.body.finishedDate,
       });
 
@@ -61,7 +73,10 @@ class BatchController {
         return;
       }
 
-      res.status(200).json(updatedBatch);
+      res.status(200).json({
+        message: "Batch updated successfully",
+        batch: updatedBatch,
+      });
     } catch (error) {
       res.status(500).json({ message: "Failed to update batch", error });
     }
