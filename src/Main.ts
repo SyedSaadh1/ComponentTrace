@@ -40,6 +40,7 @@ class App {
     this.app.use("/componentMasters", ComponentMasterRouter);
     this.app.use("/components", componentListRouter);
     this.app.use("/inventoryDetails", invRouter);
+    this.app.use("/", invRouter);
     this.app.use("/batch", batchRouter);
     this.app.use("/purchaseOrders", poRouter);
     this.app.use("/transactions", transactionsRouter);
