@@ -3,7 +3,7 @@ import mongoose, { Document, Schema } from "mongoose";
 //Model
 //  Interface for Inventory details
 export interface Inventory extends Document {
-  componentName: string; // ID of the component
+  componentMasterName: string; // ID of the component
   quantity: number; // Quantity of the component
   componentMasterId: string; // ComponentMasterId of the component
   userId: string; // userId of the component
@@ -15,7 +15,7 @@ class InventoryClass {
 
   constructor() {
     const Inventoryschema: Schema<Inventory> = new mongoose.Schema({
-      componentName: {
+      componentMasterName: {
         type: String,
         required: true,
       },

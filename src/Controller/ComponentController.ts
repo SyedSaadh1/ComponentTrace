@@ -17,7 +17,7 @@ class ComponentController {
 
       console.log("result :- ", result);
 
-      if (!result.length) {
+        if (!result.length) {
         return res.status(404).send({ msg: "No components found" });
       } else {
         return res.status(200).send(result);

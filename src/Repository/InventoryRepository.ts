@@ -20,13 +20,13 @@ class InvRepository {
   }
 
   // Get available quantity by componentMasterName
-  async getAvailableQuantityByMasterName(componentMasterName: string): Promise<number | null> {
+  async getAvailableQuantityByMasterName(componentMasterName: string) {
     try {
       const inventory = await inventoryModel.findOne({ componentMasterName });
       if (!inventory) {
         return null; 
       }
-      return inventory.quantity - inventory.reserved;
+      return inventory.quantity;
     } catch (error) {
       console.error("Error in getAvailableQuantityByMasterName:", error);
       throw new Error("Failed to fetch available quantity.");
