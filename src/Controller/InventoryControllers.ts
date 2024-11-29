@@ -16,8 +16,8 @@ class InvController {
    // Fetch available quantity by componentMasterName
    async getAvailableQuantity(req: Request, res: Response) {
     try {
-      const { componentMasterName } = req.query;
-
+      const  componentMasterName = req.params.componentMasterName;
+      // console.log("params:"+componentMasterName)
       if (!componentMasterName) {
         return res.status(400).json({
           status: "error",
@@ -26,8 +26,9 @@ class InvController {
       }
 
       const availableQuantity = await InvRepo.getAvailableQuantityByMasterName(
-        componentMasterName as string
+        componentMasterName
       );
+      // console.log("returned "+availableQuantity)
 
       if (availableQuantity === null) {
         return res.status(404).json({
