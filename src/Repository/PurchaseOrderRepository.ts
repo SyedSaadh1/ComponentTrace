@@ -1,3 +1,4 @@
+import ComponentListModel from "../Models/ComponentListModel";
 import purchaseOrderModel from "../Models/PurchaseOrderModel";
 import PurchaseOrder, { IPurchaseOrder } from "../Models/PurchaseOrderModel";
 
@@ -36,6 +37,12 @@ class PORepository {
     try {
       // to find the order document
       console.log(poId);
+      await ComponentListModel.updateMany(
+        {
+          componentId: { $in: component.componentIds },
+        },
+        { $set: { sentToDelivery: false, currentOwner: "oem" } }
+      );
       const result = await purchaseOrderModel.findOne({ poId: poId });
       console.log(result);
       if (!result) {

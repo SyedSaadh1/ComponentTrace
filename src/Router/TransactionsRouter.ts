@@ -13,7 +13,7 @@ class TransactionRouter {
     this.router.get("/", transactionController.findTransactions);
     this.router.post("/", transactionController.createTransaction);
     this.router.put(
-      "/:transactionId/grn",
+      "/grn/:transactionId",
       transactionController.createGRNNumber
     );
   }

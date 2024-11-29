@@ -52,7 +52,7 @@ class ComponentMasterRepository {
   }
   async getLastInsertedId() {
     try {
-      return await ComponentMasterModel.findOne().sort({ _id: -1 }).limit(1);
+      return await ComponentMasterModel.findOne().sort({ _id: -1 });
     } catch (error) {
       throw new Error(
         "Error Encountered while fetching last inserted Id : " + error

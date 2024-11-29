@@ -39,6 +39,30 @@ class ComponentRepository {
       );
     }
   }
+  async getComponentIds(itemData: any) {
+    try {
+      const componentMasterId: string = itemData.componentMasterId;
+      const quantity: number = itemData.quantity;
+      const componentIds: any = [];
+      const ids = await componentModel
+        .find(
+          { componentMasterId: componentMasterId, sentToDelivery: false },
+          { componentId: 1, _id: 0 }
+        )
+        .limit(quantity);
+      ids.forEach((id) => componentIds.push(id.componentId));
+
+      await componentModel.updateMany(
+        {
+          componentId: { $in: componentIds },
+        },
+        { $set: { sentToDelivery: true } }
+      );
+      return componentIds;
+    } catch (error) {
+      console.log("Error fetching componentIds: " + error);
+    }
+  }
 }
 
 export default new ComponentRepository();
