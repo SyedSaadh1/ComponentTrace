@@ -5,6 +5,8 @@ import generateId from "../AutogenerateId/AutogenerateId";
 import PORepo from "../Repository/PurchaseOrderRepository";
 import { Mutex } from "async-mutex";
 import ComponentListRepo from "../Repository/ComponentListRepository";
+import InventoryRepository from "../Repository/InventoryRepository";
+import InventoryControllers from "./InventoryControllers";
 class TransactionController {
   private mutex: Mutex;
   constructor() {
@@ -15,11 +17,11 @@ class TransactionController {
       const Data = req.body;
       const userSession = req.userSession;
       const { userName } = userSession;
-      const transactionDetails = Data.componentsDetails;
-      const completeTransactionData = await Promise.all(
-        transactionDetails.map(async (item: any) => {
+      const componentsDetails = Data.componentsDetails;
+      const completeComponentsData = await Promise.all(
+        componentsDetails.map(async (item: any) => {
           try {
-            const ids = await ComponentListRepo.getComponentIds(item);
+            const ids = await ComponentListRepo.getComponentIds(item, userName);
             item.componentIds = ids;
             return item;
           } catch (error) {
@@ -30,7 +32,7 @@ class TransactionController {
           }
         })
       );
-      Data.componentsDetails = completeTransactionData;
+      Data.componentsDetails = completeComponentsData;
       const { error, value } = validateTransaction.validate(Data);
 
       if (error) {
@@ -63,17 +65,23 @@ class TransactionController {
 
       const { componentsDetails, poId } = grnData;
       const componentIds = componentsDetails.componentIds;
-      // if (componentsDetails.length === 0) {
-      //   return res
-      //     .status(400)
-      //     .send({ msg: "components details should not be empty" });
-      // }
+
+      const grnNumber: string = await generateId.generateGRNNumber();
+      const result = await transactionsRepo.updateGRNNumber(
+        transactionId,
+        grnNumber,
+        grnData
+      );
       const remainingQuantities = await Promise.all(
         componentsDetails.map(async (component: any) => {
           const quantity = await PORepo.updateDeliveredComponents(
             component,
             poId
           );
+          if (quantity < 0) {
+            console.log("This product is delivered");
+            throw new Error("this products delivery is completed");
+          }
           return quantity;
         })
       );
@@ -82,25 +90,18 @@ class TransactionController {
         0
       );
       console.log("totalQuantity-->" + totalQuantity);
-
-      const grnNumber: string = await generateId.generateGRNNumber();
-      const result = await transactionsRepo.updateGRNNumber(
-        transactionId,
-        grnNumber,
-        grnData,
-        componentIds
-      );
       if (totalQuantity === 0) {
         await PORepo.updatePOStatus(poId);
       }
       if (result.matchedCount === 0) {
-        return res.status(404).send({ msg: "Purchase Order not found" });
+        return res.status(404).send({ msg: "Transaction not found" });
       }
 
       if (result.modifiedCount > 0 && result.acknowledged) {
-        return res
-          .status(200)
-          .send({ msg: "GRN Number generated and updated successfully" });
+        await InventoryControllers.insertDoc(req, res);
+        return res.status(200).send({
+          msg: "GRN Number generated and updated Inventory successfully",
+        });
       }
 
       return res.status(400).send({ msg: "Failed to update GRN Number" });

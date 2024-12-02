@@ -11,10 +11,37 @@ class InvRepository {
       },
     ]);
   }
-  createInv(order: Inventory) {
-    return inventoryModel.create(order);
+  async findComponents(filter = {}) {
+    try {
+      const result = await inventoryModel.findOne(filter);
+      return result;
+    } catch (error) {
+      throw error;
+    }
   }
-  async getAvailableQuantity(componentId: string): Promise<number> {
+  async updateQuantity(
+    componentMasterId: string,
+    newQuantity: number,
+    userName: string
+  ) {
+    try {
+      await inventoryModel.updateOne(
+        { componentMasterId: componentMasterId, userName: userName },
+        { $inc: { quantity: newQuantity } }
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+  createDoc(data: Inventory, userName: string) {
+    try {
+      data.userName = userName;
+      return inventoryModel.create(data);
+    } catch (error) {
+      throw error;
+    }
+  }
+  async getAvailableQuantity(componentId: string) {
     const inventory = await inventoryModel.findOne({ componentId });
     return inventory ? inventory.quantity : 0;
   }

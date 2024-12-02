@@ -39,14 +39,17 @@ class ComponentRepository {
       );
     }
   }
-  async getComponentIds(itemData: any) {
+  async getComponentIds(itemData: any, userName: string) {
     try {
       const componentMasterId: string = itemData.componentMasterId;
       const quantity: number = itemData.quantity;
       const componentIds: any = [];
       const ids = await componentModel
         .find(
-          { componentMasterId: componentMasterId, sentToDelivery: false },
+          {
+            componentMasterId: componentMasterId,
+            sentToDelivery: false,
+          },
           { componentId: 1, _id: 0 }
         )
         .limit(quantity);

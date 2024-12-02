@@ -30,6 +30,7 @@ class ComponentController {
   // Store multiple components based on quantity
   async storeComponents(req: Request, res: Response): Promise<any> {
     const componentData = req.body;
+
     const { componentName, componentMasterId } = componentData;
     let qrData = {
       componentName,
@@ -54,14 +55,17 @@ class ComponentController {
           availableQuantity,
         });
       }
-
+      const userSession = req.userSession;
+      const { userName } = userSession;
       const savedComponents = [];
       for (let i = 0; i < value.quantity; i++) {
         const componentId = await AutogenerateId.clIdGenerate();
         const componentData = {
           ...value,
           qrCode,
-          componentId, // Unique ID for each entry
+          componentId,
+          currentOwner: userName,
+          createdBy: userName,
         };
 
         // Store each component with unique ID in the database

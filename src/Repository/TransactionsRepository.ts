@@ -19,8 +19,7 @@ class TransactionRepository {
   async updateGRNNumber(
     transactionId: string,
     grnNumber: string,
-    grnData: any,
-    componentIds: string[]
+    grnData: any
   ) {
     try {
       return await transactionsModel.updateOne(

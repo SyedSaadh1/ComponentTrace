@@ -28,13 +28,15 @@ class ComponentMasterController {
           .send({ msg: "Component Master already exists with that name" });
       }
       const release = await this.mutex.acquire();
+      const userSession = req.userSession;
+      const { userName } = userSession;
 
       let result: any;
       try {
+        value.createdBy = userName;
         value.componentMasterId = await generateId.CMIdGenerate();
         console.log(value.componentMasterId);
         result = await Repo.createComponentMaster(value);
-        console.log("doc created : " + result);
       } finally {
         release();
         console.log("lock released");
@@ -47,10 +49,9 @@ class ComponentMasterController {
         createdBy,
         isFinalProduct,
       } = result;
-      console.log("sending response");
       res.status(201).send({
         msg: "Component Master Created Successfully",
-        Data: componentMasterId,
+        componentMasterId,
         componentMasterName,
         category,
         componentDescription,
@@ -75,7 +76,14 @@ class ComponentMasterController {
     const filter = req.query;
     try {
       const result = await Repo.find(filter);
-      return res.status(200).send(result);
+      const filteredResult = result.map((item: any) => ({
+        componentMasterId: item.componentMasterId,
+        componentMasterName: item.componentMasterName,
+        createdBy: item.createdBy,
+        components: item.components,
+        isFinalProduct: item.isFinalProduct,
+      }));
+      return res.status(200).send(filteredResult);
     } catch (error) {
       return res.status(500).send({ msg: "Encountered an Error : " + error });
     }

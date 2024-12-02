@@ -41,7 +41,7 @@ class PORepository {
         {
           componentId: { $in: component.componentIds },
         },
-        { $set: { sentToDelivery: false, currentOwner: "oem" } }
+        { $set: { currentOwner: "oem" } }
       );
       const result = await purchaseOrderModel.findOne({ poId: poId });
       console.log(result);
