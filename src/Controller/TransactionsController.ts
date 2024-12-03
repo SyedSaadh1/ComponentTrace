@@ -5,7 +5,6 @@ import generateId from "../AutogenerateId/AutogenerateId";
 import PORepo from "../Repository/PurchaseOrderRepository";
 import { Mutex } from "async-mutex";
 import ComponentListRepo from "../Repository/ComponentListRepository";
-import InventoryRepository from "../Repository/InventoryRepository";
 import InventoryControllers from "./InventoryControllers";
 class TransactionController {
   private mutex: Mutex;
@@ -64,7 +63,6 @@ class TransactionController {
       const grnData = req.body;
 
       const { componentsDetails, poId } = grnData;
-      const componentIds = componentsDetails.componentIds;
 
       const grnNumber: string = await generateId.generateGRNNumber();
       const result = await transactionsRepo.updateGRNNumber(
@@ -80,7 +78,7 @@ class TransactionController {
           );
           if (quantity < 0) {
             console.log("This product is delivered");
-            throw new Error("this products delivery is completed");
+            throw new Error("This product delivery is completed");
           }
           return quantity;
         })

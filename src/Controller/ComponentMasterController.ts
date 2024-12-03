@@ -3,7 +3,7 @@ import componentMaster from "../Validations/ComponentMaster.validation";
 import generateId from "../AutogenerateId/AutogenerateId";
 import Repo from "../Repository/ComponentMasterRepository";
 import { Mutex } from "async-mutex";
-
+import InventoryRepository from "../Repository/InventoryRepository";
 class ComponentMasterController {
   private mutex: Mutex;
   constructor() {
@@ -36,6 +36,7 @@ class ComponentMasterController {
         value.createdBy = userName;
         value.componentMasterId = await generateId.CMIdGenerate();
         console.log(value.componentMasterId);
+
         result = await Repo.createComponentMaster(value);
       } finally {
         release();
@@ -49,6 +50,8 @@ class ComponentMasterController {
         createdBy,
         isFinalProduct,
       } = result;
+      const invDoc = { componentMasterId, componentMasterName, userName };
+      await InventoryRepository.createDoc(result, userName);
       res.status(201).send({
         msg: "Component Master Created Successfully",
         componentMasterId,
@@ -59,9 +62,6 @@ class ComponentMasterController {
         createdBy,
         isFinalProduct,
       });
-      return;
-
-      //should have to minimize the response by sending only neccessary properties in response
     } catch (error) {
       console.error(
         "Error Encountered while Creating Component Master:",
