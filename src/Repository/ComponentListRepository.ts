@@ -1,6 +1,9 @@
 import componentModel, { IComponentList } from "../Models/ComponentListModel";
 
 class ComponentRepository {
+  findLatestBatchId() {
+    throw new Error("Method not implemented.");
+  }
   // Find all components with optional filter
 
   findAllComponents(filter = {}) {
