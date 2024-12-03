@@ -1,3 +1,4 @@
+import session from "express-session";
 export class DI {
   static destroy() {
     this.context.resolvedInstances = {};
@@ -32,11 +33,18 @@ export class DI {
       if (
         this.context.resolvedInstances[className.name] === undefined ||
         this.context.resolvedInstances[className.name] === null
-      ) {
-        this.context.resolvedInstances[className.name] = new className(
-          ...params
-        );
-      }
+      )
+        if (className === session) {
+          this.context.resolvedInstances[className.name] = className({
+            secret: "my_secret_key",
+            resave: false,
+            saveUninitialized: true,
+          });
+        } else {
+          this.context.resolvedInstances[className.name] = new className(
+            ...params
+          );
+        }
       return this.context.resolvedInstances[className.name];
     }
   }

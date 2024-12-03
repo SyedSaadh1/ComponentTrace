@@ -22,6 +22,7 @@ class InventoryClass {
       quantity: {
         type: Number,
         required: true,
+        default: 0,
       },
       componentMasterId: {
         type: String,
@@ -30,6 +31,7 @@ class InventoryClass {
       userName: {
         type: String,
         required: true,
+        // default: "User",
       },
       reserved: {
         type: Number,

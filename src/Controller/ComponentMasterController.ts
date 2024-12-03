@@ -50,8 +50,8 @@ class ComponentMasterController {
         createdBy,
         isFinalProduct,
       } = result;
-      const invDoc = { componentMasterId, componentMasterName, userName };
-      await InventoryRepository.createDoc(result, userName);
+      const invDoc = { componentMasterId, componentMasterName };
+      await InventoryRepository.createDoc(invDoc, userName);
       res.status(201).send({
         msg: "Component Master Created Successfully",
         componentMasterId,

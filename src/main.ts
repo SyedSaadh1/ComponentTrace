@@ -24,6 +24,13 @@ class App {
     this.app = express();
     this.Keycloak = DI.get<keycloak>(keycloak);
     this.securityContext = DI.get(SecurityContext);
+    this.app.use(
+      session({
+        secret: "my_secret_key",
+        resave: false,
+        saveUninitialized: true,
+      })
+    );
 
     this.initializeMiddleware();
 
@@ -33,15 +40,6 @@ class App {
   }
 
   initializeMiddleware() {
-    this.app.use(
-      session({
-        secret: "MySecrekeyKey",
-        resave: false, // Ensure to set this explicitly
-        saveUninitialized: false, // Ensure to set this explicitly
-        store: new MemoryStore(), // Uncomment if using a session store
-      })
-    );
-
     this.app.use(express.json());
     this.app.use(cors());
     this.app.use((req, res, next) => {

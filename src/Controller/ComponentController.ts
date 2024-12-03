@@ -34,7 +34,7 @@ class ComponentController {
   async storeComponents(req: Request, res: Response): Promise<any> {
     const componentData = req.body;
 
-    const { componentName, componentMasterId } = componentData;
+    const { componentName, componentMasterId, quantity } = componentData;
 
     // Prepare QR Code data
     let qrData = {
@@ -76,6 +76,7 @@ class ComponentController {
         const result = await ClRepo.storeComponents(newComponentData);
         savedComponents.push(result);
       }
+      await InventoryRepo.updateQuantity(componentMasterId, quantity, userName);
       const batchBody = {
         batchNo: batchId,
         componentName: componentName,

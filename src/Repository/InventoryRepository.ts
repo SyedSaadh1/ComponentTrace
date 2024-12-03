@@ -33,7 +33,7 @@ class InvRepository {
       throw error;
     }
   }
-  createDoc(data: Inventory, userName: string) {
+  createDoc(data: Partial<Inventory>, userName: string) {
     try {
       data.userName = userName;
       return inventoryModel.create(data);
@@ -51,7 +51,7 @@ class InvRepository {
     try {
       const inventory = await inventoryModel.findOne({ componentMasterName });
       if (!inventory) {
-        return null; 
+        return null;
       }
       return inventory.quantity;
     } catch (error) {
