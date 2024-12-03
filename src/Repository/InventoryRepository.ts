@@ -33,6 +33,20 @@ class InvRepository {
       throw error;
     }
   }
+  // async decrementQuantity(
+  //   componentMasterId: string,
+  //   decQuantity: number,
+  //   userName: string
+  // ) {
+  //   try {
+  //     await inventoryModel.updateOne(
+  //       { componentMasterId: componentMasterId, userName: userName },
+  //       { $: { quantity: newQuantity } }
+  //     );
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
   createDoc(data: Partial<Inventory>, userName: string) {
     try {
       data.userName = userName;

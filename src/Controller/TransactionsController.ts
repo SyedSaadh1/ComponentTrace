@@ -6,6 +6,7 @@ import PORepo from "../Repository/PurchaseOrderRepository";
 import { Mutex } from "async-mutex";
 import ComponentListRepo from "../Repository/ComponentListRepository";
 import InventoryControllers from "./InventoryControllers";
+import InventoryRepository from "../Repository/InventoryRepository";
 class TransactionController {
   private mutex: Mutex;
   constructor() {
@@ -14,17 +15,38 @@ class TransactionController {
   async createTransaction(req: Request, res: Response) {
     try {
       const Data = req.body;
-      const userSession = req.userSession;
-      const { userName } = userSession;
+      const { userName } = req.userSession;
+      const { poId } = Data;
       const componentsDetails = Data.componentsDetails;
+      for (const item of componentsDetails) {
+        const requiredQuantity = await PORepo.getQuantity(
+          poId,
+          item.componentMasterId
+        );
+        if (requiredQuantity < item.quantity) {
+          return res.status(400).send({
+            msg: `Can't send more than required quantity for componentMasterId: ${item.componentMasterId}`,
+          });
+        }
+      }
       const completeComponentsData = await Promise.all(
         componentsDetails.map(async (item: any) => {
           try {
+            // const requiredQuantity = await PORepo.getQuantity(
+            //   poId,
+            //   item.componentMasterId
+            // );
+            // if (requiredQuantity < item.quantity) {
+            //   console.log(
+            //     "Can't send more than required quantity from customer "
+            //   );
+            //   return;
+            // }
             const ids = await ComponentListRepo.getComponentIds(item, userName);
             item.componentIds = ids;
             return item;
           } catch (error) {
-            console.log("error in promise.all " + error);
+            console.log("Error while processing component ids " + error);
             return res
               .status(400)
               .send("error in processing component ids -:" + error);
@@ -52,6 +74,17 @@ class TransactionController {
       // } //finally {
       // release();
       // }
+
+      await Promise.all(
+        componentsDetails.map(async (item: any) => {
+          const { componentMasterId, quantity } = item;
+          await InventoryRepository.updateQuantity(
+            componentMasterId,
+            -quantity,
+            userName
+          );
+        })
+      );
       return res.status(201).send({ msg: "Order sent", Data: result });
     } catch (error) {
       return res.status(500).send("Error in creating Transaction: " + error);
@@ -61,6 +94,7 @@ class TransactionController {
     try {
       const transactionId = req.params.transactionId;
       const grnData = req.body;
+      const { userName } = req.userSession;
 
       const { componentsDetails, poId } = grnData;
 
@@ -74,7 +108,8 @@ class TransactionController {
         componentsDetails.map(async (component: any) => {
           const quantity = await PORepo.updateDeliveredComponents(
             component,
-            poId
+            poId,
+            userName
           );
           if (quantity < 0) {
             console.log("This product is delivered");

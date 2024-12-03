@@ -33,15 +33,19 @@ class PORepository {
       }
     );
   }
-  async updateDeliveredComponents(component: any, poId: string) {
+  async updateDeliveredComponents(
+    component: any,
+    poId: string,
+    userName: string
+  ) {
     try {
       // to find the order document
-      console.log(poId);
+      console.log("In update delivery components - " + poId);
       await ComponentListModel.updateMany(
         {
           componentId: { $in: component.componentIds },
         },
-        { $set: { currentOwner: "oem" } }
+        { $set: { currentOwner: userName } }
       );
       const result = await purchaseOrderModel.findOne({ poId: poId });
       console.log(result);
@@ -78,6 +82,25 @@ class PORepository {
     } catch (error) {
       console.error("Error updating delivered component quantity:", error);
       throw new Error("Failed to update component quantity. " + error);
+    }
+  }
+  async getQuantity(poId: string, componentMasterId: string) {
+    try {
+      const foundDoc = await purchaseOrderModel.findOne(
+        {
+          poId: poId,
+          "deliveredComponents.componentMasterId": componentMasterId,
+        },
+        {
+          "deliveredComponents.$": 1,
+        }
+      );
+      if (!foundDoc) {
+        throw new Error("Order or Component not found in that order");
+      }
+      return foundDoc.deliveredComponents[0].quantity;
+    } catch (error) {
+      throw error;
     }
   }
 }
