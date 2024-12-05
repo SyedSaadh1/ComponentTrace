@@ -1,3 +1,4 @@
+import { string } from "joi";
 import mongoose, { Document, Schema } from "mongoose";
 import qrcode from "qrcode";
 
@@ -17,6 +18,7 @@ export interface IComponentList extends Document {
   qrCode: string;
   sentToDelivery: boolean;
   componentState: string;
+  parentId: string;
   subComponents: subComponents[];
   wareHouseLocation?: string;
   batchNo: string;
@@ -37,7 +39,8 @@ class ComponentModel {
       componentId: { type: String, required: true },
       componentName: { type: String, required: true },
       wareHouseLocation: { type: String },
-      batchNo: { type: String, required:true },
+      batchNo: { type: String, required: true },
+      parentId: { type: String },
       subComponents: {
         type: [
           {

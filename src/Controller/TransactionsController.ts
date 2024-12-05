@@ -25,23 +25,13 @@ class TransactionController {
         );
         if (requiredQuantity < item.quantity) {
           return res.status(400).send({
-            msg: `Can't send more than required quantity for componentMasterId: ${item.componentMasterId}`,
+            msg: `Can't send more than required quantity for ${item.componentMasterName}`,
           });
         }
       }
       const completeComponentsData = await Promise.all(
         componentsDetails.map(async (item: any) => {
           try {
-            // const requiredQuantity = await PORepo.getQuantity(
-            //   poId,
-            //   item.componentMasterId
-            // );
-            // if (requiredQuantity < item.quantity) {
-            //   console.log(
-            //     "Can't send more than required quantity from customer "
-            //   );
-            //   return;
-            // }
             const ids = await ComponentListRepo.getComponentIds(item, userName);
             item.componentIds = ids;
             return item;
