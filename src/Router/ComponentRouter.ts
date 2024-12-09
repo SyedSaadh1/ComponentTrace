@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from "express";
 import ComponentController from "../Controller/ComponentController";
- 
+
 class ComponentRouter {
   public router: Router;
   ComponentController: ComponentController;
@@ -9,7 +9,7 @@ class ComponentRouter {
     this.ComponentController = new ComponentController();
     this.initializeRoutes();
   }
- 
+
   private initializeRoutes() {
     this.router.get(
       "/findAllComponents",
@@ -27,12 +27,14 @@ class ComponentRouter {
       "/updateComponents",
       this.ComponentController.updateComponents
     );
+    this.router.get(
+      "/:componentMasterId",
+      this.ComponentController.getAvailableItems
+    );
     // Uncomment below for delete functionality if implemented
     // this.router.delete('/deleteComponent/:componentId', ComponentController.deleteComponent);
   }
 }
- 
+
 // Export an instance of the ComponentRouter
 export default new ComponentRouter().router;
- 
- 

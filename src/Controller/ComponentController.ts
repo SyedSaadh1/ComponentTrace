@@ -6,7 +6,7 @@ import InventoryRepo from "../Repository/InventoryRepository";
 import BatchRepo from "../Repository/BatchRepo";
 import Batchmodels from "../Models/BatchModel";
 import QRCode from "qrcode";
-import { finished } from "stream";
+import CMRepo from "../Repository/ComponentMasterRepository";
 
 class ComponentController {
   // Find all components
@@ -141,6 +141,32 @@ class ComponentController {
     } catch (error) {
       res.status(500).json({ msg: "Error in finding component: " + error });
     }
+  }
+  async getAvailableItems(req: Request, res: Response) {
+    const { userName } = req.userSession;
+    try {
+      const componentMasterId = req.params.componentMasterId;
+      const subComponents = await CMRepo.getSubComponents(componentMasterId);
+      const quantities: any = [];
+      if (subComponents) {
+        await Promise.all(
+          subComponents.components.map(async (item: any) => {
+            const found = await InventoryRepo.findComponents(
+              item.componentMasterId
+            );
+            const itemQuantity = item.quantity;
+            const foundQuantity: any = found?.quantity;
+            const usableQuantity = Math.ceil(foundQuantity / itemQuantity);
+            quantities.push(usableQuantity);
+          })
+        );
+        const max = Math.min(quantities);
+        return res
+          .status(200)
+          .send({ msg: `can make max of ${max} ${componentMasterId}` });
+      }
+      return res.status(200).send({ msg: "No sub components present" });
+    } catch (error) {}
   }
 }
 

@@ -9,7 +9,7 @@ import componentListRouter from "./Router/ComponentRouter";
 import UserRouter from "./Router/UserRouter";
 import transactionsRouter from "./Router/TransactionsRouter";
 import { KeycloakMultiRealm as keycloak } from "./Config/KeycloakMultiRealm";
-import { DI } from "./di/DIContainer";
+import { DI } from "./DI/DIContainer";
 import session, { MemoryStore } from "express-session";
 import { UserSession } from "./Security/SecurityContext";
 // const memoryStore = DI.get<MemoryStore>(MemoryStore);

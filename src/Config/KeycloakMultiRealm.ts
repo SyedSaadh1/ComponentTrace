@@ -1,4 +1,4 @@
-import { DI } from "../di/DIContainer";
+import { DI } from "../DI/DIContainer";
 import { Request, Response, NextFunction } from "express";
 import MemoryStore, { Store } from "express-session";
 import dotenv from "dotenv";

@@ -19,7 +19,7 @@ class ComponentMasterRepository {
   // }
   async getSubComponents(componentMasterId: string) {
     try {
-      return await ComponentMasterModel.find(
+      return await ComponentMasterModel.findOne(
         { componentMasterId: componentMasterId },
         { components: 1, _id: 0 }
       );
