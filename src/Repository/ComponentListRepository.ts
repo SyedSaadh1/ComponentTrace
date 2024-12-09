@@ -53,6 +53,7 @@ class ComponentRepository {
             componentMasterId: componentMasterId,
             userName: userName,
             sentToDelivery: false,
+            
           },
           { componentId: 1, _id: 0 }
         )
