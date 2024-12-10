@@ -146,27 +146,49 @@ class ComponentController {
     const { userName } = req.userSession;
     try {
       const componentMasterId = req.params.componentMasterId;
+      const componenMasterData = await CMRepo.find({ componentMasterId });
+      const componentMasterName = componenMasterData[0].componentMasterName;
       const subComponents = await CMRepo.getSubComponents(componentMasterId);
       const quantities: any = [];
+      const detailsMap: Map<string, number> = new Map();
       if (subComponents) {
         await Promise.all(
           subComponents.components.map(async (item: any) => {
-            const found = await InventoryRepo.findComponents(
-              item.componentMasterId
-            );
+            const CMID = item.componentMasterId;
+
+            const found = await InventoryRepo.findComponents({
+              componentMasterId: CMID,
+            });
             const itemQuantity = item.quantity;
+            console.log(itemQuantity + "-itemQuantity");
             const foundQuantity: any = found?.quantity;
+            console.log(foundQuantity + "-foundQuantity");
             const usableQuantity = Math.ceil(foundQuantity / itemQuantity);
+            console.log(usableQuantity + "-usableQuantity");
+            detailsMap.set(
+              item.componentMasterName,
+              Math.abs(itemQuantity - foundQuantity)
+            );
             quantities.push(usableQuantity);
           })
         );
-        const max = Math.min(quantities);
+        const max = Math.min(...quantities);
+        console.log(max + "-max");
+        if (max == 0) {
+          const mapResponse = Object.fromEntries(detailsMap);
+          return res.status(200).json({
+            msg: `You have to create the following first`,
+            Data: mapResponse,
+          });
+        }
         return res
           .status(200)
-          .send({ msg: `can make max of ${max} ${componentMasterId}` });
+          .send({ msg: `can make max of ${max} ${componentMasterName}` });
       }
       return res.status(200).send({ msg: "No sub components present" });
-    } catch (error) {}
+    } catch (error) {
+      return res.status(500).send({ msg: "Error ->" + error });
+    }
   }
 }
 
