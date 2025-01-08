@@ -33,7 +33,7 @@ class TransactionController {
         componentsDetails.map(async (item: any) => {
           try {
             const ids = await ComponentListRepo.getComponentIds(item, userName);
-            item.componentIds = ids;
+            item.componentIds = ids;  
             return item;
           } catch (error) {
             console.log("Error while processing component ids " + error);
